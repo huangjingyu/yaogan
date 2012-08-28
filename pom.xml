@@ -9,6 +9,12 @@
   <url>http://www.rockontrolcloud.com</url>
 	
   <modules>
+    <module>yaogan-web</module>
+    <module>yaogan-model</module>
+    <module>yaogan-dao</module>
+    <module>yaogan-dao-impl</module>
+    <module>yaogan-service</module>
+    <module>yaogan-service-impl</module>
   </modules>
 	
   <dependencyManagement>

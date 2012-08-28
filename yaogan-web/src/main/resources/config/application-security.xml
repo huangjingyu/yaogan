@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+  xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   					   http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+						   http://www.springframework.org/schema/security 
+						   http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+  <http pattern="/static/**/*" security="none" />
+  <http pattern="/auth/login" security="none" />
+  <http pattern="/doLogout" security="none" />
+
+  <global-method-security pre-post-annotations="enabled" />
+
+  <http use-expressions="true" entry-point-ref="casAuthEntryPoint"
+    access-denied-page="/auth/denied">
+    <form-login login-page="/auth/login"
+      authentication-failure-url="/auth/login" default-target-url="/home"
+      always-use-default-target="true" />
+    <logout invalidate-session="true" logout-success-url="/auth/login"
+      logout-url="/auth/logout" />
+    <session-management invalid-session-url="/auth/login" />
+    <intercept-url pattern="/" access="permitAll" />
+    <intercept-url pattern="/navbar/banner/partner"
+      access="isAuthenticated()" />
+    <intercept-url pattern="/index.jsp" access="permitAll" />
+    <custom-filter ref="casAuthenticationFilter" position="CAS_FILTER" />
+  </http>
+  <authentication-manager alias="authenticationManager">
+    <authentication-provider ref="casAuthenticationProvider" />
+  </authentication-manager>
+
+  <beans:bean id="casAuthEntryPoint"
+    class="com.rockontrol.yaogan.spring.ext.CasAuthenticationEntryPoint">
+    <beans:property name="loginUrl">
+      <beans:value>${cas.login.url}</beans:value>
+    </beans:property>
+    <beans:property name="serviceProperties" ref="casService" />
+  </beans:bean>
+  <beans:bean id="casService"
+    class="com.rockontrol.yaogan.spring.ext.ServiceProperties">
+    <beans:property name="service">
+      <beans:value>${cas.client.cloudportals}</beans:value>
+    </beans:property>
+  </beans:bean>
+
+  <beans:bean id="casAuthenticationFilter"
+    class="org.springframework.security.cas.web.CasAuthenticationFilter">
+    <beans:property name="authenticationManager" ref="authenticationManager" />
+  </beans:bean>
+
+  <beans:bean id="casAuthenticationProvider"
+    class="com.rockontrol.yaogan.spring.ext.CasAuthenticationProvider">
+    <beans:property name="ticketValidator" ref="casTicketValidator" />
+    <beans:property name="serviceProperties" ref="casService" />
+    <beans:property name="key" value="rockloud-yaogan-cas" />
+    <beans:property name="authenticationUserDetailsService"
+      ref="authenticationUserDetailsService" />
+  </beans:bean>
+  <beans:bean id="casTicketValidator"
+    class="org.jasig.cas.client.validation.Cas20ServiceTicketValidator">
+    <beans:constructor-arg>
+      <beans:value>${cas.login.url}</beans:value>
+    </beans:constructor-arg>
+  </beans:bean>
+  <beans:bean id="authenticationUserDetailsService"
+    class="org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper">
+    <beans:property name="userDetailsService" ref="yaoganUserDetailsService" />
+  </beans:bean>
+</beans:beans>
