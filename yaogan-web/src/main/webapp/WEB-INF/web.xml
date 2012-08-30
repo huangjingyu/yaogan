@@ -11,9 +11,6 @@
     <param-value>classpath:config/application-config.xml</param-value>
   </context-param>
   <listener>
-    <listener-class>com.rockontrol.aries.portals.listener.PortalsContextLoaderListener</listener-class>
-  </listener>
-  <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
   <listener>
@@ -38,9 +35,12 @@
     <listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
   </listener>
 
+ <!--UTF8 编码过滤-->
   <filter>
     <filter-name>CharacterEncodingFilter</filter-name>
-    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <filter-class>
+      org.springframework.web.filter.CharacterEncodingFilter
+    </filter-class>
     <init-param>
       <param-name>encoding</param-name>
       <param-value>UTF-8</param-value>

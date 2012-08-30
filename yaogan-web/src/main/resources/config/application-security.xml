@@ -22,7 +22,7 @@
     <intercept-url pattern="/" access="permitAll" />
     <intercept-url pattern="/navbar/banner/partner"
       access="isAuthenticated()" />
-    <intercept-url pattern="/index.jsp" access="permitAll" />
+    <intercept-url pattern="/index.jsp" access="isAuthenticated()" />
     <custom-filter ref="casAuthenticationFilter" position="CAS_FILTER" />
   </http>
   <authentication-manager alias="authenticationManager">

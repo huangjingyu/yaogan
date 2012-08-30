@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.rockontrol.yaogan</groupId>
   <artifactId>yaogan-master</artifactId>
@@ -7,7 +8,7 @@
   <packaging>pom</packaging>
   <name>Rockontrol yaogan</name>
   <url>http://www.rockontrolcloud.com</url>
-	
+
   <modules>
     <module>yaogan-web</module>
     <module>yaogan-model</module>
@@ -16,7 +17,7 @@
     <module>yaogan-service</module>
     <module>yaogan-service-impl</module>
   </modules>
-	
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -31,8 +32,47 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.source.version>1.6</java.source.version>
     <java.target.version>1.6</java.target.version>
+
+
+    <cas.login.url>https://sso.rockloud.com/cas/</cas.login.url>
+    <cas.logout.url>https://sso.rockloud.com/cas/logout</cas.logout.url>
+    <cas.client.cloudportals>http://192.168.1.207:8080/portals-web/j_spring_cas_security_check</cas.client.cloudportals>
+
+    <hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect>
+    <datasource.db.driver>org.postgresql.Driver</datasource.db.driver>
+    <datasource.db.url>jdbc:postgresql://192.168.1.71:5432/yaogan</datasource.db.url>
+    <datasource.db.user>postgres</datasource.db.user>
+    <datasource.db.password>postgres</datasource.db.password>
+    <datasource.pool.init>3</datasource.pool.init>
+    <datasource.pool.min>3</datasource.pool.min>
+    <datasource.pool.max>12</datasource.pool.max>
+    <datasource.pool.increment>3</datasource.pool.increment>
+
   </properties>
-  
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.3.2</version>
+          <configuration>
+            <source>${java.source.version}</source>
+            <target>${java.target.version}</target>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
   <repositories>
     <repository>
       <id>nexus</id>
@@ -93,9 +133,9 @@
       <url>http://192.168.1.100:8080/nexus/content/repositories/snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
-  
+
   <organization>
     <name>Rockontrol</name>
     <url>http://www.rockontrol.com</url>
-  </organization>  
+  </organization>
 </project>
