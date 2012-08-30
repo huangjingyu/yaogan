@@ -6,6 +6,7 @@ import org.geotools.data.FileDataStore;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.filter.text.cql2.CQLException;
 import org.opengis.feature.simple.SimpleFeature;
+import org.springframework.stereotype.Service;
 import org.yaogan.gis.mgr.DataFileType;
 import org.yaogan.gis.mgr.IDataStoreManager;
 import org.yaogan.gis.util.EcoFactorCaculator;
@@ -13,6 +14,7 @@ import org.yaogan.gis.util.FeatureSelector;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+@Service
 public class EcoFactorComputeServiceImpl implements EcoFactorComputeService {
    // private IFeatureSelector _featureSelector;
    private IDataStoreManager _dataStoreManager;

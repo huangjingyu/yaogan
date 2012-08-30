@@ -4,16 +4,10 @@ import java.io.File;
 
 import junit.framework.Assert;
 
-import org.junit.Before;
 import org.junit.Test;
 
 public class DagaFileManagerTest {
    private final DataFileManager _manager = new DataFileManager();
-
-   @Before
-   public void configHome() {
-      _manager.setShapeFileHome("F:/shapeFile");
-   }
 
    @Test
    public void testGetShapefile() {
