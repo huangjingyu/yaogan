@@ -4,19 +4,20 @@
   xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.rockontrol.yaogan</groupId>
     <artifactId>yaogan-master</artifactId>
+    <groupId>com.rockontrol.yaogan</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
+  <groupId>com.rockontrol.yaogan</groupId>
+  <artifactId>yaogan-gis</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <name>yaogan-gis</name>
+  <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <geotools.version>8.0</geotools.version>
   </properties>
-  <groupId>com.rockontrol.yaogan</groupId>
-  <artifactId>yaogan-service</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <name>yaogan-service</name>
-  <url>http://maven.apache.org</url>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -25,30 +26,31 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-    <groupId>com.rockontrol.yaogan</groupId>
-    <artifactId>yaogan-dao</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <type>pom</type>
+      <groupId>org.geotools</groupId>
+      <artifactId>gt-shapefile</artifactId>
+      <version>${geotools.version}</version>
     </dependency>
-        <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-cas-client</artifactId>
-      <version>3.0.7.RELEASE</version>
+    <!-- Provides map projections -->
+    <dependency>
+      <groupId>org.geotools</groupId>
+      <artifactId>gt-epsg-hsql</artifactId>
+      <version>${geotools.version}</version>
     </dependency>
-       <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-core</artifactId>
-      <version>3.1.0.RELEASE</version>
+    <!-- Provides support for PostGIS. Note the different groupId -->
+    <dependency>
+      <groupId>org.geotools.jdbc</groupId>
+      <artifactId>gt-jdbc-postgis</artifactId>
+      <version>${geotools.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-web</artifactId>
-      <version>3.1.0.RELEASE</version>
+      <groupId>org.geotools</groupId>
+      <artifactId>gt-epsg-hsql</artifactId>
+      <version>${geotools.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-config</artifactId>
-      <version>3.1.0.RELEASE</version>
+      <groupId>org.geotools</groupId>
+      <artifactId>gt-cql</artifactId>
+      <version>${geotools.version}</version>
     </dependency>
   </dependencies>
   <repositories>

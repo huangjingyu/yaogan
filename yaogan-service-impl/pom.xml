@@ -8,12 +8,16 @@
     <artifactId>yaogan-master</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <groupId>com.rockontrol.yaogan</groupId>
   <artifactId>yaogan-service-impl</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>yaogan-service-impl</name>
   <url>http://maven.apache.org</url>
   <dependencies>
+  <dependency>
+      <groupId>com.rockontrol.yaogan</groupId>
+      <artifactId>yaogan-gis</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
     <dependency>
       <groupId>com.rockontrol.yaogan</groupId>
       <artifactId>yaogan-service</artifactId>
@@ -102,4 +106,5 @@
       <version>1.6.10</version>
     </dependency>
   </dependencies>
+ 
 </project>
