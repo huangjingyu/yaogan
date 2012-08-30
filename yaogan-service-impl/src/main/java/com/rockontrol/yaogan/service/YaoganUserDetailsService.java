@@ -1,6 +1,9 @@
 package com.rockontrol.yaogan.service;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,7 +23,6 @@ public class YaoganUserDetailsService implements UserDetailsService {
    public UserDetails loadUserByUsername(String username)
          throws UsernameNotFoundException {
       User user = userDao.getUserByName(username);
-
       if (user == null) {
          throw new UsernameNotFoundException(
                "Security::Error in retrieving user(username=" + username + ")");
@@ -41,7 +43,7 @@ public class YaoganUserDetailsService implements UserDetailsService {
        */
       IYaoganUserDetails yaoganUserDetails = new YaoganUserDetailsImpl(user.getId(),
             tenantId, user.getUserName(), user.getPassword(), enabled, acountNonExpired,
-            credentialsNonExpired, accountNonLock, null);
+            credentialsNonExpired, accountNonLock, new ArrayList<GrantedAuthority>());
       return yaoganUserDetails;
 
    }
