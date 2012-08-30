@@ -16,6 +16,7 @@
     <module>yaogan-service</module>
     <module>yaogan-service-impl</module>
     <module>yaogan-web</module>
+    <module>yaogan-gis</module>
   </modules>
 
   <dependencyManagement>
