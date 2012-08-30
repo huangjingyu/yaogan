@@ -10,12 +10,12 @@
   <url>http://www.rockontrolcloud.com</url>
 
   <modules>
-    <module>yaogan-web</module>
     <module>yaogan-model</module>
     <module>yaogan-dao</module>
     <module>yaogan-dao-impl</module>
     <module>yaogan-service</module>
     <module>yaogan-service-impl</module>
+    <module>yaogan-web</module>
   </modules>
 
   <dependencyManagement>
@@ -34,9 +34,9 @@
     <java.target.version>1.6</java.target.version>
 
 
-    <cas.login.url>https://sso.rockloud.com/cas/</cas.login.url>
-    <cas.logout.url>https://sso.rockloud.com/cas/logout</cas.logout.url>
-    <cas.client.cloudportals>http://192.168.1.207:8080/portals-web/j_spring_cas_security_check</cas.client.cloudportals>
+    <cas.login.url>https://sso.rkcloud.cn/cas/</cas.login.url>
+    <cas.logout.url>https://sso.rkcloud.cn/cas/logout</cas.logout.url>
+    <cas.client.cloudportals>/j_spring_cas_security_check</cas.client.cloudportals>
 
     <hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect>
     <datasource.db.driver>org.postgresql.Driver</datasource.db.driver>
@@ -47,7 +47,6 @@
     <datasource.pool.min>3</datasource.pool.min>
     <datasource.pool.max>12</datasource.pool.max>
     <datasource.pool.increment>3</datasource.pool.increment>
-
   </properties>
 
   <build>
