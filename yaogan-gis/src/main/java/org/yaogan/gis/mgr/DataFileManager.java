@@ -1,6 +1,9 @@
 package org.yaogan.gis.mgr;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 /**
  * 
@@ -14,8 +17,12 @@ import java.io.File;
 public class DataFileManager {
    private String _shapeFileHome;
 
+   public DataFileManager() {
+      initHomePath();
+   }
+
    public File getShapefile(int year, String type) {
-      this.checkFileHome();
+
       String fileName = type + "_" + year + ".shp";
       String typeHome = _shapeFileHome + File.separator + type;
       String fullPath = typeHome + File.separator + year + File.separator + fileName;
@@ -39,7 +46,7 @@ public class DataFileManager {
     * @return 地区_类型_year.shp
     */
    public File getShapefile(String region, int year, String type) {
-      this.checkFileHome();
+
       String fileName = region + "_" + type + "_" + year + ".shp";
       String typeHome = _shapeFileHome + File.separator + type;
       String fullPath = typeHome + File.separator + year + File.separator + fileName;
@@ -72,8 +79,15 @@ public class DataFileManager {
 
    }
 
-   private void checkFileHome() {
-      if (this._shapeFileHome == null)
-         _shapeFileHome = System.getProperty("yaogan.gis.shapefile.home");
+   private void initHomePath() {
+      InputStream is = DataFileManager.class
+            .getResourceAsStream("/ShapeFileStore.properties");
+      Properties props = new Properties();
+      try {
+         props.load(is);
+         _shapeFileHome = props.getProperty("yaogan.gis.shapefile.home");
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
    }
 }

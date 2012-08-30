@@ -48,6 +48,8 @@
     <datasource.pool.min>3</datasource.pool.min>
     <datasource.pool.max>12</datasource.pool.max>
     <datasource.pool.increment>3</datasource.pool.increment>
+    
+    <yaogan.gis.shapefile.home>f:/shapeFile</yaogan.gis.shapefile.home>
   </properties>
 
   <build>
