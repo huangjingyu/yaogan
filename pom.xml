@@ -33,6 +33,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.source.version>1.6</java.source.version>
     <java.target.version>1.6</java.target.version>
+    <she.version>3.5.0</she.version>
 
 
     <cas.login.url>https://sso.rkcloud.cn/cas/</cas.login.url>
