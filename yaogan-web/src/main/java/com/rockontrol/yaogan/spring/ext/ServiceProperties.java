@@ -49,10 +49,8 @@ public class ServiceProperties implements InitializingBean {
             .getRequestAttributes()).getRequest();
       String host = request.getHeader("HOST");
       StringBuilder sb = new StringBuilder();
-      sb.append("http://").append(host)
-            .append(request.getServerPort() == 80 ? "" : ":" + request.getServerPort())
-            .append(request.getContextPath()).append(service.startsWith("/") ? "" : "/")
-            .append(service);
+      sb.append("http://").append(host).append(request.getContextPath())
+            .append(service.startsWith("/") ? "" : "/").append(service);
       return sb.toString();
    }
 
