@@ -60,6 +60,7 @@
 
   <!-- 文件上传，以byte为单位 -->
   <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+
     p:maxUploadSize="1000000000"
    />
 
