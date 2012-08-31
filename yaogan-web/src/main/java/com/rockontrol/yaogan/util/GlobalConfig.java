@@ -16,6 +16,7 @@ public class GlobalConfig {
       URL url = Thread.currentThread().getContextClassLoader().getResource(_CONFIG_FILE);
       try {
          _properties = new PropertiesConfiguration(url);
+
       } catch (ConfigurationException ex) {
          ex.printStackTrace();
       }

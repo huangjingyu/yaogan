@@ -72,6 +72,7 @@ public class EcoFactorComputeController {
                result = _computeService.computeAveg(vo.getRegion(), vo.getYear(),
                      vo.getBoundary());
             }
+
          }
          HttpHeaders responseHeaders = new HttpHeaders();
          responseHeaders.add("Content-Type", "text/plain;charset=UTF-8");
