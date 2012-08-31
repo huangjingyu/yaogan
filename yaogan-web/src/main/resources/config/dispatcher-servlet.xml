@@ -58,6 +58,12 @@
     </property>
   </bean>
 
+  <!-- 文件上传，以byte为单位 -->
+  <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+    p:dafaultEncoding="utf-8"
+    p:maxUploadSize="1000000000"
+   />
+
   <bean id="dateEditor"
     class="org.springframework.beans.propertyeditors.CustomDateEditor">
     <constructor-arg>
