@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.rockontrol.yaogan.util.GlobalConfig;
+
 @Controller
 public class AuthController {
 
@@ -18,7 +20,8 @@ public class AuthController {
 
    @RequestMapping(value = "/doLogout")
    public void logout(HttpServletRequest request, HttpServletResponse response) {
-      String casLogout = "https://sso.rkcloud.cn/cas/logout";
+      String casLogout = (String) GlobalConfig.getProperties().getProperty(
+            "cas.logout.url");
 
       String protocal = request.getScheme();
       String server = request.getServerName();
