@@ -4,9 +4,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity(name = "shapefiles")
 public class Shapefile {
@@ -27,10 +30,12 @@ public class Shapefile {
    }
 
    private Long _id;
+   private Long _placeId;
    private String _fileName;
-   private String _WMSURL;
+   private String _wmsUrl;
    private String _shootTime;
    private Category _category;
+   private Place place;
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +48,15 @@ public class Shapefile {
       this._id = id;
    }
 
+   @Column(name = "place_id")
+   public Long getPlaceId() {
+      return _placeId;
+   }
+
+   public void setPlaceId(Long placeId) {
+      this._placeId = placeId;
+   }
+
    @Column(length = 64, unique = true, nullable = false)
    public String getFileName() {
       return _fileName;
@@ -53,12 +67,12 @@ public class Shapefile {
    }
 
    @Column(length = 128)
-   public String getWMSURL() {
-      return _WMSURL;
+   public String getWmsUrl() {
+      return _wmsUrl;
    }
 
-   public void setWMSURL(String WMSURL) {
-      this._WMSURL = WMSURL;
+   public void setWmsUrl(String wmsUrl) {
+      this._wmsUrl = wmsUrl;
    }
 
    @Column(length = 64)
@@ -77,5 +91,15 @@ public class Shapefile {
 
    public void setCategory(Category category) {
       this._category = category;
+   }
+
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "place_id", insertable = false, updatable = false)
+   public Place getPlace() {
+      return place;
+   }
+
+   public void setPlace(Place place) {
+      this.place = place;
    }
 }
