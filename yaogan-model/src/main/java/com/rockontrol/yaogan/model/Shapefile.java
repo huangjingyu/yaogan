@@ -66,7 +66,7 @@ public class Shapefile {
       return _shootTime;
    }
 
-   public void set_shootTime(String shootTime) {
+   public void setShootTime(String shootTime) {
       this._shootTime = shootTime;
    }
 
