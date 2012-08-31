@@ -9,7 +9,7 @@
 
 </head>
 <body>
-	<form method="post" action="upload/test" enctype="multipart/form-data">
+	<form method="post" action="upload/gis" enctype="multipart/form-data">
 		<label>地区</label><input type="text" name="region" /> <br/>
 		<label>拍摄时间</label><input type="text" name="shootTime" /> <br/>
 		<label>土地类型文件</label><input type="file" name="landType" /> <br/>

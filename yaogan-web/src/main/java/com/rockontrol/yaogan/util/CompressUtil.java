@@ -47,6 +47,15 @@ public class CompressUtil {
       unZip(source, dest, Charset.defaultCharset());
    }
 
+   public static void unZip(File source, String dest, Charset charSet)
+         throws IOException {
+      unZip(source.getAbsolutePath(), dest, charSet);
+   }
+
+   public static void unZip(File source, String dest) throws IOException {
+      unZip(source.getAbsolutePath(), dest);
+   }
+
    public static void saveTo(InputStream is, String dest) throws IOException {
       OutputStream os = new FileOutputStream(dest);
       byte b[] = new byte[1024];
