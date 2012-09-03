@@ -34,7 +34,7 @@ public class YaoganServiceImpl implements IYaoganService {
    }
 
    @Override
-   public void sharePlacesToUser(User caller, Long userId, Long[] placeId) {
+   public void sharePlacesToUser(User caller, Long userId, Long[] placeIds) {
       // TODO Auto-generated method stub
 
    }

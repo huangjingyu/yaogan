@@ -17,7 +17,7 @@ public interface IYaoganService {
 
    public List<User> getAllUsersOfOrg(User caller, Long orgId);
 
-   public void sharePlacesToUser(User caller, Long userId, Long[] placeId);
+   public void sharePlacesToUser(User caller, Long userId, Long[] placeIds);
 
    public void unsharePlaceToUser(User caller, Long userId, Long placeId);
 

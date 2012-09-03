@@ -9,5 +9,6 @@
     <mapping class="com.rockontrol.yaogan.model.Tenant" />
     <mapping class="com.rockontrol.yaogan.model.Place" />
     <mapping class="com.rockontrol.yaogan.model.Shapefile" />
+    <mapping class="com.rockontrol.yaogan.model.UserPlace" />
 </session-factory>
 </hibernate-configuration>
