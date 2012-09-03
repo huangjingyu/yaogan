@@ -4,12 +4,16 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.yaogan.gis.mgr.DataFileType;
 
+import com.rockontrol.yaogan.model.Shapefile.Category;
+import com.rockontrol.yaogan.service.IPlaceService;
+import com.rockontrol.yaogan.service.IShapefileService;
 import com.rockontrol.yaogan.util.CompressUtil;
 import com.rockontrol.yaogan.util.GlobalConfig;
 
@@ -17,14 +21,19 @@ import com.rockontrol.yaogan.util.GlobalConfig;
 @RequestMapping("upload")
 public class UploadController {
 
+   @Autowired
+   private IPlaceService placeService;
+   @Autowired
+   private IShapefileService shapefileService;
+
    @RequestMapping(value = "/gis")
    public String handleFormUpload(@RequestParam("region") String region,
-         @RequestParam("shootTime") int year,
+         @RequestParam("shootTime") String year,
          @RequestParam("landType") MultipartFile landTypeFile,
          @RequestParam("landSoil") MultipartFile landSoilFile,
          @RequestParam("boundary") MultipartFile boundaryFile) {
-      String tempDir = (String) GlobalConfig.getProperties().getProperty(
-            "yaogan.upload.tempdir");
+      // String tempDir = (String) GlobalConfig.getProperties().getProperty(
+      // "yaogan.upload.tempdir");
       String shapeFileHome = (String) GlobalConfig.getProperties().getProperty(
             "yaogan.gis.shapefile.home");
       try {
@@ -41,16 +50,30 @@ public class UploadController {
 
          File dLandTypeFile = new File(landTypePath + File.separator + region + "_"
                + DataFileType.FILE_LAND_TYPE + "_" + year + ".zip");
+         File dLandTypeShpfile = new File(landTypePath + File.separator + region + "_"
+               + DataFileType.FILE_LAND_TYPE + "_" + year + ".shp");
          File dSoilFile = new File(landSoilPath + File.separator + region + "_"
                + DataFileType.FILE_LAND_SOIL + "_" + year + ".zip");
+         File dSoilShpFile = new File(landSoilPath + File.separator + region + "_"
+               + DataFileType.FILE_LAND_SOIL + "_" + year + ".shp");
          File dBoundaryFile = new File(boundaryPath + File.separator + region + "_"
                + DataFileType.FILE_REGION_BOUNDARY + "_" + year + ".zip");
+         File dBoundaryShpFile = new File(boundaryPath + File.separator + region + "_"
+               + DataFileType.FILE_REGION_BOUNDARY + "_" + year + ".shp");
          landTypeFile.transferTo(dLandTypeFile);
          landSoilFile.transferTo(dSoilFile);
          boundaryFile.transferTo(dBoundaryFile);
          unZip(dLandTypeFile);
          unZip(dSoilFile);
          unZip(dBoundaryFile);
+
+         shapefileService.saveUploadFile(region, Category.FILE_LAND_TYPE,
+               dLandTypeShpfile, year);
+         shapefileService.saveUploadFile(region, Category.FILE_LAND_SOIL, dSoilShpFile,
+               year);
+         shapefileService.saveUploadFile(region, Category.FILE_REGION_BOUNDARY,
+               dBoundaryShpFile, year);
+
          dLandTypeFile.delete();
          dSoilFile.delete();
          dBoundaryFile.delete();

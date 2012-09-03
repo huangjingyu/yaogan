@@ -1,6 +1,7 @@
 package org.yaogan.gis.mgr;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -10,6 +11,7 @@ import java.util.Properties;
  * 
  * 
  * ShapeFile store :$ROOT/type/year FileName: region_type_year或region_type
+ * region/type/year
  * 
  * @author Administrator
  * 
@@ -44,26 +46,14 @@ public class DataFileManager {
     * @param year
     * @param type
     * @return 地区_类型_year.shp
+    * @throws FileNotFoundException
     */
    public File getShapefile(String region, int year, String type) {
 
       String fileName = region + "_" + type + "_" + year + ".shp";
-      String typeHome = _shapeFileHome + File.separator + type;
+      String typeHome = _shapeFileHome + File.separator + region + File.separator + type;
       String fullPath = typeHome + File.separator + year + File.separator + fileName;
       File file = new File(fullPath);
-      if (!file.exists()) {
-         fileName = type + "_" + year + ".shp";
-         fullPath = typeHome + File.separator + year + File.separator + fileName;
-         file = new File(fullPath);
-      }
-      if (!file.exists()) {
-         fileName = region + "_" + type + ".shp";
-         fullPath = typeHome + File.separator + fileName;
-         file = new File(fullPath);
-      }
-
-      if (!file.exists())
-         file = null;
       return file;
    }
 
