@@ -3,6 +3,7 @@ package com.rockontrol.yaogan.service;
 import java.util.List;
 
 import com.rockontrol.yaogan.model.Place;
+import com.rockontrol.yaogan.model.Shapefile;
 import com.rockontrol.yaogan.model.User;
 import com.rockontrol.yaogan.vo.EnvStats;
 
@@ -26,4 +27,6 @@ public interface IYaoganService {
          String geom_string);
 
    public EnvStats getEnvStats(User caller, Long placeId, String time);
+
+   public List<Shapefile> getShapefiles(User caller, Long placeId, String time);
 }
