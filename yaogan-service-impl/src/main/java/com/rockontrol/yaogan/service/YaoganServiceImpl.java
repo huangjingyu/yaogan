@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.rockontrol.yaogan.model.Place;
 import com.rockontrol.yaogan.model.User;
+import com.rockontrol.yaogan.vo.EnvStats;
 
 public class YaoganServiceImpl implements IYaoganService {
 
@@ -41,6 +42,25 @@ public class YaoganServiceImpl implements IYaoganService {
    public void unsharePlaceToUser(User caller, Long userId, Long placeId) {
       // TODO Auto-generated method stub
 
+   }
+
+   @Override
+   public EnvStats getEnvStats(User caller, Long placeId, String time) {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+   @Override
+   public EnvStats computeEnvStats(User caller, Long placeId, String time) {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+   @Override
+   public EnvStats computeEnvStats(User caller, Long placeId, String time,
+         String geom_string) {
+      // TODO Auto-generated method stub
+      return null;
    }
 
 }

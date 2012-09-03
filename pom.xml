@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.rockontrol.yaogan</groupId>
   <artifactId>yaogan-master</artifactId>
@@ -10,13 +9,14 @@
   <url>http://www.rockontrolcloud.com</url>
 
   <modules>
+    <module>yaogan-common</module>
     <module>yaogan-model</module>
     <module>yaogan-dao</module>
     <module>yaogan-dao-impl</module>
     <module>yaogan-service</module>
     <module>yaogan-service-impl</module>
     <module>yaogan-web</module>
-    <module>yaogan-gis</module>
+    <module>yaogan-gis</module>    
   </modules>
 
   <dependencyManagement>
@@ -34,7 +34,6 @@
     <java.source.version>1.6</java.source.version>
     <java.target.version>1.6</java.target.version>
     <she.version>3.5.0</she.version>
-
 
     <cas.login.url>https://sso.rkcloud.cn/cas/</cas.login.url>
     <cas.logout.url>https://sso.rkcloud.cn/cas/logout</cas.logout.url>

@@ -32,6 +32,7 @@ public class Shapefile {
    private Long _id;
    private Long _placeId;
    private String _fileName;
+   private String _filePath;
    private String _wmsUrl;
    private String _shootTime;
    private Category _category;
@@ -64,6 +65,14 @@ public class Shapefile {
 
    public void setFileName(String fileName) {
       this._fileName = fileName;
+   }
+
+   public String getFilePath() {
+      return _filePath;
+   }
+
+   public void setFilePath(String filePath) {
+      this._filePath = filePath;
    }
 
    @Column(length = 128)

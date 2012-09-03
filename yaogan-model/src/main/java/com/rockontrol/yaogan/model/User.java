@@ -6,12 +6,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity(name = "users")
 public class User {
 
    private Long _id;
+   private Long tenantId;
    private String _userName;
    private String _password;
    private String _email;
@@ -26,6 +28,15 @@ public class User {
 
    public void setId(Long id) {
       this._id = id;
+   }
+
+   @Column(name = "tenant_id")
+   public Long getTenantId() {
+      return tenantId;
+   }
+
+   public void setTenantId(Long tenantId) {
+      this.tenantId = tenantId;
    }
 
    @Column(length = 64, unique = true, nullable = false)
@@ -56,6 +67,7 @@ public class User {
    }
 
    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+   @JoinColumn(name = "tenant_id", insertable = false, updatable = false)
    public Tenant getTenant() {
       return _tenant;
    }

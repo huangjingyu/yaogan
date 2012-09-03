@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.rockontrol.yaogan.model.Place;
 import com.rockontrol.yaogan.model.User;
+import com.rockontrol.yaogan.vo.EnvStats;
 
 public interface IYaoganService {
 
@@ -18,4 +19,11 @@ public interface IYaoganService {
    public void sharePlacesToUser(User caller, Long userId, Long[] placeId);
 
    public void unsharePlaceToUser(User caller, Long userId, Long placeId);
+
+   public EnvStats computeEnvStats(User caller, Long placeId, String time);
+
+   public EnvStats computeEnvStats(User caller, Long placeId, String time,
+         String geom_string);
+
+   public EnvStats getEnvStats(User caller, Long placeId, String time);
 }
