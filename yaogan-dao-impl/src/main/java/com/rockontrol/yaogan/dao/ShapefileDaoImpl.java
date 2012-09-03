@@ -18,4 +18,13 @@ public class ShapefileDaoImpl extends BaseDaoImpl<Shapefile> implements IShapefi
       return query.list();
    }
 
+   @SuppressWarnings("unchecked")
+   @Override
+   public List<Shapefile> getShapefiles(Long placeId, String time) {
+      Query query = getSession().getNamedQuery("Shapefile.getShapefilesByPlaceAndTime");
+      query.setLong("placeId", placeId);
+      query.setString("time", time);
+      return query.list();
+   }
+
 }

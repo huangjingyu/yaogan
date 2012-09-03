@@ -6,4 +6,6 @@ import com.rockontrol.yaogan.model.Shapefile;
 
 public interface IShapefileDao extends IBaseDao<Shapefile> {
    public List<String> getAvailableTimesOfPlace(Long placeId);
+
+   public List<Shapefile> getShapefiles(Long placeId, String time);
 }

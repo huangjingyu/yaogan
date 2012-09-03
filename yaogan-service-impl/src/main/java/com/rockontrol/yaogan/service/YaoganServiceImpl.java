@@ -81,8 +81,7 @@ public class YaoganServiceImpl implements IYaoganService {
 
    @Override
    public List<Shapefile> getShapefiles(User caller, Long placeId, String time) {
-      // TODO Auto-generated method stub
-      return null;
+      return shapefileDao.getShapefiles(placeId, time);
    }
 
 }

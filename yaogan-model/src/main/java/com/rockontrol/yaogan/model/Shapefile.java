@@ -14,8 +14,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 @Entity(name = "shapefiles")
-@NamedQueries({ @NamedQuery(name = "Shapefile.getAvailableTimesOfPlace", query = "select shootTime from com.rockontrol.yaogan.model.Shapefile"
-      + " where placeId = :placeId") })
+@NamedQueries({
+      @NamedQuery(name = "Shapefile.getAvailableTimesOfPlace", query = "select distinct shootTime from com.rockontrol.yaogan.model.Shapefile"
+            + " where placeId = :placeId"),
+      @NamedQuery(name = "Shapefile.getShapefilesByPlaceAndTime", query = "from com.rockontrol.yaogan.model.Shapefile"
+            + " where placeId = :placeId and shootTime = :time") })
 public class Shapefile {
 
    public enum Category {
