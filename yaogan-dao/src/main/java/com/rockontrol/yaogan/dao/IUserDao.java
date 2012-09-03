@@ -2,6 +2,6 @@ package com.rockontrol.yaogan.dao;
 
 import com.rockontrol.yaogan.model.User;
 
-public interface IUserDao {
+public interface IUserDao extends IBaseDao<User> {
    User getUserByName(String userName);
 }

@@ -1,7 +1,7 @@
 package com.rockontrol.yaogan.dao;
 
-import org.she.mvc.db.IBaseDao;
+import com.rockontrol.yaogan.model.Shapefile;
 
-public interface IShapefileDao extends IBaseDao {
+public interface IShapefileDao extends IBaseDao<Shapefile> {
 
 }

@@ -1,7 +1,8 @@
 package com.rockontrol.yaogan.dao;
 
-import org.she.mvc.db.hibernate.dao.HibernateImplDao;
+import com.rockontrol.yaogan.model.Shapefile;
 
-public class ShapefileDaoImpl extends HibernateImplDao implements IShapefileDao {
+
+public class ShapefileDaoImpl extends BaseDaoImpl<Shapefile> implements IShapefileDao {
 
 }

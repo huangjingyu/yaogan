@@ -3,19 +3,23 @@
  */
 package com.rockontrol.yaogan.service;
 
-import org.she.mvc.db.hibernate.service.DefaultService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.rockontrol.yaogan.dao.IShapefileDao;
 import com.rockontrol.yaogan.model.Shapefile;
 
 @Service("shapeFileService")
-public class ShapefileServiceImpl extends DefaultService implements IShapefileService {
+public class ShapefileServiceImpl implements IShapefileService {
+
+   @Autowired
+   protected IShapefileDao dao;
 
    @Override
    @Transactional
    public void saveShapefile(Shapefile shapefile) {
-      this.save(shapefile);
+      dao.save(shapefile);
       // Shapefile shapefile = new Shapefile();
       // setCategory(shapefile, type);
       // shapefile.setFileName(file.getName());
