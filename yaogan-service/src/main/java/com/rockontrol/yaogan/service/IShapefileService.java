@@ -5,5 +5,7 @@ import org.she.mvc.db.IBaseService;
 import com.rockontrol.yaogan.model.Shapefile;
 
 public interface IShapefileService extends IBaseService {
-   public void addShapefile(Shapefile shapefile);
+   public void saveShapefile(Shapefile shapefile);
+
+   public Shapefile getShapeFile(String areaName, String type, String year);
 }
