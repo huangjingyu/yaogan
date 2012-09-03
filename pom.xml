@@ -50,7 +50,7 @@
     <datasource.pool.max>12</datasource.pool.max>
     <datasource.pool.increment>3</datasource.pool.increment>
     
-    <yaogan.gis.shapefile.home>f:/shapeFile/test</yaogan.gis.shapefile.home>
+    <yaogan.gis.shapefile.home>d:/test</yaogan.gis.shapefile.home>
     <yaogan.upload.tempdir>/WEB-INF/temp</yaogan.upload.tempdir>
   </properties>
 

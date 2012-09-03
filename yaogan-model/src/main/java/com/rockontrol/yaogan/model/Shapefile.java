@@ -90,7 +90,22 @@ public class Shapefile {
    }
 
    public void setCategory(Category category) {
-      this._category = category;
+      switch (category) {
+      case FILE_LAND_COLLAPSE:
+         this._category = Category.FILE_LAND_COLLAPSE;
+         break;
+      case FILE_LAND_SOIL:
+         this._category = Category.FILE_LAND_SOIL;
+         break;
+      case FILE_LAND_FRACTURE:
+         this._category = Category.FILE_LAND_FRACTURE;
+         break;
+      case FILE_LAND_TYPE:
+         this._category = Category.FILE_LAND_TYPE;
+         break;
+      case FILE_REGION_BOUNDARY:
+         this._category = Category.FILE_REGION_BOUNDARY;
+      }
    }
 
    @ManyToOne(fetch = FetchType.LAZY)
