@@ -214,4 +214,64 @@ public class EcoFactorComputeServiceImpl implements EcoFactorComputeService {
       SimpleFeatureSource source = store.getFeatureSource();
       return EcoFactorCaculator.computeAero(source, maxX, maxY, minX, minY);
    }
+
+   @Override
+   public double computeAbio(long regionId, int year) throws IOException {
+      // TODO Auto-generated method stub
+      return 0;
+   }
+
+   @Override
+   public double computeAbio(long regionId, int year, String geom_string)
+         throws IOException {
+      // TODO Auto-generated method stub
+      return 0;
+   }
+
+   @Override
+   public double computeAveg(long regionId, int year, String geom_string)
+         throws IOException {
+      // TODO Auto-generated method stub
+      return 0;
+   }
+
+   @Override
+   public double computeAveg(long regionId, int year) throws IOException {
+      // TODO Auto-generated method stub
+      return 0;
+   }
+
+   @Override
+   public double computeAero(long regionId, int year, String geom_string)
+         throws IOException {
+      // TODO Auto-generated method stub
+      return 0;
+   }
+
+   @Override
+   public double computeAero(long regionId, int year) throws IOException {
+      // TODO Auto-generated method stub
+      return 0;
+   }
+
+   @Override
+   public double computeAbio(long regionId, int year, double maxX, double maxY,
+         double minX, double minY) throws IOException {
+      // TODO Auto-generated method stub
+      return 0;
+   }
+
+   @Override
+   public double computeAveg(long regionId, int year, double maxX, double maxY,
+         double minX, double minY) throws IOException {
+      // TODO Auto-generated method stub
+      return 0;
+   }
+
+   @Override
+   public double computeAero(long regionId, int year, double maxX, double maxY,
+         double minX, double minY) throws IOException {
+      // TODO Auto-generated method stub
+      return 0;
+   }
 }

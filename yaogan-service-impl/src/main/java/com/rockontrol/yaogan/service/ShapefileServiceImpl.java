@@ -14,8 +14,18 @@ public class ShapefileServiceImpl extends DefaultService implements IShapefileSe
 
    @Override
    @Transactional
-   public void addShapefile(Shapefile shapefile) {
+   public void saveShapefile(Shapefile shapefile) {
       this.save(shapefile);
+      // Shapefile shapefile = new Shapefile();
+      // setCategory(shapefile, type);
+      // shapefile.setFileName(file.getName());
+      // shapefile.setShootTime(year);
+   }
+
+   @Override
+   public Shapefile getShapeFile(String areaName, String type, String year) {
+      // TODO Auto-generated method stub
+      return null;
    }
 
 }
