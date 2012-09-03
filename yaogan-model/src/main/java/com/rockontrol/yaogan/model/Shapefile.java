@@ -67,6 +67,7 @@ public class Shapefile {
       this._fileName = fileName;
    }
 
+   @Column(length = 128)
    public String getFilePath() {
       return _filePath;
    }

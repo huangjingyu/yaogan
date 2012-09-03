@@ -20,6 +20,9 @@ public class ShapefileServiceImpl extends DefaultService implements IShapefileSe
    @Autowired
    private IPlaceService placeService;
 
+   @Autowired
+   private GeoService geoService;
+
    @Override
    @Transactional
    public void saveUploadFile(String region, Category type, File file, String year) {
@@ -35,6 +38,7 @@ public class ShapefileServiceImpl extends DefaultService implements IShapefileSe
          place = placeService.findPlaceByName(region);
       }
       shapefile.setPlaceId(place.getId());
+      // shapefile.setWmsUrl(geoService.publishShapeFile(file));
       shapefile.setWmsUrl(null);
       this.save(shapefile);
    }
