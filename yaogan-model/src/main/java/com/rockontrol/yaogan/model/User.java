@@ -8,16 +8,20 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 @Entity(name = "users")
+@NamedQueries({ @NamedQuery(name = "Shapefile.getAvailableTimesOfPlace", query = "select shootTime from com.rockontrol.yaogan.model.Shapefile"
+      + " where placeId = :placeId") })
 public class User {
 
    private Long _id;
-   private Long tenantId;
+   private Long _orgId;
    private String _userName;
    private String _password;
    private String _email;
-   private Tenant _tenant;
+   private Organization _organization;
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,13 +34,13 @@ public class User {
       this._id = id;
    }
 
-   @Column(name = "tenant_id")
-   public Long getTenantId() {
-      return tenantId;
+   @Column(name = "org_id")
+   public Long getOrgId() {
+      return _orgId;
    }
 
-   public void setTenantId(Long tenantId) {
-      this.tenantId = tenantId;
+   public void setOrgId(Long orgId) {
+      this._orgId = orgId;
    }
 
    @Column(length = 64, unique = true, nullable = false)
@@ -67,12 +71,12 @@ public class User {
    }
 
    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-   @JoinColumn(name = "tenant_id", insertable = false, updatable = false)
-   public Tenant getTenant() {
-      return _tenant;
+   @JoinColumn(name = "org_id", insertable = false, updatable = false)
+   public Organization getOrganization() {
+      return _organization;
    }
 
-   public void setTenant(Tenant tenant) {
-      this._tenant = tenant;
+   public void setOrganization(Organization organization) {
+      this._organization = organization;
    }
 }

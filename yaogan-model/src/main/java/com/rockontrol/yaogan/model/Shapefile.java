@@ -10,8 +10,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 @Entity(name = "shapefiles")
+@NamedQueries({ @NamedQuery(name = "Shapefile.getAvailableTimesOfPlace", query = "select shootTime from com.rockontrol.yaogan.model.Shapefile"
+      + " where placeId = :placeId") })
 public class Shapefile {
 
    public enum Category {

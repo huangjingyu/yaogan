@@ -6,6 +6,6 @@ public interface IYaoganUserDetails extends UserDetails {
 
    Long getUserId();
 
-   Long getTenantId();
+   Long getOrgId();
 
 }

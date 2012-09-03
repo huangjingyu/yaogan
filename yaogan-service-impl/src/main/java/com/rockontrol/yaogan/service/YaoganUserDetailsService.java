@@ -28,10 +28,7 @@ public class YaoganUserDetailsService implements UserDetailsService {
                "Security::Error in retrieving user(username=" + username + ")");
       }
 
-      Long tenantId = null;
-      if (user.getTenant() != null) {
-         tenantId = user.getTenant().getId();
-      }
+      Long orgId = user.getOrgId();
       boolean enabled = true;
       boolean acountNonExpired = true;
       boolean credentialsNonExpired = true;
@@ -42,7 +39,7 @@ public class YaoganUserDetailsService implements UserDetailsService {
        * user.getUserState(); }
        */
       IYaoganUserDetails yaoganUserDetails = new YaoganUserDetailsImpl(user.getId(),
-            tenantId, user.getUserName(), user.getPassword(), enabled, acountNonExpired,
+            orgId, user.getUserName(), user.getPassword(), enabled, acountNonExpired,
             credentialsNonExpired, accountNonLock, new ArrayList<GrantedAuthority>());
       return yaoganUserDetails;
 

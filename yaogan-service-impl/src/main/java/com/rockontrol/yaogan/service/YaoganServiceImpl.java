@@ -2,17 +2,33 @@ package com.rockontrol.yaogan.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.rockontrol.yaogan.dao.IOrganizationDao;
+import com.rockontrol.yaogan.dao.IPlaceDao;
+import com.rockontrol.yaogan.dao.IShapefileDao;
+import com.rockontrol.yaogan.model.Organization;
 import com.rockontrol.yaogan.model.Place;
 import com.rockontrol.yaogan.model.Shapefile;
 import com.rockontrol.yaogan.model.User;
 import com.rockontrol.yaogan.vo.EnvStats;
 
+@Service
 public class YaoganServiceImpl implements IYaoganService {
+
+   @Autowired
+   protected IPlaceDao placeDao;
+
+   @Autowired
+   protected IShapefileDao shapefileDao;
+
+   @Autowired
+   protected IOrganizationDao orgDao;
 
    @Override
    public List<Place> getAllPlaces(User caller) {
-      // TODO Auto-generated method stub
-      return null;
+      return placeDao.findAll();
    }
 
    @Override
@@ -23,14 +39,13 @@ public class YaoganServiceImpl implements IYaoganService {
 
    @Override
    public List<String> getAvailableTimeOptions(User caller, Long placeId) {
-      // TODO Auto-generated method stub
-      return null;
+      return shapefileDao.getAvailableTimesOfPlace(placeId);
    }
 
    @Override
    public List<User> getAllUsersOfOrg(User caller, Long orgId) {
-      // TODO Auto-generated method stub
-      return null;
+      Organization org = orgDao.get(orgId);
+      return org == null ? null : org.getEmployees();
    }
 
    @Override

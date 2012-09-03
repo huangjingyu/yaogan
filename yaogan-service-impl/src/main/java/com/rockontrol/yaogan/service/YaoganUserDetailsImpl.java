@@ -8,34 +8,34 @@ import org.springframework.security.core.userdetails.User;
 public class YaoganUserDetailsImpl extends User implements IYaoganUserDetails {
 
    private static final long serialVersionUID = 1L;
-   private Long userId;
+   private Long _userId;
 
-   private Long tenantId;
+   private Long _orgId;
 
-   public YaoganUserDetailsImpl(Long userId, Long tenantId, String username,
+   public YaoganUserDetailsImpl(Long userId, Long orgId, String username,
          String password, boolean enabled, boolean accountNonExpired,
          boolean credentialsNonExpired, boolean accountNonLocked,
          Collection<? extends GrantedAuthority> authorities) {
       super(username, password, enabled, accountNonExpired, credentialsNonExpired,
             accountNonLocked, authorities);
-      this.userId = userId;
-      this.tenantId = tenantId;
+      this._userId = userId;
+      this._orgId = orgId;
    }
 
    public void setUserId(Long userId) {
-      this.userId = userId;
+      this._userId = userId;
    }
 
-   public void setTenantId(Long tenantId) {
-      this.tenantId = tenantId;
+   public void setOrgId(Long orgId) {
+      this._orgId = orgId;
    }
 
    public Long getUserId() {
-      return this.userId;
+      return this._userId;
    }
 
-   public Long getTenantId() {
-      return this.tenantId;
+   public Long getOrgId() {
+      return this._orgId;
    }
 
 }

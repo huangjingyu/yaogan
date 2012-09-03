@@ -1,7 +1,9 @@
 package com.rockontrol.yaogan.dao;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,13 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
    @Override
    public T get(Long id) {
       return (T) getSession().get(entityClass, id);
+   }
+
+   @SuppressWarnings("unchecked")
+   @Override
+   public List<T> findAll() {
+      Query query = getSession().createQuery("from " + entityClass.getName());
+      return query.list();
    }
 
    @Override
