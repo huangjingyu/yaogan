@@ -19,7 +19,7 @@ public class GeoServiceTest {
    @Test
    public void testLogin() {
       GeoService service = context.getBean(GeoService.class);
-      service.publishShapeFile("pingshuo", "DL", "2010", new File("E:/testfile/2010.shp"));
+      service.publishShapeFile(new File("E:/testfile/psbj.shp"));
    }
    
   

@@ -12,6 +12,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.Header;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -20,6 +21,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.client.params.HttpClientParams;
+import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
@@ -46,6 +48,9 @@ public class GeoServiceImpl implements GeoService {
    public static final String SHP_FILE_KEY = "SHP_FILE";
    public static final Log log = LogFactory.getLog(GeoServiceImpl.class);
 
+   public static void main(String[] args) {
+      new GeoServiceImpl().publishShapeFile(new File("E:/testfile/psbj.shp"));
+   }
    /**
     * @param area
     *           矿区标识
@@ -57,15 +62,14 @@ public class GeoServiceImpl implements GeoService {
     *           文件名称
     */
    @Override
-   public void publishShapeFile(String area, String type, String time, File shapeFile) {
+   public String publishShapeFile(File shapeFile) {
       HttpClient client = null;
+      CallContext context = new CallContext();
       try {
-         CallContext context = new CallContext();
-         if ("FILE_REGION_BOUNDARY".equals(type)) {
-            context.storeName = area + "_" + type;
-         } else {
-            context.storeName = area + "_" + type + "_" + time;
-         }
+         //FILE_REGION_BOUNDARY
+         String fileName = shapeFile.getName();
+         int pos = fileName.lastIndexOf('.');
+         context.storeName = fileName.substring(0, pos);
          copyFile(shapeFile, context.storeName);
          context.workspaceName = WORKSPACE_NAME;
          client = createClient();
@@ -103,6 +107,7 @@ public class GeoServiceImpl implements GeoService {
             client.getConnectionManager().shutdown();
          }
       }
+     return context.storeName;
    }
 
    /**
@@ -172,10 +177,10 @@ public class GeoServiceImpl implements GeoService {
     * */
    private HttpClient createClient() {
       ThreadSafeClientConnManager manager = new ThreadSafeClientConnManager();
-      manager.setDefaultMaxPerRoute(10);
+      manager.setDefaultMaxPerRoute(20);
       DefaultHttpClient client = new DefaultHttpClient(manager);
-      // HttpHost proxy = new HttpHost("127.0.0.1", 8080);
-      // client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+      //HttpHost proxy = new HttpHost("127.0.0.1", 8080);
+     // client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
       HttpClientParams.setCookiePolicy(client.getParams(),
             CookiePolicy.BROWSER_COMPATIBILITY);
       return client;
@@ -273,11 +278,20 @@ public class GeoServiceImpl implements GeoService {
     * @param context
     */
    private HttpResponse addStore(HttpClient client, CallContext context) {
+      
+      String html = context.lastHtml;
       HttpPost httpPost = new HttpPost(context.location);
       List<NameValuePair> params = new ArrayList<NameValuePair>();
-      /** 工作空间test */
-      params.add(new BasicNameValuePair("workspacePanel:border:paramValue",
-            (String) context.get(WS_KEY)));
+      /** 工作空间yaogan */
+      params.add(new BasicNameValuePair("workspacePanel:border:paramValue",(String) context.get(WS_KEY)));
+      int selectStart = html.indexOf("<select");
+      int actionStart = html.indexOf("?", selectStart);
+      int actionEnd = html.indexOf("'", actionStart);
+      String wsAction = html.substring(actionStart, actionEnd);
+      /**点击下拉的工作空间*/
+      HttpPost wsPost = new HttpPost(SERVER_BASE + "/web/" + wsAction);
+      execute(params, client, wsPost);
+      
       /** 存储名称 */
       params.add(new BasicNameValuePair("dataStoreNamePanel:border:paramValue",
             context.storeName));
@@ -288,7 +302,6 @@ public class GeoServiceImpl implements GeoService {
       params.add(new BasicNameValuePair("dataStoreEnabledPanel:paramValue", "on"));
 
       /** 得到文件选择的地址 */
-      String html = context.lastHtml;
       int browIndex = html.indexOf("Browse...");
       while (browIndex-- > 0) {
          if (html.charAt(browIndex) == '?') {
@@ -468,7 +481,8 @@ public class GeoServiceImpl implements GeoService {
 
    private HttpResponse execute(HttpClient client, HttpGet get) {
       try {
-         return client.execute(get);
+         HttpResponse response = client.execute(get);
+         return response;
       } catch (Exception e) {
          throw new RuntimeException("Get调用异常:" + get.getURI(), e);
       }
