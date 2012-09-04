@@ -38,6 +38,15 @@ public class FeatureSelector {
       return collection;
    }
 
+   public static SimpleFeatureCollection selectFeatureWithinBoundary(String geom_string,
+         SimpleFeatureSource source) throws IOException {
+      FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2();
+
+      Filter filter = ff.within(ff.property("the_geom"), ff.literal(geom_string));
+      SimpleFeatureCollection collection = source.getFeatures(filter);
+      return collection;
+   }
+
    public static SimpleFeatureCollection selectFeatureWithinBBox(
          SimpleFeatureSource source, double maxX, double maxY, double minX, double minY)
          throws IOException {

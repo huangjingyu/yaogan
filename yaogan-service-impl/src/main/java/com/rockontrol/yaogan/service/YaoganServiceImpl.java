@@ -1,6 +1,7 @@
 package com.rockontrol.yaogan.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -34,6 +35,9 @@ public class YaoganServiceImpl implements IYaoganService {
 
    @Autowired
    protected IUserPlaceDao upDao;
+
+   @Autowired
+   private EcoFactorComputeService computeService;
 
    @Override
    public List<Place> getPlacesOfOrg(User caller, Long orgId) {
@@ -81,34 +85,92 @@ public class YaoganServiceImpl implements IYaoganService {
 
    @Override
    public EnvStats getEnvStats(User caller, Long placeId, String time) {
-      // TODO Auto-generated method stub
+
       return null;
    }
 
    @Override
    public EnvStats getEnvStats(User caller, Long placeId, String time, String geom_string) {
-      // TODO Auto-generated method stub
+      // List<Shapefile> list = this.getShapefiles(caller, placeId, time);
+      // EnvStats stats = new EnvStats();
+      // try {
+      // for (Shapefile shapefile : list) {
+      // Category category = shapefile.getCategory();
+      // if (category.equals(Shapefile.Category.FILE_LAND_TYPE)) {
+      // double abio = this.computeService.computeAbio(shapefile.getFilePath());
+      // double aveg = this.computeService.computeAveg(shapefile.getFilePath());
+      // stats.setAbio(abio);
+      // stats.setAveg(aveg);
+      // } else if (category.equals(Shapefile.Category.FILE_LAND_SOIL)) {
+      // double aero = this.computeService.computeAero(shapefile.getFilePath());
+      // stats.setAero(aero);
+      // }
+      // }
+      // } catch (IOException e) {
+      // e.printStackTrace();
+      // }
+      //
       return null;
    }
 
    @Transactional
    @Override
    public EnvStats computeEnvStats(User caller, Long placeId, String time) {
-      // TODO Auto-generated method stub
-      return null;
+      List<Shapefile> list = this.getShapefiles(caller, placeId, time);
+      EnvStats stats = new EnvStats();
+      try {
+         for (Shapefile shapefile : list) {
+            Category category = shapefile.getCategory();
+            if (category.equals(Shapefile.Category.FILE_LAND_TYPE)) {
+               double abio = this.computeService.computeAbio(shapefile.getFilePath());
+               double aveg = this.computeService.computeAveg(shapefile.getFilePath());
+               stats.setAbio(abio);
+               stats.setAveg(aveg);
+            } else if (category.equals(Shapefile.Category.FILE_LAND_SOIL)) {
+               double aero = this.computeService.computeAero(shapefile.getFilePath());
+               stats.setAero(aero);
+            }
+         }
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
+      // persist env
+      return stats;
    }
 
    @Transactional
    @Override
    public EnvStats computeEnvStats(User caller, Long placeId, String time,
          String geom_string) {
-      // TODO Auto-generated method stub
-      return null;
+      List<Shapefile> list = this.getShapefiles(caller, placeId, time);
+      EnvStats stats = new EnvStats();
+      try {
+         for (Shapefile shapefile : list) {
+            Category category = shapefile.getCategory();
+            if (category.equals(Shapefile.Category.FILE_LAND_TYPE)) {
+               double abio = this.computeService.computeAbio(shapefile.getFilePath(),
+                     geom_string);
+               double aveg = this.computeService.computeAveg(shapefile.getFilePath(),
+                     geom_string);
+               stats.setAbio(abio);
+               stats.setAveg(aveg);
+            } else if (category.equals(Shapefile.Category.FILE_LAND_SOIL)) {
+               double aero = this.computeService.computeAero(shapefile.getFilePath(),
+                     geom_string);
+               stats.setAero(aero);
+            }
+         }
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
+      // persist env
+      return stats;
    }
 
    @Override
    public EnvStats[] getEnvStats(User caller, Long placeId, String[] time) {
       // TODO Auto-generated method stub
+
       return null;
    }
 
@@ -140,6 +202,46 @@ public class YaoganServiceImpl implements IYaoganService {
       // shapefile.setWmsUrl(geoService.publishShapeFile(file));
       shapefile.setWmsUrl(null);
       shapefileDao.save(shapefile);
+   }
+
+   public IPlaceDao getPlaceDao() {
+      return placeDao;
+   }
+
+   public void setPlaceDao(IPlaceDao placeDao) {
+      this.placeDao = placeDao;
+   }
+
+   public IShapefileDao getShapefileDao() {
+      return shapefileDao;
+   }
+
+   public void setShapefileDao(IShapefileDao shapefileDao) {
+      this.shapefileDao = shapefileDao;
+   }
+
+   public IOrganizationDao getOrgDao() {
+      return orgDao;
+   }
+
+   public void setOrgDao(IOrganizationDao orgDao) {
+      this.orgDao = orgDao;
+   }
+
+   public IUserPlaceDao getUpDao() {
+      return upDao;
+   }
+
+   public void setUpDao(IUserPlaceDao upDao) {
+      this.upDao = upDao;
+   }
+
+   public EcoFactorComputeService getComputeService() {
+      return computeService;
+   }
+
+   public void setComputeService(EcoFactorComputeService computeService) {
+      this.computeService = computeService;
    }
 
 }
