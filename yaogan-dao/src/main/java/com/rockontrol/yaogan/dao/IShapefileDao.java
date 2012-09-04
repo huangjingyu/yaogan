@@ -1,7 +1,11 @@
 package com.rockontrol.yaogan.dao;
 
-import org.she.mvc.db.IBaseDao;
+import java.util.List;
 
-public interface IShapefileDao extends IBaseDao {
+import com.rockontrol.yaogan.model.Shapefile;
 
+public interface IShapefileDao extends IBaseDao<Shapefile> {
+   public List<String> getAvailableTimesOfPlace(Long placeId);
+
+   public List<Shapefile> getShapefiles(Long placeId, String time);
 }

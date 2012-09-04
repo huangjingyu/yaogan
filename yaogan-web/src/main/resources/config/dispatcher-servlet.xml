@@ -17,7 +17,8 @@
             ">
 
   <mvc:annotation-driven />
-
+  <mvc:resources mapping="/static/**" location="/public/" />
+  
   <context:component-scan base-package="com.rockontrol.*"
     use-default-filters="false">
     <context:include-filter expression="org.springframework.stereotype.Controller"

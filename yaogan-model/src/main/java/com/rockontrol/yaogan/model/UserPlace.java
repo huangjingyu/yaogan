@@ -1,6 +1,8 @@
 package com.rockontrol.yaogan.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity(name = "user_place")
 public class UserPlace {
@@ -8,6 +10,7 @@ public class UserPlace {
    private Long userId;
    private Long placeId;
 
+   @Id
    public Long getId() {
       return id;
    }
@@ -16,6 +19,7 @@ public class UserPlace {
       this.id = id;
    }
 
+   @Column
    public Long getUserId() {
       return userId;
    }
@@ -24,6 +28,7 @@ public class UserPlace {
       this.userId = userId;
    }
 
+   @Column
    public Long getPlaceId() {
       return placeId;
    }
