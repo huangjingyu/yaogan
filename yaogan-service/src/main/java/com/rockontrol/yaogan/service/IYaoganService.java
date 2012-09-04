@@ -35,7 +35,9 @@ public interface IYaoganService {
 
    public List<Shapefile> getShapefiles(User caller, Long placeId, String time);
 
+   public Shapefile getShapefile(User caller, Long placeId, String category, String time);
+
    public void saveShapefile(String placeName, Category type, File file, String time);
-   
+
    public void saveUserPlace(UserPlace userPlace);
 }

@@ -30,7 +30,7 @@ public class YaoganServiceImpl implements IYaoganService {
 
    @Autowired
    protected IOrganizationDao orgDao;
-   
+
    @Autowired
    protected IUserPlaceDao upDao;
 
@@ -96,6 +96,17 @@ public class YaoganServiceImpl implements IYaoganService {
    @Override
    public List<Shapefile> getShapefiles(User caller, Long placeId, String time) {
       return shapefileDao.getShapefiles(placeId, time);
+   }
+
+   @Override
+   public Shapefile getShapefile(User caller, Long placeId, String category, String time) {
+      List<Shapefile> list = this.getShapefiles(caller, placeId, time);
+      for (Shapefile shapefile : list) {
+         if (shapefile.getCategory().equals(category)) {
+            return shapefile;
+         }
+      }
+      return null;
    }
 
    @Override
