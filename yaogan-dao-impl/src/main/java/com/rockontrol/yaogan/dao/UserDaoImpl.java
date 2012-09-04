@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.rockontrol.yaogan.model.User;
 
-@Repository("userDao")
+@Repository("user_PlaceDao")
 public class UserDaoImpl implements IUserDao {
 
    @Autowired
