@@ -41,6 +41,11 @@ public class YaoganServiceImpl implements IYaoganService {
    }
 
    @Override
+   public Place getPlaceById(Long placeId) {
+      return placeDao.get(placeId);
+   }
+
+   @Override
    public Place getPlaceByName(String placeName) {
       return placeDao.getPlaceByName(placeName);
    }
