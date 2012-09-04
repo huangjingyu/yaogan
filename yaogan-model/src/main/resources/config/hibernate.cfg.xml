@@ -6,9 +6,9 @@
     <property name="hibernate.show_sql">true</property>
     <property name="hibernate.hbm2ddl.auto">update</property>
     <mapping class="com.rockontrol.yaogan.model.User" />
-    <mapping class="com.rockontrol.yaogan.model.Tenant" />
+    <mapping class="com.rockontrol.yaogan.model.Organization" />
     <mapping class="com.rockontrol.yaogan.model.Place" />
     <mapping class="com.rockontrol.yaogan.model.Shapefile" />
     <mapping class="com.rockontrol.yaogan.model.UserPlace" />
-</session-factory>
+  </session-factory>
 </hibernate-configuration>

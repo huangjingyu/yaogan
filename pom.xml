@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.rockontrol.yaogan</groupId>
   <artifactId>yaogan-master</artifactId>
@@ -16,7 +17,7 @@
     <module>yaogan-service</module>
     <module>yaogan-service-impl</module>
     <module>yaogan-web</module>
-    <module>yaogan-gis</module>    
+    <module>yaogan-gis</module>
   </modules>
 
   <dependencyManagement>
@@ -25,6 +26,51 @@
         <groupId>commons-configuration</groupId>
         <artifactId>commons-configuration</artifactId>
         <version>1.8</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-core</artifactId>
+        <version>3.1.1.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>3.1.1.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-aop</artifactId>
+        <version>3.1.1.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-tx</artifactId>
+        <version>3.1.1.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-jdbc</artifactId>
+        <version>3.1.1.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-orm</artifactId>
+        <version>3.1.1.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjrt</artifactId>
+        <version>1.6.5</version>
+      </dependency>
+      <dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjweaver</artifactId>
+        <version>1.6.10</version>
+      </dependency>
+      <dependency>
+        <groupId>postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>9.1-901.jdbc4</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -48,7 +94,7 @@
     <datasource.pool.min>3</datasource.pool.min>
     <datasource.pool.max>12</datasource.pool.max>
     <datasource.pool.increment>3</datasource.pool.increment>
-    
+
     <yaogan.gis.shapefile.home>d:/test</yaogan.gis.shapefile.home>
     <yaogan.upload.tempdir>/WEB-INF/temp</yaogan.upload.tempdir>
   </properties>

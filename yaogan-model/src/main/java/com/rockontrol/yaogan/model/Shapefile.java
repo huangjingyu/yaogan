@@ -65,7 +65,7 @@ public class Shapefile {
       this._placeId = placeId;
    }
 
-   @Column(length = 64, unique = true, nullable = false)
+   @Column(length = 512, unique = true, nullable = false)
    public String getFileName() {
       return _fileName;
    }
@@ -74,7 +74,7 @@ public class Shapefile {
       this._fileName = fileName;
    }
 
-   @Column(length = 128)
+   @Column(length = 1024)
    public String getFilePath() {
       return _filePath;
    }

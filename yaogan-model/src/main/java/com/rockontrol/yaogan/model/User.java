@@ -8,12 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 
 @Entity(name = "users")
-@NamedQueries({ @NamedQuery(name = "Shapefile.getAvailableTimesOfPlace", query = "select shootTime from com.rockontrol.yaogan.model.Shapefile"
-      + " where placeId = :placeId") })
 public class User {
 
    private Long _id;
@@ -43,7 +39,7 @@ public class User {
       this._orgId = orgId;
    }
 
-   @Column(length = 64, unique = true, nullable = false)
+   @Column(length = 128, unique = true, nullable = false)
    public String getUserName() {
       return _userName;
    }
@@ -52,7 +48,7 @@ public class User {
       this._userName = userName;
    }
 
-   @Column(length = 128)
+   @Column(name = "password", length = 128)
    public String getPassword() {
       return _password;
    }
@@ -61,7 +57,7 @@ public class User {
       this._password = password;
    }
 
-   @Column(length = 64, unique = true)
+   @Column(name = "email", length = 128, unique = true)
    public String getEmail() {
       return _email;
    }
