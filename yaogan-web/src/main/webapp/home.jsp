@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>welcome</h1>
-文件上传<a href="/upload.jsp"/>
-矿区浏览<a href="/browse.jsp"/>
+<a href="upload.jsp">文件上传</a>
+<a href="browse.jsp">矿区浏览</a>
 </body>
 </html>

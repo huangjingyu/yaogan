@@ -2,6 +2,7 @@ package com.rockontrol.yaogan.dao;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import com.rockontrol.yaogan.model.User;

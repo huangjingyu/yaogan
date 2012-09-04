@@ -1,5 +1,6 @@
 package com.rockontrol.yaogan.service;
 
+import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import com.rockontrol.yaogan.dao.IShapefileDao;
 import com.rockontrol.yaogan.model.Organization;
 import com.rockontrol.yaogan.model.Place;
 import com.rockontrol.yaogan.model.Shapefile;
+import com.rockontrol.yaogan.model.Shapefile.Category;
 import com.rockontrol.yaogan.model.User;
 import com.rockontrol.yaogan.vo.EnvStats;
 
@@ -29,6 +31,12 @@ public class YaoganServiceImpl implements IYaoganService {
    @Override
    public List<Place> getAllPlaces(User caller) {
       return placeDao.findAll();
+   }
+
+   @Override
+   public Place findPlaceByName(String placeName) {
+      // TODO Auto-generated method stub
+      return null;
    }
 
    @Override
@@ -82,6 +90,24 @@ public class YaoganServiceImpl implements IYaoganService {
    @Override
    public List<Shapefile> getShapefiles(User caller, Long placeId, String time) {
       return shapefileDao.getShapefiles(placeId, time);
+   }
+
+   @Override
+   public void saveShapefile(String placeName, Category type, File file, String time) {
+      Shapefile shapefile = new Shapefile();
+      shapefile.setCategory(type);
+      shapefile.setFileName(file.getName());
+      shapefile.setShootTime(time);
+      Place place = findPlaceByName(placeName);
+      if (place == null) {
+         place = new Place();
+         place.setName(placeName);
+         placeDao.save(place);
+      }
+      shapefile.setPlaceId(place.getId());
+      // shapefile.setWmsUrl(geoService.publishShapeFile(file));
+      shapefile.setWmsUrl(null);
+      shapefileDao.save(shapefile);
    }
 
 }

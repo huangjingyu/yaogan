@@ -1,6 +1,7 @@
 package com.rockontrol.yaogan.dao;
 
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;

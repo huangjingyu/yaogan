@@ -1,15 +1,19 @@
 package com.rockontrol.yaogan.service;
 
+import java.io.File;
 import java.util.List;
 
 import com.rockontrol.yaogan.model.Place;
 import com.rockontrol.yaogan.model.Shapefile;
+import com.rockontrol.yaogan.model.Shapefile.Category;
 import com.rockontrol.yaogan.model.User;
 import com.rockontrol.yaogan.vo.EnvStats;
 
 public interface IYaoganService {
 
    public List<Place> getAllPlaces(User caller);
+
+   public Place findPlaceByName(String placeName);
 
    public List<Place> getPlacesVisibleToUser(User caller, Long userId);
 
@@ -29,4 +33,6 @@ public interface IYaoganService {
    public EnvStats getEnvStats(User caller, Long placeId, String time);
 
    public List<Shapefile> getShapefiles(User caller, Long placeId, String time);
+
+   public void saveShapefile(String placeName, Category type, File file, String time);
 }
