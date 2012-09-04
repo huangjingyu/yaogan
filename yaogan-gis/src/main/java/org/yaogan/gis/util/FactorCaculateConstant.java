@@ -1,4 +1,4 @@
-package org.yaogan.gis.service;
+package org.yaogan.gis.util;
 
 public interface FactorCaculateConstant {
    public static final double AF_MAX = Math.sqrt(35.0);

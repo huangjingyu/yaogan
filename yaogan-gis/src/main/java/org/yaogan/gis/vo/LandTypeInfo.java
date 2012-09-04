@@ -2,7 +2,7 @@ package org.yaogan.gis.vo;
 
 import java.util.Map;
 
-import org.yaogan.gis.service.FactorCaculateConstant;
+import org.yaogan.gis.util.FactorCaculateConstant;
 
 public class LandTypeInfo {
    // private String _areaName;
