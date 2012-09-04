@@ -1,15 +1,11 @@
 package com.rockontrol.yaogan.service;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.nio.charset.Charset;
 
-import org.geotools.data.FeatureSource;
 import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
 import org.geotools.data.shapefile.ShapefileDataStore;
-import org.geotools.styling.SLD;
-import org.geotools.styling.StyledLayerDescriptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,21 +30,20 @@ public class PrintImageServiceImpl implements IPrintImageService {
 
       ((ShapefileDataStore) store).setStringCharset(Charset.forName("GB2312"));
 
-      FeatureSource featureSource = store
-
-      .getFeatureSource();
-
-      Configuration config = new SLDConfiguration();
-
-      Parser parser = new Parser(config);
-
-      InputStream sld = new FileInputStream(sldFile);
-
-      StyledLayerDescriptor styleSLD = (StyledLayerDescriptor) parser.parse(sld);
-
-      Style style = SLD.defaultStyle(styleSLD);
-
-      map.addLayer(featureSource, style);
+      // FeatureSource featureSource = store.getFeatureSource();
+      //
+      // Configuration config = new SLDConfiguration();
+      //
+      // Parser parser = new Parser(config);
+      //
+      // InputStream sld = new FileInputStream(sldFile);
+      //
+      // StyledLayerDescriptor styleSLD = (StyledLayerDescriptor)
+      // parser.parse(sld);
+      //
+      // Style style = SLD.defaultStyle(styleSLD);
+      //
+      // map.addLayer(featureSource, style);
 
    }
 }

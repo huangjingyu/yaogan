@@ -8,8 +8,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 @Entity(name = "place")
+@NamedQueries({
+      @NamedQuery(name = "Place.getByName", query = "from com.rockontrol.yaogan.model.Place"
+            + " where name = :placeName"),
+      @NamedQuery(name = "Place.getByOrgId", query = "from com.rockontrol.yaogan.model.Place"
+            + " where orgId = :orgId") })
 public class Place {
    private Long id;
    private String name;

@@ -72,7 +72,7 @@ public class EcoFactorCaculator {
       return result;
    }
 
-   public static double computeAbio(LandTypeInfo areaInfo) {
+   private static double computeAbio(LandTypeInfo areaInfo) {
       double forest_area = areaInfo.getForestArea();
       double lawn_area = areaInfo.getLawnArea();
       double farm_land_area = areaInfo.getFarmArea();
@@ -113,7 +113,7 @@ public class EcoFactorCaculator {
       return result;
    }
 
-   public static double computeAveg(LandTypeInfo areaInfo) {
+   private static double computeAveg(LandTypeInfo areaInfo) {
       double forest_area = areaInfo.getForestArea();
       double lawn_area = areaInfo.getLawnArea();
       double farm_land_area = areaInfo.getFarmArea();
@@ -147,7 +147,7 @@ public class EcoFactorCaculator {
       return result;
    }
 
-   public static double computeAero(LandDeterioratedInfo landInfo) {
+   private static double computeAero(LandDeterioratedInfo landInfo) {
       double slight_area = landInfo.getSlightArea();
       double part_area = landInfo.getPartArea();
       double serious_area = landInfo.getSeriousArea();
@@ -160,6 +160,14 @@ public class EcoFactorCaculator {
    }
 
    public static double computeAbio(SimpleFeatureSource source, Geometry boundary)
+         throws IOException {
+      SimpleFeatureCollection collection = FeatureSelector.selectFeatureWithinBoundary(
+            boundary, source);
+      LandTypeInfo typyInfo = getLandTypeInfo(collection);
+      return computeAbio(typyInfo);
+   }
+
+   public static double computeAbio(SimpleFeatureSource source, String boundary)
          throws IOException {
       SimpleFeatureCollection collection = FeatureSelector.selectFeatureWithinBoundary(
             boundary, source);
@@ -181,6 +189,14 @@ public class EcoFactorCaculator {
    }
 
    public static double computeAveg(SimpleFeatureSource source, Geometry boundary)
+         throws IOException {
+      SimpleFeatureCollection collection = FeatureSelector.selectFeatureWithinBoundary(
+            boundary, source);
+      LandTypeInfo typyInfo = getLandTypeInfo(collection);
+      return computeAveg(typyInfo);
+   }
+
+   public static double computeAveg(SimpleFeatureSource source, String boundary)
          throws IOException {
       SimpleFeatureCollection collection = FeatureSelector.selectFeatureWithinBoundary(
             boundary, source);
@@ -210,6 +226,14 @@ public class EcoFactorCaculator {
    }
 
    public static double computeAero(SimpleFeatureSource source, Geometry boundary)
+         throws IOException {
+      SimpleFeatureCollection collection = FeatureSelector.selectFeatureWithinBoundary(
+            boundary, source);
+      LandDeterioratedInfo info = getDeterioratedInfo(collection);
+      return computeAero(info);
+   }
+
+   public static double computeAero(SimpleFeatureSource source, String boundary)
          throws IOException {
       SimpleFeatureCollection collection = FeatureSelector.selectFeatureWithinBoundary(
             boundary, source);
@@ -268,4 +292,5 @@ public class EcoFactorCaculator {
       LandDeterioratedInfo typeInfo = new LandDeterioratedInfo(areaMap);
       return typeInfo;
    }
+
 }
