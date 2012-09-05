@@ -1,10 +1,10 @@
 package com.rockontrol.yaogan.service;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 
 import org.geotools.data.FileDataStore;
-import org.geotools.data.FileDataStoreFinder;
 import org.geotools.data.shapefile.ShapefileDataStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,9 +26,13 @@ public class PrintImageServiceImpl implements IPrintImageService {
 
       // File sldFile = new File("C:\\data\\" + name + ".sld");
 
-      FileDataStore store = FileDataStoreFinder.getDataStore(file);
-
-      ((ShapefileDataStore) store).setStringCharset(Charset.forName("GB2312"));
+      try {
+         FileDataStore store = new ShapefileDataStore(file.toURI().toURL(), false,
+               Charset.forName("GBK"));
+      } catch (MalformedURLException e) {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
 
       // FeatureSource featureSource = store.getFeatureSource();
       //

@@ -19,8 +19,8 @@ public class LandTypeInfo {
             : landInfoMap.get(FactorCaculateConstant.LAND_TYPE_FORST);
       _lawnArea = landInfoMap.get(FactorCaculateConstant.LAND_TYPE_LAWN) == null ? 0
             : landInfoMap.get(FactorCaculateConstant.LAND_TYPE_LAWN);
-      _farmArea = landInfoMap.get(FactorCaculateConstant.LAND_TYPE_FAPRM) == null ? 0
-            : landInfoMap.get(FactorCaculateConstant.LAND_TYPE_FAPRM);
+      _farmArea = landInfoMap.get(FactorCaculateConstant.LAND_TYPE_FARM) == null ? 0
+            : landInfoMap.get(FactorCaculateConstant.LAND_TYPE_FARM);
       _wetLandArea = landInfoMap.get(FactorCaculateConstant.LAND_TYPE_WET) == null ? 0
             : landInfoMap.get(FactorCaculateConstant.LAND_TYPE_WET);
       _constructionArea = landInfoMap.get(FactorCaculateConstant.LAND_TYPE_CONSTRUCTION) == null ? 0
