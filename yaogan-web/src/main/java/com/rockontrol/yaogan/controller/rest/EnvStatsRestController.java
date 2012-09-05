@@ -1,7 +1,5 @@
 package com.rockontrol.yaogan.controller.rest;
 
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +15,7 @@ import com.rockontrol.yaogan.vo.EnvStats;
 
 @Controller
 @RequestMapping(value = "/api/envstats")
-public class EnvStatsController {
+public class EnvStatsRestController {
 
    @Autowired
    private ISecurityManager _secMng;
@@ -29,13 +27,21 @@ public class EnvStatsController {
    @RequestMapping(value = "place/{placeId}/times/{times}")
    public Pair<String, EnvStats>[] envStatsOfDiffTimes(
          @PathVariable("placeId") Long placeId, @PathVariable("times") String timesStr) {
-      User user = _secMng.currentUser();
-      String[] times = Constants.PAT_COMMA.split(timesStr);
-      Arrays.sort(times);
-      EnvStats[] statsArr = _service.getEnvStats(user, placeId, times);
-      Pair<String, EnvStats>[] pairs = new Pair[times.length];
-      for (int i = 0; i < times.length; i++) {
-         pairs[i] = new Pair<String, EnvStats>(times[i], statsArr[i]);
+      // User user = _secMng.currentUser();
+      // String[] times = Constants.PAT_COMMA.split(timesStr);
+      // Arrays.sort(times);
+      // EnvStats[] statsArr = _service.getEnvStats(user, placeId, times);
+      // Pair<String, EnvStats>[] pairs = new Pair[times.length];
+      // for (int i = 0; i < times.length; i++) {
+      // pairs[i] = new Pair<String, EnvStats>(times[i], statsArr[i]);
+      // }
+      Pair<String, EnvStats>[] pairs = new Pair[2];
+      EnvStats stats = new EnvStats();
+      stats.setAbio(2.5);
+      stats.setAero(1.0);
+      stats.setAveg(1.3);
+      for (int i = 8; i <= 9; i++) {
+         pairs[i - 8] = new Pair<String, EnvStats>("200" + i, stats);
       }
       return pairs;
    }
