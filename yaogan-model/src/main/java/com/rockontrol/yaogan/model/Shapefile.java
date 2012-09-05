@@ -33,7 +33,6 @@ public class Shapefile {
       public String getName() {
          return this.name;
       }
-
    }
 
    private Long _id;

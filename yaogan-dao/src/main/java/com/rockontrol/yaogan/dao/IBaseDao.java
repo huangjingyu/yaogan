@@ -8,4 +8,6 @@ public interface IBaseDao<T> {
    public List<T> findAll();
 
    public void save(T entity);
+
+   public void remove(T entity);
 }

@@ -10,6 +10,9 @@ public class EnvStats {
    // 土地退化指数
    private double aero;
 
+   // 土地环境指数
+   private double asus;
+
    public double getAbio() {
       return abio;
    }
@@ -32,6 +35,14 @@ public class EnvStats {
 
    public void setAero(double aero) {
       this.aero = aero;
+   }
+
+   public double getAsus() {
+      return asus;
+   }
+
+   public void setAsus(double asus) {
+      this.asus = asus;
    }
 
 }

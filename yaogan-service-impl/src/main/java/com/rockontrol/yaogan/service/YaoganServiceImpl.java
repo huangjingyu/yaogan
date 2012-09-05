@@ -12,10 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.rockontrol.yaogan.dao.IOrganizationDao;
 import com.rockontrol.yaogan.dao.IPlaceDao;
+import com.rockontrol.yaogan.dao.IPlaceParamDao;
 import com.rockontrol.yaogan.dao.IShapefileDao;
 import com.rockontrol.yaogan.dao.IUserPlaceDao;
 import com.rockontrol.yaogan.model.Organization;
 import com.rockontrol.yaogan.model.Place;
+import com.rockontrol.yaogan.model.PlaceParam;
 import com.rockontrol.yaogan.model.Shapefile;
 import com.rockontrol.yaogan.model.Shapefile.Category;
 import com.rockontrol.yaogan.model.User;
@@ -26,6 +28,9 @@ public class YaoganServiceImpl implements IYaoganService {
 
    @Autowired
    protected IPlaceDao placeDao;
+
+   @Autowired
+   protected IPlaceParamDao placeParamDao;
 
    @Autowired
    protected IShapefileDao shapefileDao;
@@ -118,6 +123,12 @@ public class YaoganServiceImpl implements IYaoganService {
    public EnvStats computeEnvStats(User caller, Long placeId, String time) {
       List<Shapefile> list = this.getShapefiles(caller, placeId, time);
       EnvStats stats = new EnvStats();
+      Shapefile fractureFile = null;
+      Shapefile collapseFile = null;
+      Shapefile boundaryFile = null;
+      PlaceParam param = placeParamDao.getPlaceParam(placeId, time,
+            PlaceParam.GROUND_WATER_DESC);
+
       try {
          for (Shapefile shapefile : list) {
             Category category = shapefile.getCategory();
@@ -129,7 +140,24 @@ public class YaoganServiceImpl implements IYaoganService {
             } else if (category.equals(Shapefile.Category.FILE_LAND_SOIL)) {
                double aero = this.computeService.computeAero(shapefile.getFilePath());
                stats.setAero(aero);
+            } else if (category.equals(Shapefile.Category.FILE_LAND_FRACTURE)) {
+               fractureFile = shapefile;
+            } else if (category.equals(Shapefile.Category.FILE_LAND_COLLAPSE)) {
+               collapseFile = shapefile;
+            } else if (category.equals(Shapefile.Category.FILE_REGION_BOUNDARY)) {
+               boundaryFile = shapefile;
             }
+         }
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
+
+      try {
+         if (fractureFile != null && collapseFile != null && boundaryFile != null) {
+            double asus = computeService.computeAsus(fractureFile.getFilePath(),
+                  collapseFile.getFilePath(), boundaryFile.getFilePath(),
+                  Double.parseDouble(param.getParamValue()));
+            stats.setAsus(asus);
          }
       } catch (IOException e) {
          e.printStackTrace();
@@ -143,6 +171,11 @@ public class YaoganServiceImpl implements IYaoganService {
    public EnvStats computeEnvStats(User caller, Long placeId, String time,
          String geom_string) {
       List<Shapefile> list = this.getShapefiles(caller, placeId, time);
+      Shapefile fractureFile = null;
+      Shapefile collapseFile = null;
+      Shapefile boundaryFile = null;
+      PlaceParam param = placeParamDao.getPlaceParam(placeId, time,
+            PlaceParam.GROUND_WATER_DESC);
       EnvStats stats = new EnvStats();
       try {
          for (Shapefile shapefile : list) {
@@ -158,7 +191,24 @@ public class YaoganServiceImpl implements IYaoganService {
                double aero = this.computeService.computeAero(shapefile.getFilePath(),
                      geom_string);
                stats.setAero(aero);
+            } else if (category.equals(Shapefile.Category.FILE_LAND_FRACTURE)) {
+               fractureFile = shapefile;
+            } else if (category.equals(Shapefile.Category.FILE_LAND_COLLAPSE)) {
+               collapseFile = shapefile;
+            } else if (category.equals(Shapefile.Category.FILE_REGION_BOUNDARY)) {
+               boundaryFile = shapefile;
             }
+         }
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
+
+      try {
+         if (fractureFile != null && collapseFile != null && boundaryFile != null) {
+            double asus = computeService.computeAsus(fractureFile.getFilePath(),
+                  collapseFile.getFilePath(), boundaryFile.getFilePath(), geom_string,
+                  Double.parseDouble(param.getParamValue()));
+            stats.setAsus(asus);
          }
       } catch (IOException e) {
          e.printStackTrace();

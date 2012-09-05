@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.rockontrol.yaogan.dao.IOrganizationDao;
 import com.rockontrol.yaogan.dao.IPlaceDao;
+import com.rockontrol.yaogan.dao.IPlaceParamDao;
 import com.rockontrol.yaogan.dao.IShapefileDao;
 import com.rockontrol.yaogan.dao.IUserDao;
 import com.rockontrol.yaogan.dao.IUserPlaceDao;
@@ -33,6 +34,9 @@ public class BaseTest extends AbstractTransactionalJUnit4SpringContextTests {
 
    @Autowired
    protected IPlaceDao placeDao;
+
+   @Autowired
+   protected IPlaceParamDao placeParamDao;
 
    @Autowired
    protected IShapefileDao shapefileDao;

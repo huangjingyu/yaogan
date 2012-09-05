@@ -9,7 +9,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class BaseDaoImpl<T> implements IBaseDao<T> {
-   private Class<T> entityClass;
+   private final Class<T> entityClass;
 
    @Autowired
    private SessionFactory sessionFactory;
@@ -40,6 +40,11 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
    @Override
    public void save(T entity) {
       getSession().save(entity);
+   }
+
+   @Override
+   public void remove(T entity) {
+      getSession().delete(entity);
    }
 
 }
