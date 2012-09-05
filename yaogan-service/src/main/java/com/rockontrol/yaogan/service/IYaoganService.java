@@ -21,6 +21,14 @@ public interface IYaoganService {
    public List<Place> getPlacesOfOrg(User caller, Long orgId);
 
    /**
+    * get place by id.
+    * 
+    * @param placeId
+    * @return
+    */
+   public Place getPlaceById(Long placeId);
+
+   /**
     * get place by name
     * 
     * @param placeName
@@ -125,7 +133,7 @@ public interface IYaoganService {
     * @param time
     * @return
     */
-   public EnvStats[] getEnvStats(User caller, Long placeId, String[] time);
+   public EnvStats[] getEnvStats(User caller, Long placeId, String[] times);
 
    /**
     * get statistics of these places in specified time.
@@ -135,7 +143,7 @@ public interface IYaoganService {
     * @param time
     * @return
     */
-   public EnvStats[] getEnvStats(User caller, Long[] placeId, String time);
+   public EnvStats[] getEnvStats(User caller, Long[] placeIds, String time);
 
    /**
     * get shapefiles of place in specified time.
