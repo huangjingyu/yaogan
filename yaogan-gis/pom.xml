@@ -53,6 +53,11 @@
       <artifactId>gt-cql</artifactId>
       <version>${geotools.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.geotools</groupId>
+      <artifactId>gt-swing</artifactId>
+      <version>${geotools.version}</version>
+    </dependency>
   </dependencies>
   <repositories>
     <!-- <repository> <id>maven2-repository.dev.java.net</id> <name>Java.net 

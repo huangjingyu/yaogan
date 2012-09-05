@@ -1,9 +1,18 @@
 package org.yaogan.gis.mgr;
 
+import java.io.IOException;
+
 import org.geotools.data.FileDataStore;
 
+/**
+ * 
+ * @author Administrator
+ * 
+ */
 public interface IDataStoreManager {
-   public FileDataStore getFileDataStore(int year, String data_type);
 
-   public FileDataStore getFileDataStore(String region, int year, String data_type);
+   public FileDataStore getDataStore(String shapeFilePath) throws IOException;
+
+   public void releaseDataStore(FileDataStore store);
+
 }

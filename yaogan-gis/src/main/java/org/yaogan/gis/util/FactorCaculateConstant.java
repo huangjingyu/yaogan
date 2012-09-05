@@ -1,4 +1,4 @@
-package org.yaogan.gis.service;
+package org.yaogan.gis.util;
 
 public interface FactorCaculateConstant {
    public static final double AF_MAX = Math.sqrt(35.0);
@@ -11,7 +11,7 @@ public interface FactorCaculateConstant {
 
    public static final String LAND_TYPE_FORST = "林地";
    public static final String LAND_TYPE_LAWN = "草地";
-   public static final String LAND_TYPE_FAPRM = "耕地";
+   public static final String LAND_TYPE_FARM = "耕地";
    public static final String LAND_TYPE_WET = "水域湿地";
    public static final String LAND_TYPE_CONSTRUCTION = "建设用地";
    public static final String LAND_TYPE_NOT_USED = "未利用地";

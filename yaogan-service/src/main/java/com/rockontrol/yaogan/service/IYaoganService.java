@@ -156,6 +156,17 @@ public interface IYaoganService {
    public List<Shapefile> getShapefiles(User caller, Long placeId, String time);
 
    /**
+    * get one shapefile
+    * 
+    * @param caller
+    * @param placeId
+    * @param category
+    * @param time
+    * @return shapefile
+    */
+   public Shapefile getShapefile(User caller, Long placeId, String category, String time);
+
+   /**
     * save shapefile.
     * 
     * @param placeName
@@ -164,5 +175,4 @@ public interface IYaoganService {
     * @param time
     */
    public void saveShapefile(String placeName, Category type, File file, String time);
-
 }
