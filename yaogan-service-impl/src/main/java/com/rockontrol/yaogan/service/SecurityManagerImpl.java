@@ -2,6 +2,7 @@ package com.rockontrol.yaogan.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.rockontrol.yaogan.dao.IUserDao;
@@ -13,24 +14,18 @@ public class SecurityManagerImpl implements ISecurityManager {
    private IUserDao userDao;
 
    @Override
-   public IYaoganUserDetails userContext() {
+   public UserDetails userContext() {
       if (SecurityContextHolder.getContext() == null
             || SecurityContextHolder.getContext().getAuthentication() == null)
          return null;
       Object userObj = SecurityContextHolder.getContext().getAuthentication()
             .getPrincipal();
-      if (userObj == null)
-         return null;
-      if (userObj instanceof IYaoganUserDetails) {
-         return (IYaoganUserDetails) userObj;
-      } else {
-         return null;
-      }
+      return (UserDetails) userObj;
    }
 
    @Override
    public User currentUser() {
-      IYaoganUserDetails ctx = userContext();
+      UserDetails ctx = userContext();
       if (ctx == null)
          return null;
       return userDao.getUserByName(ctx.getUsername());
