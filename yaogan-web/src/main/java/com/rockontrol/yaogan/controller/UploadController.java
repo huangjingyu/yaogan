@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.yaogan.gis.mgr.DataFileType;
 
+import com.rockontrol.yaogan.model.PlaceParam;
 import com.rockontrol.yaogan.model.Shapefile.Category;
 import com.rockontrol.yaogan.service.IYaoganService;
 import com.rockontrol.yaogan.util.CompressUtil;
@@ -43,7 +44,9 @@ public class UploadController {
          this.processUploadFile(fractureFile, DataFileType.FILE_LAND_FRACTURE, year,
                region);
          if (groundWaterDesc != null) {
-
+            yaoganService.deletePlaceParam(region, region, PlaceParam.GROUND_WATER_DESC);
+            yaoganService.addPlaceParam(region, region, PlaceParam.GROUND_WATER_DESC,
+                  groundWaterDesc);
          }
       } catch (IOException e) {
          e.printStackTrace();

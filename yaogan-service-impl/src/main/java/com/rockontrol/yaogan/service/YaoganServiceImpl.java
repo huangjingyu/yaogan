@@ -329,12 +329,7 @@ public class YaoganServiceImpl implements IYaoganService {
       shapefile.setCategory(type);
       shapefile.setFileName(file.getName());
       shapefile.setShootTime(time);
-      Place place = placeDao.getPlaceByName(placeName);
-      if (place == null) {
-         place = new Place();
-         place.setName(placeName);
-         placeDao.save(place);
-      }
+      Place place = this.checkAndCreatePlace(placeName);
       shapefile.setPlaceId(place.getId());
 
       shapefile.setFilePath(filePath);
@@ -397,4 +392,36 @@ public class YaoganServiceImpl implements IYaoganService {
       return null;
    }
 
+   @Override
+   public void addPlaceParam(PlaceParam param) {
+      this.placeParamDao.save(param);
+   }
+
+   @Override
+   public void deletePlaceParam(String placeName, String time, String paramName) {
+      this.placeParamDao.deleteParam(placeName, time, paramName);
+
+   }
+
+   @Override
+   public void addPlaceParam(String placeName, String time, String paramName,
+         String paramValue) {
+      Place place = this.checkAndCreatePlace(placeName);
+      PlaceParam param = new PlaceParam();
+      param.setParamName(paramName);
+      param.setParamValue(paramValue);
+      param.setPlaceId(place.getId());
+      param.setTime(time);
+      this.placeParamDao.save(param);
+   }
+
+   private Place checkAndCreatePlace(String placeName) {
+      Place place = placeDao.getPlaceByName(placeName);
+      if (place == null) {
+         place = new Place();
+         place.setName(placeName);
+         placeDao.save(place);
+      }
+      return place;
+   }
 }

@@ -10,4 +10,6 @@ public interface IPlaceParamDao extends IBaseDao<PlaceParam> {
    public PlaceParam getPlaceParam(Long placeId, String time, String paramName);
 
    public PlaceParam getPlaceParam(String placeName, String time, String paramName);
+
+   public void deleteParam(String placeName, String time, String paramName);
 }

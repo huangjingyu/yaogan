@@ -42,4 +42,10 @@ public class PlaceParamDaoImpl extends BaseDaoImpl<PlaceParam> implements IPlace
       return (PlaceParam) query.uniqueResult();
    }
 
+   @Override
+   public void deleteParam(String placeName, String time, String paramName) {
+      PlaceParam param = this.getPlaceParam(placeName, time, paramName);
+      this.getSession().delete(param);
+   }
+
 }

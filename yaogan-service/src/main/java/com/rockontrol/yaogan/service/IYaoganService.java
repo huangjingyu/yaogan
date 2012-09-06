@@ -186,6 +186,13 @@ public interface IYaoganService {
     */
    public PlaceParam getPlaceParam(String placeName, String time, String paramName);
 
+   public void addPlaceParam(PlaceParam param);
+
+   public void addPlaceParam(String placeName, String time, String paramName,
+         String paramValue);
+
+   public void deletePlaceParam(String placeName, String time, String paramName);
+
    /**
     * 
     * @param placeName
