@@ -13,6 +13,7 @@ import org.yaogan.gis.mgr.DataFileType;
 
 import com.rockontrol.yaogan.model.PlaceParam;
 import com.rockontrol.yaogan.model.Shapefile.Category;
+import com.rockontrol.yaogan.service.ISecurityManager;
 import com.rockontrol.yaogan.service.IYaoganService;
 import com.rockontrol.yaogan.util.CompressUtil;
 import com.rockontrol.yaogan.util.GlobalConfig;
@@ -20,6 +21,9 @@ import com.rockontrol.yaogan.util.GlobalConfig;
 @Controller
 @RequestMapping("admin/upload")
 public class UploadController {
+
+   @Autowired
+   private ISecurityManager _secMng;
 
    @Autowired
    private IYaoganService yaoganService;
@@ -100,7 +104,8 @@ public class UploadController {
       String fullPath = dLandTypeShpfile.getAbsolutePath();
       String filePath = fullPath.substring(fullPath.indexOf(shapeFileHome)
             + shapeFileHome.length(), fullPath.length());
-      yaoganService.saveShapefile(region, category, dLandTypeShpfile, filePath, year);
+      yaoganService.saveShapefile(_secMng.currentUser(), region, category,
+            dLandTypeShpfile, filePath, year);
       dLandTypeFile.delete();
    }
 }

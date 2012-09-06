@@ -202,7 +202,7 @@ public interface IYaoganService {
     *           path relative to shapefile home
     * @param time
     */
-   public void saveShapefile(String placeName, Category type, File file,
+   public void saveShapefile(User caller, String placeName, Category type, File file,
          String filePath, String time);
 
 }

@@ -1,15 +1,17 @@
 package com.rockontrol.yaogan.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 @Entity(name = "users")
@@ -18,83 +20,117 @@ public class User {
       ROLE_ADMIN, ROLE_USER
    }
 
-   private Long _id;
-   private Long _orgId;
-   private String _userName;
-   private String _password;
-   private String _email;
-   private Role _role;
-   private Organization _organization;
+   private Long id;
+   private Long orgId;
+   private String userName;
+   private String password;
+   private String email;
+   private Role role;
+   private String realName;
+   private String mobile;
+   private Organization organization;
+   private List<UserPlace> userPlaces;
 
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id")
    public Long getId() {
-      return _id;
+      return id;
    }
 
    public void setId(Long id) {
-      this._id = id;
+      this.id = id;
    }
 
    @Column(name = "org_id")
    public Long getOrgId() {
-      return _orgId;
+      return orgId;
    }
 
    public void setOrgId(Long orgId) {
-      this._orgId = orgId;
+      this.orgId = orgId;
    }
 
    @Column(length = 128, unique = true, nullable = false)
    public String getUserName() {
-      return _userName;
+      return userName;
    }
 
    public void setUserName(String userName) {
-      this._userName = userName;
+      this.userName = userName;
    }
 
    @Column(name = "password", length = 128)
    public String getPassword() {
-      return _password;
+      return password;
    }
 
    public void setPassword(String password) {
-      this._password = password;
+      this.password = password;
    }
 
    @Column(name = "email", length = 128, unique = true)
    public String getEmail() {
-      return _email;
+      return email;
    }
 
    public void setEmail(String email) {
-      this._email = email;
+      this.email = email;
    }
 
    @Enumerated(EnumType.STRING)
    @Column(name = "role", length = 32)
    public Role getRole() {
-      return _role;
+      return role;
    }
 
    public void setRole(Role role) {
-      this._role = role;
+      this.role = role;
    }
 
-   @ManyToOne(fetch = FetchType.LAZY, optional = true)
+   @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "org_id", insertable = false, updatable = false)
    public Organization getOrganization() {
-      return _organization;
+      return organization;
    }
 
    public void setOrganization(Organization organization) {
-      this._organization = organization;
+      this.organization = organization;
+   }
+
+   public String getRealName() {
+      return realName;
+   }
+
+   public void setRealName(String realName) {
+      this.realName = realName;
+   }
+
+   public String getMobile() {
+      return mobile;
+   }
+
+   public void setMobile(String mobile) {
+      this.mobile = mobile;
+   }
+
+   @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = { CascadeType.REMOVE })
+   public List<UserPlace> getUserPlaces() {
+      return userPlaces;
+   }
+
+   public void setUserPlaces(List<UserPlace> userPlaces) {
+      this.userPlaces = userPlaces;
    }
 
    @Transient
-   public boolean isAdmin() {
-      return Role.ROLE_ADMIN.equals(_role);
+   public Boolean getIsAdmin() {
+      return Role.ROLE_ADMIN.equals(role);
+   }
+
+   public void setIsAdmin(Boolean isAdmin) {
+      if (Boolean.TRUE.equals(isAdmin))
+         this.role = Role.ROLE_ADMIN;
+      else
+         this.role = Role.ROLE_USER;
    }
 }
