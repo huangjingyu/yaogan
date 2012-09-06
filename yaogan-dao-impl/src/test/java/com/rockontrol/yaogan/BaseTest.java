@@ -2,6 +2,7 @@ package com.rockontrol.yaogan;
 
 import java.util.UUID;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -49,22 +50,25 @@ public class BaseTest extends AbstractTransactionalJUnit4SpringContextTests {
    protected Place place;
 
    protected void setUp() {
-      org = mockOrg();
+      org = mockOrg(1L);
       orgDao.save(org);
-      user = mockUser(org.getId());
+      user = mockUser(org.getId(), 1L);
       userDao.save(user);
       place = mockPlace(org.getId());
       placeDao.save(place);
    }
 
-   protected Organization mockOrg() {
+   protected Organization mockOrg(Long orgId) {
       Organization org = new Organization();
+      org.setId(orgId);
       org.setName(UUID.randomUUID().toString().substring(18));
       return org;
    }
 
-   protected User mockUser(Long orgId) {
+   protected User mockUser(Long orgId, Long userId) {
       User user = new User();
+      user.setId(userId);
+      user.setOrgId(orgId);
       user.setUserName(UUID.randomUUID().toString().substring(18));
       user.setPassword("password");
       user.setEmail(UUID.randomUUID().toString().substring(8) + "@rockontrol.com");
@@ -76,5 +80,9 @@ public class BaseTest extends AbstractTransactionalJUnit4SpringContextTests {
       place.setName(UUID.randomUUID().toString());
       place.setOrgId(orgId);
       return place;
+   }
+
+   @Test
+   public void test() {
    }
 }

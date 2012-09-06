@@ -6,11 +6,17 @@ import java.util.Map;
 public interface IBaseDao<T> {
    public T get(Long id);
 
+   public T load(Long id);
+
    public List<T> findAll();
 
    public void save(T entity);
 
-   public void remove(T entity);
+   public void update(T entity);
+
+   public void delete(T entity);
+
+   public void deleteById(Long id);
 
    /**
     * 分页查询

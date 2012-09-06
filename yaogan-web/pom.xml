@@ -19,6 +19,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
+  <build>
+    <finalName>yaogan-web</finalName>
+  </build>
+
   <dependencies>
     <dependency>
       <groupId>com.rockontrol.yaogan</groupId>

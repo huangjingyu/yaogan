@@ -26,7 +26,7 @@ public class EnvStatsController {
    public String timeCompare(Model model) {
       User user = _secMng.currentUser();
       List<Place> places = null;
-      if (user.isAdmin()) {
+      if (user.getIsAdmin()) {
          places = _service.getPlacesOfOrg(user, user.getOrgId());
       } else {
          places = _service.getPlacesVisibleToUser(user, user.getId());

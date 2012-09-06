@@ -35,6 +35,12 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 
    @SuppressWarnings("unchecked")
    @Override
+   public T load(Long id) {
+      return (T) getSession().load(entityClass, id);
+   }
+
+   @SuppressWarnings("unchecked")
+   @Override
    public List<T> findAll() {
       Query query = getSession().createQuery("from " + entityClass.getName());
       return query.list();
@@ -46,8 +52,19 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
    }
 
    @Override
-   public void remove(T entity) {
+   public void delete(T entity) {
       getSession().delete(entity);
+   }
+
+   @Override
+   public void deleteById(Long id) {
+      T obj = load(id);
+      delete(obj);
+   }
+
+   @Override
+   public void update(T entity) {
+      getSession().update(entity);
    }
 
    @Override
