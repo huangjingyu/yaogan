@@ -171,7 +171,7 @@
         <homepage.user>/user/layers</homepage.user>
 
         <geoserver.baseUrl>http://localhost:8080/geoserver</geoserver.baseUrl>
-        <geoserver.workDir>/home/ubuntu/yaogan/data/</geoserver.workDir>
+        <geoserver.workDir>/home/ubuntu/apache-tomcat-7.0.27-sso/webapps/geoserver/data/yaogandata/</geoserver.workDir>
       </properties>
     </profile>
   </profiles>

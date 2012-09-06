@@ -34,10 +34,18 @@
 	               .append(arr[2]).append(".").append(arr[3]).toString();
 	      }
 	   }
-	   String cloud_context = null;
-	   String cloudScriptUrl = "http://" + domainName + "/navbar/banner/partner";
+	   String cloudScriptUrl = null;
+	   if (domainName.length() > 0) {
+	      cloudScriptUrl = "http://" + domainName + "/navbar/banner/partner";
+	   }
 	%>
-
+	<%
+	   if (cloudScriptUrl != null) {
+	%>
+	<script type="text/javascript" src="<%=cloudScriptUrl%>"></script>
+	<%
+	   }
+	%>
 	<page:applyDecorator name="adminHeader" />
 	<div id="main">
 		<div id="left">
