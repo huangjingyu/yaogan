@@ -45,7 +45,8 @@ public class PlaceParamDaoImpl extends BaseDaoImpl<PlaceParam> implements IPlace
    @Override
    public void deleteParam(String placeName, String time, String paramName) {
       PlaceParam param = this.getPlaceParam(placeName, time, paramName);
-      this.getSession().delete(param);
+      if (param != null)
+         this.getSession().delete(param);
    }
 
 }
