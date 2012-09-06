@@ -337,7 +337,7 @@ public class YaoganServiceImpl implements IYaoganService {
       if (place == null) {
          place = new Place();
          place.setName(placeName);
-         place.setOrgId(caller.getId());
+         place.setOrgId(caller.getOrgId());
          placeDao.save(place);
       }
       shapefile.setPlaceId(place.getId());
