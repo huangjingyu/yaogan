@@ -12,5 +12,8 @@
     http://www.springframework.org/schema/jdbc
    http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
-  
+   <bean class="com.rockontrol.yaogan.service.GeoServiceImpl">
+      <property name="serverBase" value="${geoserver.baseUrl}"></property>
+      <property name="workDir" value="${geoserver.workDir}"></property>
+   </bean>
 </beans>

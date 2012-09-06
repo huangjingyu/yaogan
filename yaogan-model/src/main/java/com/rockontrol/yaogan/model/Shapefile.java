@@ -22,8 +22,8 @@ import javax.persistence.NamedQuery;
 public class Shapefile {
 
    public enum Category {
-      FILE_REGION_BOUNDARY("边界"), FILE_LAND_TYPE("地类"), FILE_LAND_COLLAPSE("地塌陷"), FILE_LAND_FRACTURE(
-            "地裂缝"), FILE_LAND_SOIL("土壤侵蚀");
+      FILE_REGION_BOUNDARY("边界"), FILE_LAND_TYPE("土地利用"), FILE_LAND_COLLAPSE("地表塌陷"), FILE_LAND_FRACTURE(
+            "地裂缝"), FILE_LAND_SOIL("土壤侵蚀"), FILE_HIG_DEF("高清遥感");
       private final String name;
 
       private Category(String name) {

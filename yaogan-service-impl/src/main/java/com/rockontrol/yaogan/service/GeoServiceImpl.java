@@ -26,9 +26,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.springframework.stereotype.Service;
 
-@Service
+import com.rockontrol.yaogan.model.Shapefile;
+
 public class GeoServiceImpl implements GeoService {
 
    public static final String SERVER_BASE = "http://localhost:8888/geoserver";
@@ -46,31 +46,64 @@ public class GeoServiceImpl implements GeoService {
 
    public static final String WS_KEY = "WS";
    public static final String SHP_FILE_KEY = "SHP_FILE";
-   public static final Log log = LogFactory.getLog(GeoServiceImpl.class);
-
-   public static void main(String[] args) {
-      new GeoServiceImpl().publishShapeFile(new File("E:/testfile/psbj.shp"));
-   }
    /**
-    * @param area
-    *           矿区标识
-    * @param type
-    *           Shapefile.Category
-    * @param time
-    *           时间:如2010
-    * @param shapeFile
-    *           文件名称
+    * geoserver启动的地址
     */
-   @Override
-   public String publishShapeFile(File shapeFile) {
+   private String serverBase = SERVER_BASE;
+   /**
+    * geoserver的工作目录
+    */
+   private String workDir = WORK_DIR;
+   
+   
+   
+   public String getServerBase() {
+      return serverBase;
+   }
+
+   public void setServerBase(String serverBase) {
+      this.serverBase = serverBase;
+   }
+
+   public String getWorkDir() {
+      return workDir;
+   }
+
+   public void setWorkDir(String workDir) {
+      this.workDir = workDir;
+   }
+
+   /**
+    * 用于标识文件属性
+    */
+   /*shapefile*/
+   public static final String SF_ATTR = "SF";
+   /*高清遥感*/
+   public static final String HD_ATTR = "HD";
+   
+   public static final Log log = LogFactory.getLog(GeoServiceImpl.class);
+   
+   public String publishGeoFile(Shapefile.Category type, File geoFile) {
+      System.out.println(serverBase);
+      if(log != null) {
+         return "";
+      }
       HttpClient client = null;
       CallContext context = new CallContext();
       try {
-         //FILE_REGION_BOUNDARY
-         String fileName = shapeFile.getName();
+         String fileName = geoFile.getName();
+         context.fileName = fileName;
          int pos = fileName.lastIndexOf('.');
          context.storeName = fileName.substring(0, pos);
-         copyFile(shapeFile, context.storeName);
+         /**根据文件后缀判断文件属性*/
+         if(fileName.endsWith(".shp")) {
+            context.fileAttr = SF_ATTR;
+            copyShapeFile(geoFile, context.storeName);
+         } else {
+            context.fileAttr = HD_ATTR;
+            copyHdFile(geoFile, context.storeName);
+         }
+        
          context.workspaceName = WORKSPACE_NAME;
          client = createClient();
          HttpResponse response;
@@ -88,7 +121,7 @@ public class GeoServiceImpl implements GeoService {
          response = openStorePage(client, context);
 
          html = getContent(response);
-         context.location = SERVER_BASE + "/web/" + getStoreSubmitFormAction(html);
+         context.location = getWebLocation(getStoreSubmitFormAction(html));
          String workSpaceId = getWorkspaceId(html);
          context.put(WS_KEY, workSpaceId);
          context.lastHtml = html;
@@ -98,7 +131,8 @@ public class GeoServiceImpl implements GeoService {
          /** 打开发布页面 */
          response = openPublishLayerPage(client, context);
          html = getContent(response);
-         context.location = SERVER_BASE + "/web/" + getLayerSubmitFormAction(html);
+         context.lastHtml = html;
+         context.location = getWebLocation(search(html, "<form", "?wicket:interface", 0, "\""));
          /** 添加layer */
          addLayer(client, context);
 
@@ -115,7 +149,7 @@ public class GeoServiceImpl implements GeoService {
     * 
     * @param shapeFile
     */
-   private void copyFile(File shapeFile, String rename) {
+   private void copyShapeFile(File shapeFile, String rename) {
       String name = shapeFile.getName();
       int pos = name.indexOf(".");
       String prefix = name.substring(0, pos);
@@ -131,6 +165,14 @@ public class GeoServiceImpl implements GeoService {
       copyOne(new File(prePart + "evf"), rename);
 
    }
+   /**
+    * 将高清遥感图拷贝到工作目录下
+    * @param hdFile
+    * @param rename
+    */
+   private void copyHdFile(File hdFile, String rename) {
+      copyOne(hdFile, rename);
+   }
 
    /**
     * 拷贝一个文件
@@ -145,7 +187,11 @@ public class GeoServiceImpl implements GeoService {
       String name = source.getName();
       int pos = name.indexOf(".");
       String suffix = name.substring(pos + 1);
-      File dest = new File(WORK_DIR + rename + "." + suffix);
+      File file = new File(workDir);
+      if(! file.exists()) {
+         file.mkdirs();
+      }
+      File dest = new File(workDir + rename + "." + suffix);
       try {
          FileUtils.copyFile(source, dest);
       } catch (IOException e) {
@@ -160,16 +206,8 @@ public class GeoServiceImpl implements GeoService {
     * @return
     */
    private String getWorkspaceId(String html) {
-      int yaoganLabel = html.indexOf(WORKSPACE_NAME);
-      while (yaoganLabel-- > 0) {
-         if (html.charAt(yaoganLabel) == '=') {
-            break;
-         }
-      }
-      int idStart = yaoganLabel + 2;
-      int idEnd = html.indexOf("\"", idStart);
-      String id = html.substring(idStart, idEnd);
-      return id;
+      int idStart = reverseSearch(html, WORKSPACE_NAME, '=');
+      return search(html, null, idStart, 2, "\"");
    }
 
    /**
@@ -179,8 +217,8 @@ public class GeoServiceImpl implements GeoService {
       ThreadSafeClientConnManager manager = new ThreadSafeClientConnManager();
       manager.setDefaultMaxPerRoute(20);
       DefaultHttpClient client = new DefaultHttpClient(manager);
-      //HttpHost proxy = new HttpHost("127.0.0.1", 8080);
-     // client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+      HttpHost proxy = new HttpHost("127.0.0.1", 8080);
+      client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
       HttpClientParams.setCookiePolicy(client.getParams(),
             CookiePolicy.BROWSER_COMPATIBILITY);
       return client;
@@ -193,10 +231,10 @@ public class GeoServiceImpl implements GeoService {
     * @return
     */
    private HttpResponse loginGeoServer(HttpClient client, CallContext context) {
-      HttpGet get = new HttpGet(SERVER_BASE + "/web/");
+      HttpGet get = new HttpGet(serverBase + "/web/");
       execute(client, get);
 
-      HttpPost httpPost = new HttpPost(SERVER_BASE + "/j_spring_security_check");
+      HttpPost httpPost = new HttpPost(serverBase + "/j_spring_security_check");
       List<NameValuePair> params = new ArrayList<NameValuePair>();
       params.add(new BasicNameValuePair("username", "admin"));
       params.add(new BasicNameValuePair("password", "geoserver"));
@@ -211,15 +249,20 @@ public class GeoServiceImpl implements GeoService {
     * @param context
     */
    public HttpResponse openStorePage(HttpClient client, CallContext context) {
-      HttpGet httpGet = new HttpGet(SERVER_BASE
-            + "/web/?wicket:bookmarkablePage=:org.geoserver.web.data.store.NewDataPage");
+      HttpGet httpGet = new HttpGet(getWebLocation("?wicket:bookmarkablePage=:org.geoserver.web.data.store.NewDataPage"));
       HttpResponse response = execute(client, httpGet);
       String html = getContent(response);
       /** 发送post请求到shapefile页面 */
-      HttpPost post = new HttpPost(SERVER_BASE + "/web/" + getStorePageFormAction(html));
-      response = execute(
-            Arrays.asList(new BasicNameValuePair("vectorResources:4:resourcelink", "x")),
-            client, post);
+      HttpPost post = new HttpPost(getWebLocation(getStorePageFormAction(html)));
+      String key;
+      /**根据文件属性选择打开shapefile格式还是tif格式链接*/
+      if(SF_ATTR.equals(context.fileAttr)) {
+         key = "vectorResources:4:resourcelink";
+      } else {
+         key = "rasterResources:1:resourcelink";
+      }
+      
+      response = execute(Arrays.asList(new BasicNameValuePair(key, "x")),client, post);
       String location = getLocation(response);
 
       /** 跳转到返回的shapefile页面 */
@@ -237,10 +280,7 @@ public class GeoServiceImpl implements GeoService {
     * @return
     */
    private String getStorePageFormAction(String html) {
-      int formStart = html.indexOf("<form");
-      int actionStart = html.indexOf("action=", formStart) + 8;
-      int actionEnd = html.indexOf("\"", actionStart);
-      return html.substring(actionStart, actionEnd);
+      return search(html, "<form", "action=", 8, "\"");
    }
 
    /**
@@ -251,25 +291,11 @@ public class GeoServiceImpl implements GeoService {
     */
    private String getStoreSubmitFormAction(String html) {
       int formStart = html.indexOf("<form");
-      int buttonStart = html.indexOf("<div class=\"button-group", formStart);
-      int actionStart = html.indexOf("?wicket:interface", buttonStart);
-      int actionEnd = html.indexOf("\'", actionStart);
-      String location = html.substring(actionStart, actionEnd);
+      String location = search(html.substring(formStart), "<div class=\"button-group", "?wicket:interface", 0, "\'");
       return location.replace("&amp;", "&");
    }
 
-   /**
-    * 得到layer提交页面post地址
-    * 
-    * @param html
-    * @return
-    */
-   private String getLayerSubmitFormAction(String html) {
-      int formStart = html.indexOf("<form");
-      int actionStart = html.indexOf("?wicket:interface", formStart);
-      int actionEnd = html.indexOf("\"", actionStart);
-      return html.substring(actionStart, actionEnd);
-   }
+
 
    /**
     * 提交shapefile表单
@@ -284,47 +310,48 @@ public class GeoServiceImpl implements GeoService {
       List<NameValuePair> params = new ArrayList<NameValuePair>();
       /** 工作空间yaogan */
       params.add(new BasicNameValuePair("workspacePanel:border:paramValue",(String) context.get(WS_KEY)));
-      int selectStart = html.indexOf("<select");
-      int actionStart = html.indexOf("?", selectStart);
-      int actionEnd = html.indexOf("'", actionStart);
-      String wsAction = html.substring(actionStart, actionEnd);
+      String wsAction = search(html, "<select", "?", 0, "'");
       /**点击下拉的工作空间*/
-      HttpPost wsPost = new HttpPost(SERVER_BASE + "/web/" + wsAction);
+      HttpPost wsPost = new HttpPost(getWebLocation(wsAction));
       execute(params, client, wsPost);
       
       /** 存储名称 */
-      params.add(new BasicNameValuePair("dataStoreNamePanel:border:paramValue",
-            context.storeName));
+      String storeNameKey;
       /** 存储描述 */
-      params.add(new BasicNameValuePair("dataStoreDescriptionPanel:border:paramValue",
-            ""));
-      /** 启用标志 */
-      params.add(new BasicNameValuePair("dataStoreEnabledPanel:paramValue", "on"));
+      String descKey;   
+      String enableKey;
+      if(SF_ATTR.equals(context.fileAttr)) {
+         storeNameKey = "dataStoreNamePanel:border:paramValue";
+         descKey = "dataStoreDescriptionPanel:border:paramValue";
+         enableKey = "dataStoreEnabledPanel:paramValue";
+      } else {
+         storeNameKey = "namePanel:border:paramValue";
+         descKey = "descriptionPanel:border:paramValue";
+         enableKey = "enabledPanel:paramValue";
+      }
+      params.add(new BasicNameValuePair(storeNameKey, context.storeName));
+      params.add(new BasicNameValuePair(descKey,""));
+      params.add(new BasicNameValuePair(enableKey, "on"));
 
       /** 得到文件选择的地址 */
-      int browIndex = html.indexOf("Browse...");
-      while (browIndex-- > 0) {
-         if (html.charAt(browIndex) == '?') {
-            break;
-         }
-      }
-      int start = browIndex;
+      int start = reverseSearch(html, "Browse...", '?');
       int end = html.indexOf("'", start);
       String action = html.substring(start, end);
-      context.location = SERVER_BASE + "/web/" + action;
+      context.location = getWebLocation(action);
       selectFile(client, context);
       /** 存储目录 */
       params.add(new BasicNameValuePair("parametersPanel:url:border:paramValue",
-            "file:yaogandata/" + context.storeName + ".shp"));
+            "file:yaogandata/" + context.fileName));
       params.add(new BasicNameValuePair("parametersPanel:url:dialog:content:roots", "0"));
-      /** 字符集GBK */
-      params.add(new BasicNameValuePair("parametersPanel:charset:border:paramValue", "6"));
-      /** index */
-      params.add(new BasicNameValuePair("parametersPanel:spatialIndex:paramValue", "on"));
-      /** cache memory */
-      params.add(new BasicNameValuePair("parametersPanel:cacheMemoryMaps:paramValue",
-            "on"));
-
+      if(SF_ATTR.equals(context.fileAttr)) {
+         /** 字符集GBK */
+         params.add(new BasicNameValuePair("parametersPanel:charset:border:paramValue", "6"));
+         /** index */
+         params.add(new BasicNameValuePair("parametersPanel:spatialIndex:paramValue", "on"));
+         /** cache memory */
+         params.add(new BasicNameValuePair("parametersPanel:cacheMemoryMaps:paramValue",
+               "on"));
+      }
       params.add(new BasicNameValuePair("save", "1"));
       httpPost.addHeader("Wicket-Ajax", "true");
       httpPost.addHeader("Accept", "text/xml");
@@ -350,32 +377,20 @@ public class GeoServiceImpl implements GeoService {
       httpPost.addHeader("Accept", "text/xml");
       /** 打开文件对话框 */
       HttpResponse response = execute(params, client, httpPost);
-      response = execute(params, client, httpPost);
       String html = getContent(response);
-      int pos = html.indexOf(FOLDER_NAME);
-      while (pos-- > 0) {
-         if (html.charAt(pos) == '?') {
-            break;
-         }
-      }
-      int start = pos;
+      
+      int start = reverseSearch(html, FOLDER_NAME, '?');
       int end = html.indexOf("\'", start);
       String href = html.substring(start, end);
       /** 点击yaogandata */
-      HttpGet get = new HttpGet(SERVER_BASE + "/web/" + href);
+      HttpGet get = new HttpGet(getWebLocation(href));
       response = execute(client, get);
       html = getContent(response);
-      pos = html.indexOf(context.storeName + ".shp");
-      while (pos-- > 0) {
-         if (html.charAt(pos) == '?') {
-            break;
-         }
-      }
-      start = pos;
+      start = reverseSearch(html, context.fileName, '?');
       end = html.indexOf("\'", start);
       href = html.substring(start, end);
       /** 点击文件 */
-      get = new HttpGet(SERVER_BASE + "/web/" + href);
+      get = new HttpGet(getWebLocation(href));
       execute(client, get);
       return response;
    }
@@ -396,41 +411,131 @@ public class GeoServiceImpl implements GeoService {
       params.add(new BasicNameValuePair(
             "tabs:panel:theList:0:content:referencingForm:nativeSRS:srs", "UNKNOWN"));
       params.add(new BasicNameValuePair(
-            "tabs:panel:theList:0:content:referencingForm:declaredSRS:srs", "EPSG:2413"));
+            "tabs:panel:theList:0:content:referencingForm:declaredSRS:srs", "EPSG:4326"));
       params.add(new BasicNameValuePair(
             "tabs:panel:theList:0:content:referencingForm:declaredSRS:popup:content:table:filterForm:filter",
-            "1954"));
+            "4326"));
+      if(SF_ATTR.equals(context.fileAttr)) {
+         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:srsHandling", "FORCE_DECLARED"));
+      } else {
+         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:srsHandling", "REPROJECT_TO_DECLARED"));
+      }
+      String[] nativeBound = getNativeBound(client, context, params);
       params.add(new BasicNameValuePair(
-            "tabs:panel:theList:0:content:referencingForm:srsHandling", "FORCE_DECLARED"));
+            "tabs:panel:theList:0:content:referencingForm:nativeBoundingBox:minX", nativeBound[0]));
       params.add(new BasicNameValuePair(
-            "tabs:panel:theList:0:content:referencingForm:nativeBoundingBox:minX",
-            "37,610,716.932526596"));
+            "tabs:panel:theList:0:content:referencingForm:nativeBoundingBox:minY", nativeBound[1]));
       params.add(new BasicNameValuePair(
-            "tabs:panel:theList:0:content:referencingForm:nativeBoundingBox:minY",
-            "4,365,977.2120092"));
+            "tabs:panel:theList:0:content:referencingForm:nativeBoundingBox:maxX", nativeBound[2]));
       params.add(new BasicNameValuePair(
-            "tabs:panel:theList:0:content:referencingForm:nativeBoundingBox:maxX",
-            "37,625,766.36042764"));
+            "tabs:panel:theList:0:content:referencingForm:nativeBoundingBox:maxY", nativeBound[3]));
+      String[] llBound = getLLBound(client, context, params);
       params.add(new BasicNameValuePair(
-            "tabs:panel:theList:0:content:referencingForm:nativeBoundingBox:maxY",
-            "4,385,308.8299839"));
+            "tabs:panel:theList:0:content:referencingForm:latLonBoundingBox:minX", llBound[0]));
       params.add(new BasicNameValuePair(
-            "tabs:panel:theList:0:content:referencingForm:latLonBoundingBox:minX",
-            "112.28619667632907"));
+            "tabs:panel:theList:0:content:referencingForm:latLonBoundingBox:minY", llBound[1]));
       params.add(new BasicNameValuePair(
-            "tabs:panel:theList:0:content:referencingForm:latLonBoundingBox:minY",
-            "39.41804968685204"));
+            "tabs:panel:theList:0:content:referencingForm:latLonBoundingBox:maxX", llBound[2]));
       params.add(new BasicNameValuePair(
-            "tabs:panel:theList:0:content:referencingForm:latLonBoundingBox:maxX",
-            "112.46456147932551"));
-      params.add(new BasicNameValuePair(
-            "tabs:panel:theList:0:content:referencingForm:latLonBoundingBox:maxY",
-            "39.59418969944382"));
-
+            "tabs:panel:theList:0:content:referencingForm:latLonBoundingBox:maxY", llBound[3]));
+      
+      if(HD_ATTR.equals(context.fileAttr)) {
+         params.add(new BasicNameValuePair("tabs:panel:theList:1:content:parameters:0:parameterPanel:border:paramValue", ""));
+         String html = context.lastHtml;
+         int pos = reverseSearch(html, "name=\"tabs:panel:theList:1:content:parameters:1:parameterPanel:border:paramValue", '=');
+         String value = search(html, null, pos, 2, "\"");
+         params.add(new BasicNameValuePair("tabs:panel:theList:1:content:parameters:1:parameterPanel:border:paramValue", value));
+      }
+      
       params.add(new BasicNameValuePair("save", "x"));
       HttpResponse response = execute(params, client, httpPost);
       return response;
    }
+   
+   /**
+    * 计算本地边界值 点击compute from data按钮
+    * @param client
+    * @param context
+    * @param params
+    * @return
+    */
+   private String[] getNativeBound(HttpClient client, CallContext context, List<NameValuePair> params) {
+      String content;
+      String html = context.lastHtml;
+      int startPos = html.indexOf("nativeBoundingBox");
+      /**如果是shapefile格式的 则需要发起请求*/
+      if(SF_ATTR.equals(context.fileAttr)) {
+         String link = getWebLocation(search(html, startPos, "?", 0, "'"));
+         HttpPost post = new HttpPost(link);
+         post.addHeader("Wicket-Ajax", "true");
+         post.addHeader("Accept", "text/xml");
+         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:computeNative", "1"));
+         HttpResponse response = execute(params, client, post);
+         params.remove(params.size() - 1);
+         content = getContent(response);
+         /**tif格式的可以从页面直接得到*/
+      } else {
+         content = html.substring(startPos);
+      }
+      int minXStart = content.indexOf("value=") + 7;
+      int minXEnd = content.indexOf("\"", minXStart);
+      String minX = content.substring(minXStart, minXEnd);
+
+      int minYStart = content.indexOf("value=", minXEnd) + 7;
+      int minYEnd = content.indexOf("\"", minYStart);
+      String minY = content.substring(minYStart, minYEnd);
+      
+      int maxXStart = content.indexOf("value=", minYEnd) + 7;
+      int maxXEnd = content.indexOf("\"", maxXStart);
+      String maxX = content.substring(maxXStart, maxXEnd);
+      int maxYStart = content.indexOf("value=", maxXEnd) + 7;
+      int maxYEnd = content.indexOf("\"", maxYStart);
+      String maxY = content.substring(maxYStart, maxYEnd);
+      return new String[]{minX, minY, maxX, maxY};
+   }
+   
+   /**
+    * 计算经纬度边界值 点击compute from data按钮
+    * @param client
+    * @param context
+    * @param params
+    * @return
+    */
+   private String[] getLLBound(HttpClient client, CallContext context, List<NameValuePair> params) {
+      String html = context.lastHtml;
+      int startPos = html.indexOf("Lat/Lon Bounding Box");
+      String content;
+      if(SF_ATTR.equals(context.fileAttr)) {
+         int linkStart = html.indexOf("?", startPos);
+         int linkEnd = html.indexOf("'", linkStart);
+         String link = getWebLocation(html.substring(linkStart, linkEnd));
+         HttpPost post = new HttpPost(link);
+         post.addHeader("Wicket-Ajax", "true");
+         post.addHeader("Accept", "text/xml");
+         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:computeLatLon", "1"));
+         HttpResponse response = execute(params, client, post);
+         content = getContent(response);
+         params.remove(params.size() - 1);
+      } else {
+         content = html.substring(startPos);
+      }
+      int minXStart = content.indexOf("value=") + 7;
+      int minXEnd = content.indexOf("\"", minXStart);
+      String minX = content.substring(minXStart, minXEnd);
+
+      int minYStart = content.indexOf("value=", minXEnd) + 7;
+      int minYEnd = content.indexOf("\"", minYStart);
+      String minY = content.substring(minYStart, minYEnd);
+      
+      int maxXStart = content.indexOf("value=", minYEnd) + 7;
+      int maxXEnd = content.indexOf("\"", maxXStart);
+      String maxX = content.substring(maxXStart, maxXEnd);
+      int maxYStart = content.indexOf("value=", maxXEnd) + 7;
+      int maxYEnd = content.indexOf("\"", maxYStart);
+      String maxY = content.substring(maxYStart, maxYEnd);
+      return new String[]{minX, minY, maxX, maxY};
+   }
+
 
    /**
     * 打开发布页面 为了独立性 不是在存储后点击发布 而是在layer页面中选择发布
@@ -440,8 +545,7 @@ public class GeoServiceImpl implements GeoService {
     * @return
     */
    public HttpResponse openPublishLayerPage(HttpClient client, CallContext context) {
-      HttpGet httpGet = new HttpGet(SERVER_BASE
-            + "/web/?wicket:bookmarkablePage=:org.geoserver.web.data.layer.NewLayerPage");
+      HttpGet httpGet = new HttpGet(getWebLocation("?wicket:bookmarkablePage=:org.geoserver.web.data.layer.NewLayerPage"));
       HttpResponse response = execute(client, httpGet);
       String html = getContent(response);
       /** 得到刚加入的存储 */
@@ -451,30 +555,18 @@ public class GeoServiceImpl implements GeoService {
             break;
          }
       }
-      int idStart = storeStart + 2;
-      int idEnd = html.indexOf("\"", idStart);
-
-      String id = html.substring(idStart, idEnd);
+      int idStart = reverseSearch(html, context.workspaceName + ":" + context.storeName, '=');
+      String id = search(html, null, idStart, 2, "\"");
       /** 得到form表单地址 */
-      int formStart = html.indexOf("<select name=\"storesDropDown\"");
-      int actionStart = html.indexOf("?", formStart);
-      int actionEnd = html.indexOf("\'", actionStart);
-      String action = html.substring(actionStart, actionEnd);
-      HttpPost httpPost = new HttpPost(SERVER_BASE + "/web/" + action);
+      String action = search(html, "<select name=\"storesDropDown\"", "?", 0, "\'");
+      HttpPost httpPost = new HttpPost(getWebLocation(action));
       response = execute(Arrays.asList(new BasicNameValuePair("storesDropDown", id)),
             client, httpPost);
       html = getContent(response);
-      int labelStart = html.indexOf("Publish<");
-      while (labelStart-- > 0) {
-         if (html.charAt(labelStart) == '?') {
-            break;
-         }
-      }
-      int linkStart = labelStart;
-      int linkEnd = html.indexOf("'", linkStart);
-      String link = html.substring(linkStart, linkEnd);
+      int linkStart = reverseSearch(html, "Publish<", '?');
+      String link = search(html, null, linkStart, 0, "'");
       /** 点击发布链接 */
-      httpGet = new HttpGet(SERVER_BASE + "/web/" + link);
+      httpGet = new HttpGet(getWebLocation(link));
       response = execute(client, httpGet);
       return response;
    }
@@ -506,7 +598,7 @@ public class GeoServiceImpl implements GeoService {
       }
    }
 
-   private String getContent(HttpResponse response) {
+   private static String getContent(HttpResponse response) {
       try {
          return EntityUtils.toString(response.getEntity());
       } catch (Exception e) {
@@ -520,12 +612,91 @@ public class GeoServiceImpl implements GeoService {
     * @param response
     * @return
     */
-   private String getLocation(HttpResponse response) {
+   private static String getLocation(HttpResponse response) {
       Header[] locations = response.getHeaders("Location");
       if (locations != null && locations.length > 0) {
          return locations[0].getValue();
       }
       return null;
+   }
+   
+   /**
+    * geoserver地址+web + suffix拼接
+    * @param suffix
+    * @return
+    */
+   private static String getWebLocation(String suffix) {
+      return SERVER_BASE + "/web/" + suffix;
+   }
+   
+   /**
+    * 从object处反向查找ch字符的位置
+    * @param html
+    * @param from
+    * @param ch
+    * @return
+    */
+   private static int reverseSearch(String html, Object from, char ch) {
+      int fromPos = 0;
+      if(from instanceof Integer) {
+         fromPos = (Integer) from;
+      } else {
+         fromPos = html.indexOf((String) from);
+         if(fromPos == -1) {
+            log.info("html:" + html);
+            throw new RuntimeException("from字符串搜索失败," + from);
+         }
+      }
+      while(fromPos-- >= 0) {
+         if(html.charAt(fromPos) == ch) {
+            return fromPos;
+         }
+      }
+      return -1;
+   }
+   /**
+    * 从html中搜索字符串 从from 处开始找 找内容在start和end之间的
+    * @param html
+    * @param from
+    * @param start
+    * @param end
+    * @return
+    */
+   private static String search(String html, Object from, Object start, Integer startOffset, String end) {
+      int fromPos = 0;
+      if(from != null) {
+         if(from instanceof Integer) {
+            fromPos = (Integer) from;
+         } else {
+            fromPos = html.indexOf((String) from);
+            if(fromPos == -1) {
+               log.info("html:" + html);
+               throw new RuntimeException("from字符串搜索失败," + from);
+            }
+         }
+      }
+      int startPos;
+      if(start instanceof Integer) {
+         startPos = (Integer) start;
+      } else {
+            startPos = html.indexOf((String) start, fromPos);
+            if(startPos == -1) {
+               log.info("html:" + html);
+               throw new RuntimeException("start字符串搜索失败," + start);
+            }
+      }
+      if(startOffset == null) {
+         if(start instanceof String) {
+            startPos += ((String) start).length();
+         } 
+      } else {
+         startPos += startOffset;
+      }
+      int endPos = html.indexOf(end, startPos);
+      if(endPos == -1) {
+         throw new RuntimeException("end字符串搜索失败," + end);
+      }
+      return html.substring(startPos, endPos);
    }
 
    /**
@@ -549,6 +720,18 @@ public class GeoServiceImpl implements GeoService {
       private String storeName;
 
       private String lastHtml;
+      /**
+       * 文件属性
+       * */
+      private String fileAttr;
+      /**
+       * 文件类型
+       */
+      private String fileType;
+      /**
+       * 文件名称
+       * */
+      private String fileName;
 
       public CallContext() {
 
