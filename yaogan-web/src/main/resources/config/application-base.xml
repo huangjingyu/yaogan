@@ -53,6 +53,7 @@
     <context:exclude-filter expression="org.springframework.stereotype.Controller"
       type="annotation" />
   </context:component-scan>
-  
+
+  <import resource="applicationContext-httpclient.xml" />  
   <import resource="application-security.xml" />
 </beans>

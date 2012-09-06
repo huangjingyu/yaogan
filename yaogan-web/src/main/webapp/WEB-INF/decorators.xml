@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<decorators defaultdir="/WEB-INF/decorators">
+  <excludes>
+    <pattern>/index.jsp</pattern>
+    <pattern>/ajax/**</pattern>
+    <pattern>/api/**</pattern>
+    <pattern>/static/**</pattern>
+    <pattern>/*ajax/**/*</pattern>
+    <pattern>/**/ajax/**</pattern>
+    <pattern>/errors/**/*</pattern>
+  </excludes>
+  <decorator name="adminMain" page="admin/main.jsp">
+    <pattern>/admin/*</pattern>
+  </decorator>
+  <decorator name="adminHeader" page="admin/header.jsp" />
+  <decorator name="adminFooter" page="admin/footer.jsp" />
+  <decorator name="adminMenu" page="admin/menu.jsp" />
+  
+  <decorator name="userMain" page="user/main.jsp">
+    <pattern>/user/*</pattern>
+  </decorator>
+  <decorator name="userHeader" page="user/header.jsp" />
+  <decorator name="userFooter" page="user/footer.jsp" />
+  <decorator name="userMenu" page="user/menu.jsp" />
+</decorators>  
