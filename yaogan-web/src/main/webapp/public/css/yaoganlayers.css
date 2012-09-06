@@ -14,7 +14,12 @@
             
             /*控制左右div水平排放*/
             #leftDiv {
-               float : left
+               float : left;
+               margin-right : 20px
+            }
+            
+            #rightDiv {
+               padding-top : 70px;
             }
             
             #kqSelect {

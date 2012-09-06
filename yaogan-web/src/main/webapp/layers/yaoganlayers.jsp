@@ -1,20 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/includes.jsp"%>
    <!-- 左边 -->
       <div id="leftDiv">
       <div>
       <!-- 矿区选择 -->
          <ul id="kqSelect">
             <li>
-               <select>
-                  <option value ="">--选择矿区--</option>
-                  <option value ="pingshuo">平朔</option>
+                                        地区:<select id="placeSelect">
+                  <option value ="">--选择--</option>
+                  <c:forEach items="${places}" var="place">
+                     <option value ="${place.id}">${place.name}</option>
+                  </c:forEach>
                </select>
             </li>
             <li>
-               <select>
-                  <option value ="">--选择日期--</option>
-                  <option value ="2010">2010</option>
-                  <option value ="2011">2011</option>
+                                            日期:<select id="timeSelect">
+                  <option value ="">--选择--</option>
                </select>
             </li>
             <li style="float:none"><input id="queryMap" type="button" value="地图查询"></input></li>
@@ -31,6 +32,7 @@
                <input type="checkbox" value="kq"/>矿区
                <input type="checkbox" value="tdly"/>土地利用
                <input type="checkbox" value="dbtx"/>地表塌陷
+               <input type="checkbox" value="dlf"/>地裂缝
                <input type="checkbox" value="trqs"/>土壤侵蚀
                <input type="checkbox" value="gqyg"/>高清遥感图
             </li>
@@ -55,7 +57,14 @@
     </div>
     <!-- 右边 -->
      <div id="rightDiv">
-      <input id="queryData" type="button" value="查询指数"/><br/>
+     <div id="queryType"> 
+        <input type="checkbox" name="swfd" checked="checked"/>生物丰度
+        <input type="checkbox" name="zbfg" checked="checked"/>植被覆盖
+        <input type="checkbox" name="tdth" checked="checked"/>土地退回
+     </div>
+     <div>
+        <input id="queryData" type="button" value="查询指数"/><br/>
       查询结果：<br/>
+      </div>
       <div id="content"></div>
      </div>

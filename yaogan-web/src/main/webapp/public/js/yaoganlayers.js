@@ -1,11 +1,18 @@
     /**地图控制部分*/
     (function(){
-    	var layerGroupWmsUrl = "http://www.rockloudtest.com/geoserver/wms";
-    	var layerWmsUrl = "http://www.rockloudtest.com/geoserver/yaogan/wms";
+    	var layerGroupWmsUrl = "/geoserver/wms";
+    	var layerWmsUrl = "/geoserver/yaogan/wms";
+    	var test = false;
+    	var kqLayerName = test ? "yaogan:pingshuo_KQ" : null;
+    	var tdlyLayerName = test ? "yaogan:tdly2011" : null;
+    	var dbtxLayerName = test ? "yaogan:dbtx2011" : null;
+    	var trqsLayerName = test ? "yaogan:trqs2011" : null;
+    	var gqygLayerName = test ? "yaogan:TH01_2011" : null;
+    	var dlfLayerName = test ? "yaogan:groundcrack2011" : null;
         /**全局命名空间R*/
         var R = window.R = {
-        		    /*选择要素的图层的名字*/
-        		    SELECT_LNAME : "selectLayer",
+        	    /*选择要素的图层的名字*/
+        	   SELECT_LNAME : "selectLayer",
                /*二维图层的名字*/
                 TD_LNAME : "tdLayer",
                 /*二维layer配置*/
@@ -25,27 +32,32 @@
                 /*矿区layer配置*/
                 kqLayer : {
                   wmsUrl : layerWmsUrl,
-                  layerName : "yaogan:pingshuo_KQ"
+                  layerName : kqLayerName
                 },
                 /*土地利用配置*/
                  tdlyLayer : {
                    wmsUrl : layerWmsUrl,
-                   layerName : "yaogan:tdly2011"
+                   layerName : tdlyLayerName
                 },
+                /*地裂缝配置*/
+                dlfLayer : {
+                  wmsUrl : layerWmsUrl,
+                  layerName : dlfLayerName
+               },                
                 /*地表塌陷配置*/
                  dbtxLayer : {
                    wmsUrl : layerWmsUrl,
-                   layerName : "yaogan:dbtx2011"
+                   layerName : dbtxLayerName
                 },
                 /*土壤侵蚀配置*/
                  trqsLayer : {
                    wmsUrl : layerWmsUrl,
-                   layerName : "yaogan:trqs2011"
+                   layerName :  trqsLayerName
                 },
                 /*高清遥感配置*/
                 gqygLayer : {
                   wmsUrl : layerWmsUrl,
-                  layerName : "yaogan:TH01_2011"
+                  layerName :  gqygLayerName
                },                
                 /*边界值 目前为一个省的边界值*/
                 BOUNDS : new OpenLayers.Bounds(
@@ -71,7 +83,16 @@
                 baseType : {
                 	TD : "td",
                 	YG : "yg"
-                }
+                },
+                /*请求的url*/
+                reqUrl: {
+                	/*根据地区选择时间*/
+                	GETTIME : "./getAvailableTime",
+                	/*查询地图信息*/
+                	QUERYMAP : "./queryMap",
+                	/*查询指数信息*/
+                	QUERYSTATS : "./queryEnvStats"
+                }                
         };
         
         /**Layers为地图层的大对象*/
@@ -183,7 +204,7 @@
                 gfCtl.deactivate();
                }
                /*图形选择*/
-            } else if(value == R.selectOp.SELECT) {
+            } else if(selectOp == R.selectOp.SELECT) {
                   boxCtl.deactivate();
                   pynCtl.deactivate();
                   selectCtl.activate();
@@ -257,11 +278,14 @@
          
         	/*专题图层名称*/
         	var spcLayerNames = this.spcLayerNames = [];
-        	$("#mapSelect input[type='checkbox'][checked=='checked']").each(function(){
+        	$("#mapSelect input[type='checkbox'][checked='checked']").each(function(){
         		spcLayerNames[spcLayerNames.length] = $(this).val() + "Layer";
         	});
         	/*叠加各专题图层*/
         	for(var i = 0; i < spcLayerNames.length; i++) {
+        		if(! R.spcLayerNames[i].layerName) {
+        			continue;
+        		}
         		this.addWmsLayer(spcLayerNames[i], {transparent : true});
                 /*如果是矿区图 则需要添加getFeature控件*/
                 if(R.KQ_LNAME == layerName) {
@@ -288,8 +312,54 @@
         };
     })();
     
-    /**页面元素控制部分*/
-    $(function(){    
+   /**页面元素控制部分*/
+   $(function(){    
+	  /**地区下拉选择*/
+      $("#placeSelect").bind("change", function() {
+    	   var val = ($(this).val());
+    	   /**如果选择*/
+    	   if(val == "") {
+    		   return;
+    	   }
+    	  $.getJSON(R.reqUrl.GETTIME + "?placeId=" + val, function(result) {
+    		  $("#timeSelect").empty();
+    		  $("#timeSelect").append("<option value =''>--选择--</option>");
+    		  for(var i = 0; i < result.length; i++) {
+    			  $("#timeSelect").append("<option value ='" + result[i] + "'>" + result[i] + "</option>");
+    		  }
+    	  });
+      });
+      
+      /**点击查询地图按钮*/
+      $("#queryMap").bind("click", function() {
+    	  var placeId = $("#placeSelect").val();
+    	  var time = $("#timeSelect").val();
+    	  if(placeId == "" || time == "") {
+    		  alert("请选择地区和时间");
+    		  return;
+    	  }
+    	  $.getJSON(R.reqUrl.QUERYMAP + "?placeId=" + placeId + "&time=" + time, function(result) {
+    		  if(result.length == 0) {
+    			  alert("目前没有该地区和日期的数据");
+    		  }
+    		  /*重新设置当前地图的placeId和time*/
+    		  R.layerMap.placeId = placeId;
+    		  R.layerMap.time = time;
+    		  /*清空当前的专题图层名称*/
+    	      R.kqLayer.layerName = R.tdlyLayer.layerName = R.dbtxLayer.layerName
+    	      = R.trqsLayer.layerName = R.gqygLayer.layerName = null;
+    	      /*设置新的当前的专题图层名称*/
+    	      for(var i = 0; i < result.length; i++) {
+    	    	  R[result[i].type + "Layer"].layerName = result[i].layerName;
+    	      }
+    	      /*清空现有地图*/
+              R.layerMap.map.destroy();
+              $("#map").empty();
+              /*渲染新的地图*/
+              R.layerMap.init();
+    	  });
+      });
+      
       /**底层图片的切换*/
       $("#mapSelect input[type='radio']").bind("click", function() {
      	 var layerName = $(this).val() + "Layer";
@@ -297,8 +367,9 @@
      	 if(R.layerMap[layerName]) {
      		 return;
      	 }
-    	 if(! R[layerName]) {
-    		 alert("该图尚不存在");
+    	 if(! R[layerName].layerName) {
+    		 alert("该类型专题图尚不存在");
+    		 return;
     	 }
     	 var addLayer = layerName;
     	 var rmLayer;
@@ -316,8 +387,9 @@
       /**专题层的选择*/
      $("#mapSelect input[type='checkbox']").bind("click", function() {
     	 var layerName = $(this).val() + "Layer";
-    	 if(! R[layerName]) {
+    	 if(! R[layerName].layerName) {
     		 alert("该图尚不存在");
+    		 return;
     	 }
     	 var checked = $(this).attr("checked") == "checked";
     	 /*如果选中了 则添加图层 否则删除图层*/
@@ -351,7 +423,7 @@
    });
  	
    /**
-   *清除按钮的选择
+   *清除按钮的点击
    */
    $("#selectOp input[type='button']").bind("click", function() {
  	  var name = $(this).attr('name');
@@ -364,7 +436,39 @@
           var selectLayer = R.layerMap[R.SELECT_LNAME];
           selectLayer.removeAllFeatures();
         }
-   });     
-     /**页面装载完毕后对地图进行初始化*/
-     R.layerMap.init();
+   });  
+   
+   /**查询结果按钮点击*/
+   $("#queryData").bind("click", function() {
+	   var placeId = R.layerMap.placeId;
+	   var time = R.layerMap.time;
+	   if(! (placeId && time)) {
+		   alert("请先查询地图");
+		   return;
+	   }
+	   var features = R.layerMap[R.SELECT_LNAME].selectedFeatures;
+	   if(features.length > 1) {
+		   alert("目前仅支持单个图形查询");
+		   return;
+	   }
+	   var geometry = "";
+	   if(features.length > 0) {
+		   geometry = "geometry=" + features[0].geometry;
+	   }
+	   $("#content").empty();
+	   $.getJSON(R.reqUrl.QUERYSTATS + "?placeId=" + placeId + "&time=" + time + "&" + geometry, function(result) {
+		   if($("#queryType input[name='swfd']").attr("checked") == "checked") {
+			   $("#content").append("生物丰度指数:" + result.abio + "<br/>");
+		   }
+		   if($("#queryType input[name='zbfg']").attr("checked") == "checked") {
+			   $("#content").append("植被覆盖指数:" + result.aveg + "<br/>");
+		   }
+		   if($("#queryType input[name='tdth']").attr("checked") == "checked") {
+			   $("#content").append("土地退化指数:" + result.aero + "<br/>");
+		   }		   
+	   });	   
+   });
+   
+   /**页面装载完毕后对地图进行初始化*/
+   R.layerMap.init();
     });
