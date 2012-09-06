@@ -2,21 +2,28 @@ package com.rockontrol.yaogan.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 @Entity(name = "users")
 public class User {
+   public enum Role {
+      ROLE_ADMIN, ROLE_USER
+   }
 
    private Long _id;
    private Long _orgId;
    private String _userName;
    private String _password;
    private String _email;
+   private Role _role;
    private Organization _organization;
 
    @Id
@@ -66,6 +73,16 @@ public class User {
       this._email = email;
    }
 
+   @Enumerated(EnumType.STRING)
+   @Column(name = "role", length = 32)
+   public Role getRole() {
+      return _role;
+   }
+
+   public void setRole(Role role) {
+      this._role = role;
+   }
+
    @ManyToOne(fetch = FetchType.LAZY, optional = true)
    @JoinColumn(name = "org_id", insertable = false, updatable = false)
    public Organization getOrganization() {
@@ -74,5 +91,10 @@ public class User {
 
    public void setOrganization(Organization organization) {
       this._organization = organization;
+   }
+
+   @Transient
+   public boolean isAdmin() {
+      return Role.ROLE_ADMIN.equals(_role);
    }
 }

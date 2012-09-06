@@ -1,9 +1,11 @@
 package com.rockontrol.yaogan.service;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.rockontrol.yaogan.model.User;
 
 public interface ISecurityManager {
-   IYaoganUserDetails userContext();
+   UserDetails userContext();
 
    User currentUser();
 }

@@ -17,7 +17,7 @@ import com.rockontrol.yaogan.vo.EnvStats;
 
 @Controller
 @RequestMapping(value = "/api/envstats")
-public class EnvStatsController {
+public class EnvStatsRestController {
 
    @Autowired
    private ISecurityManager _secMng;
