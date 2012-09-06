@@ -13,7 +13,7 @@ import com.rockontrol.yaogan.service.ISecurityManager;
 import com.rockontrol.yaogan.service.IYaoganService;
 
 @Controller
-@RequestMapping("/share/envstats")
+@RequestMapping(value = { "/admin/envstats", "/user/envstats" })
 public class EnvStatsController {
 
    @Autowired

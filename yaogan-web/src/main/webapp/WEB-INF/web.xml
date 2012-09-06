@@ -35,12 +35,11 @@
     <listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
   </listener>
 
- <!--UTF8 编码过滤-->
+  <!--UTF8 编码过滤 -->
   <filter>
     <filter-name>CharacterEncodingFilter</filter-name>
     <filter-class>
-      org.springframework.web.filter.CharacterEncodingFilter
-    </filter-class>
+      org.springframework.web.filter.CharacterEncodingFilter</filter-class>
     <init-param>
       <param-name>encoding</param-name>
       <param-value>UTF-8</param-value>
@@ -81,8 +80,15 @@
   <filter-mapping>
     <filter-name>springSecurityFilterChain</filter-name>
     <url-pattern>/*</url-pattern>
-  </filter-mapping>  
-
+  </filter-mapping>
+  <filter>
+    <filter-name>sitemesh</filter-name>
+    <filter-class>com.opensymphony.module.sitemesh.filter.PageFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>sitemesh</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
   <filter>
     <filter-name>openSessionInViewFilter</filter-name>
     <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
@@ -91,7 +97,7 @@
   <filter-mapping>
     <filter-name>openSessionInViewFilter</filter-name>
     <url-pattern>/*</url-pattern>
-  </filter-mapping>  
+  </filter-mapping>
 
   <session-config>
     <session-timeout>30</session-timeout>
@@ -101,7 +107,7 @@
     <extension>ico</extension>
     <mime-type>image/x-icon</mime-type>
   </mime-mapping>
-  
+
   <welcome-file-list>
     <welcome-file>/index.jsp</welcome-file>
   </welcome-file-list>
