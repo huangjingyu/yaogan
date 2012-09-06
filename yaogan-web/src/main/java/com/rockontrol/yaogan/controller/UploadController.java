@@ -49,8 +49,8 @@ public class UploadController {
                region);
          if (groundWaterDesc != null) {
             yaoganService.deletePlaceParam(region, region, PlaceParam.GROUND_WATER_DESC);
-            yaoganService.addPlaceParam(region, region, PlaceParam.GROUND_WATER_DESC,
-                  groundWaterDesc);
+            yaoganService.addPlaceParam(_secMng.currentUser(), region, region,
+                  PlaceParam.GROUND_WATER_DESC, groundWaterDesc);
          }
       } catch (IOException e) {
          e.printStackTrace();

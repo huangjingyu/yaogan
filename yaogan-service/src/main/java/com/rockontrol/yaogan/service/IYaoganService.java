@@ -188,8 +188,8 @@ public interface IYaoganService {
 
    public void addPlaceParam(PlaceParam param);
 
-   public void addPlaceParam(String placeName, String time, String paramName,
-         String paramValue);
+   public void addPlaceParam(User caller, String placeName, String time,
+         String paramName, String paramValue);
 
    public void deletePlaceParam(String placeName, String time, String paramName);
 
