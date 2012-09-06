@@ -81,6 +81,8 @@ public class UploadController {
          String region) throws IllegalStateException, IOException {
       String shapeFileHome = (String) GlobalConfig.getProperties().getProperty(
             "yaogan.gis.shapefile.home");
+      if (shapeFileHome.endsWith("/") || shapeFileHome.endsWith("\\"))
+         shapeFileHome = shapeFileHome.substring(0, shapeFileHome.length() - 1);
       String landTypePath = shapeFileHome + File.separator + region + File.separator
             + type + File.separator + year;
       checkPath(landTypePath);
@@ -103,7 +105,7 @@ public class UploadController {
          category = Category.FILE_REGION_BOUNDARY;
       String fullPath = dLandTypeShpfile.getAbsolutePath();
       String filePath = fullPath.substring(fullPath.indexOf(shapeFileHome)
-            + shapeFileHome.length(), fullPath.length());
+            + shapeFileHome.length() + 2, fullPath.length());
       yaoganService.saveShapefile(_secMng.currentUser(), region, category,
             dLandTypeShpfile, filePath, year);
       dLandTypeFile.delete();

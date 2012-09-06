@@ -39,7 +39,14 @@ public class PlaceParamDaoImpl extends BaseDaoImpl<PlaceParam> implements IPlace
       query.setString("placeName", placeName);
       query.setString("time", time);
       query.setString("paramName", paramName);
-      return (PlaceParam) query.uniqueResult();
+      PlaceParam param = null;
+      try {
+         param = (PlaceParam) query.uniqueResult();
+      } catch (Exception e) {
+         e.printStackTrace();
+      }
+      return param;
+
    }
 
    @Override
