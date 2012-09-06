@@ -17,10 +17,31 @@
 <decorator:head />
 </head>
 <body class="claro">
+	<%
+	   String domainName = "";
+	   String host = request.getHeader("HOST");
+	   String[] arr = host.split("\\.");
+	   if (arr.length == 4) {
+	      boolean isIp = false;
+	      try {
+	         Integer.parseInt(arr[0]);
+	         isIp = true;
+	      } catch (Exception e) {
+	      }
+	      if (isIp) {
+	      } else {
+	         domainName = new StringBuilder().append(arr[1]).append(".")
+	               .append(arr[2]).append(".").append(arr[3]).toString();
+	      }
+	   }
+	   String cloud_context = null;
+	   String cloudScriptUrl = "http://" + domainName + "/navbar/banner/partner";
+	%>
+
 	<page:applyDecorator name="adminHeader" />
 	<div id="main">
 		<div id="left">
-			<div class="left_top">用户操作</div>			
+			<div class="left_top">用户操作</div>
 			<div class="left_menu">
 				<page:applyDecorator name="adminMenu" />
 			</div>

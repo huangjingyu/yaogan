@@ -98,8 +98,7 @@ public class YaoganServiceImpl implements IYaoganService {
 
    @Override
    public EnvStats getEnvStats(User caller, Long placeId, String time) {
-
-      return null;
+      return computeEnvStats(caller, placeId, time);
    }
 
    @Override
@@ -123,7 +122,7 @@ public class YaoganServiceImpl implements IYaoganService {
       // e.printStackTrace();
       // }
       //
-      return null;
+      return computeEnvStats(caller, placeId, time, geom_string);
    }
 
    @Transactional
@@ -287,16 +286,21 @@ public class YaoganServiceImpl implements IYaoganService {
    }
 
    @Override
-   public EnvStats[] getEnvStats(User caller, Long placeId, String[] time) {
-      // TODO Auto-generated method stub
-
-      return null;
+   public EnvStats[] getEnvStats(User caller, Long placeId, String[] times) {
+      EnvStats[] statsArr = new EnvStats[times.length];
+      for (int i = 0; i < times.length; i++) {
+         statsArr[i] = getEnvStats(caller, placeId, times[i]);
+      }
+      return statsArr;
    }
 
    @Override
-   public EnvStats[] getEnvStats(User caller, Long[] placeId, String time) {
-      // TODO Auto-generated method stub
-      return null;
+   public EnvStats[] getEnvStats(User caller, Long[] placeIds, String time) {
+      EnvStats[] statsArr = new EnvStats[placeIds.length];
+      for (int i = 0; i < placeIds.length; i++) {
+         statsArr[i] = getEnvStats(caller, placeIds[i], time);
+      }
+      return statsArr;
    }
 
    @Override
@@ -332,7 +336,6 @@ public class YaoganServiceImpl implements IYaoganService {
       shapefile.setPlaceId(place.getId());
       shapefile.setFilePath(file.getAbsolutePath());
       shapefile.setWmsUrl(wmsUrl);
-      shapefile.setWmsUrl(null);
       shapefileDao.save(shapefile);
    }
 

@@ -18,11 +18,9 @@ public class HomeController {
    public String home() {
       User user = _secMng.currentUser();
       if (user != null && user.getIsAdmin()) {
-         return "redirect:"
-               + GlobalConfig.getProperties().getString("yaogan.admin.homepage");
+         return "redirect:" + GlobalConfig.getProperties().getString("homepage.admin");
       } else {
-         return "redirect:"
-               + GlobalConfig.getProperties().getString("yaogan.user.homepage");
+         return "redirect:" + GlobalConfig.getProperties().getString("homepage.user");
       }
    }
 }
