@@ -1,5 +1,8 @@
 package com.rockontrol.yaogan.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,13 +11,24 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 
 @Entity(name = "place")
+@NamedQueries({
+      @NamedQuery(name = "Place.getByName", query = "from com.rockontrol.yaogan.model.Place"
+            + " where name = :placeName"),
+      @NamedQuery(name = "Place.getByOrgId", query = "from com.rockontrol.yaogan.model.Place"
+            + " where orgId = :orgId") })
 public class Place {
    private Long id;
    private String name;
    private Long orgId;
    private Organization organization;
+   private List<PlaceParam> params;
+   private List<UserPlace> userPlaces;
+   private List<Shapefile> shapeFiles;
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +67,33 @@ public class Place {
 
    public void setOrganization(Organization organization) {
       this.organization = organization;
+   }
+
+   @OneToMany(fetch = FetchType.LAZY, mappedBy = "place", cascade = { CascadeType.REMOVE })
+   public List<PlaceParam> getParams() {
+      return params;
+   }
+
+   public void setParams(List<PlaceParam> params) {
+      this.params = params;
+   }
+
+   @OneToMany(fetch = FetchType.LAZY, mappedBy = "place", cascade = { CascadeType.REMOVE })
+   public List<UserPlace> getUserPlaces() {
+      return userPlaces;
+   }
+
+   public void setUserPlaces(List<UserPlace> userPlaces) {
+      this.userPlaces = userPlaces;
+   }
+
+   @OneToMany(fetch = FetchType.LAZY, mappedBy = "place", cascade = { CascadeType.REMOVE })
+   public List<Shapefile> getShapeFiles() {
+      return shapeFiles;
+   }
+
+   public void setShapeFiles(List<Shapefile> shapeFiles) {
+      this.shapeFiles = shapeFiles;
    }
 
 }

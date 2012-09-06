@@ -2,48 +2,86 @@ package com.rockontrol.yaogan.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
 public class Organization {
 
-   private Long _id;
-   private String _name;
-   private List<User> _employees;
+   private Long id;
+   private String name;
+   private String contactEmail;
+   private String postCode;
+   private String address;
+   private List<User> employees;
+   private List<Place> places;
 
    @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id")
    public Long getId() {
-      return _id;
+      return id;
    }
 
    public void setId(Long id) {
-      this._id = id;
+      this.id = id;
    }
 
    @Column(length = 128)
    public String getName() {
-      return _name;
+      return name;
    }
 
    public void setName(String name) {
-      this._name = name;
+      this.name = name;
    }
 
-   @OneToMany(fetch = FetchType.LAZY, mappedBy = "organization")
+   @Column(name = "contact_email", length = 128)
+   public String getContactEmail() {
+      return contactEmail;
+   }
+
+   public void setContactEmail(String contactEmail) {
+      this.contactEmail = contactEmail;
+   }
+
+   @Column(name = "post_code", length = 32)
+   public String getPostCode() {
+      return postCode;
+   }
+
+   public void setPostCode(String postCode) {
+      this.postCode = postCode;
+   }
+
+   @Column(name = "address")
+   public String getAddress() {
+      return address;
+   }
+
+   public void setAddress(String address) {
+      this.address = address;
+   }
+
+   @OneToMany(fetch = FetchType.LAZY, mappedBy = "organization", cascade = { CascadeType.REMOVE })
    public List<User> getEmployees() {
-      return _employees;
+      return employees;
    }
 
    public void setEmployees(List<User> employees) {
-      this._employees = employees;
+      this.employees = employees;
+   }
+
+   @OneToMany(fetch = FetchType.LAZY, mappedBy = "organization", cascade = { CascadeType.REMOVE })
+   public List<Place> getPlaces() {
+      return places;
+   }
+
+   public void setPlaces(List<Place> places) {
+      this.places = places;
    }
 
 }

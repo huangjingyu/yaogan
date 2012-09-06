@@ -22,18 +22,35 @@ import javax.persistence.NamedQuery;
 public class Shapefile {
 
    public enum Category {
-      FILE_REGION_BOUNDARY("边界"), FILE_LAND_TYPE("地类"), FILE_LAND_COLLAPSE("地塌陷"), FILE_LAND_FRACTURE(
-            "地裂缝"), FILE_LAND_SOIL("土壤侵蚀");
-      private final String name;
+      FILE_REGION_BOUNDARY("kq", "边界"), 
+      FILE_LAND_TYPE("tdly", "土地利用"), 
+      FILE_LAND_COLLAPSE("dbtx", "地表塌陷"), 
+      FILE_LAND_FRACTURE("dlf","地裂缝"), 
+      FILE_LAND_SOIL("trqs", "土壤侵蚀"), 
+      FILE_HIG_DEF("gqyg", "高清遥感");
+      
+      /**
+       * 名称
+       */
+       private final String name;
+       
+      /**
+       * 类型 前台页面使用的一个标识
+       */
+      private final String type;
 
-      private Category(String name) {
+      private Category(String type, String name) {
+         this.type = type;
          this.name = name;
+      }
+      
+      public String getType() {
+         return this.type;
       }
 
       public String getName() {
          return this.name;
       }
-
    }
 
    private Long _id;
@@ -122,6 +139,9 @@ public class Shapefile {
          break;
       case FILE_REGION_BOUNDARY:
          this._category = Category.FILE_REGION_BOUNDARY;
+         break;
+      case FILE_HIG_DEF:
+         this._category = Category.FILE_HIG_DEF;
       }
    }
 
@@ -133,5 +153,30 @@ public class Shapefile {
 
    public void setPlace(Place place) {
       this.place = place;
+   }
+
+   // just a placeholder
+   public void setTypeString(String str) {
+      // nothing to do
+   }
+
+   public String getTypeString() {
+      switch (this._category) {
+      case FILE_LAND_COLLAPSE:
+         return "地塌陷";
+
+      case FILE_LAND_SOIL:
+         return "土壤侵蚀";
+
+      case FILE_LAND_FRACTURE:
+         return "地裂缝";
+      case FILE_LAND_TYPE:
+         return "地类";
+      case FILE_REGION_BOUNDARY:
+         return "边界";
+
+      }
+      // will never go to here
+      return "未知";
    }
 }

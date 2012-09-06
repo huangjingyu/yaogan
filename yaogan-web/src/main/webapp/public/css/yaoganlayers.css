@@ -1,0 +1,36 @@
+            /*地图div样式*/
+            #map {
+                clear: both;
+                position: relative;
+                width: 698px;
+                height: 512px;
+                border: 1px solid black;
+            }
+            /*坐标信息*/
+            #location {
+             float : right
+            } 
+            
+            
+            /*控制左右div水平排放*/
+            #leftDiv {
+               float : left;
+               margin-right : 20px
+            }
+            
+            #rightDiv {
+               padding-top : 70px;
+            }
+            
+            #kqSelect {
+               list-style-type : none
+            }
+            #kqSelect li{
+               float : left
+            }            
+            #mapSelect {
+               list-style-type : none
+            }
+            #mapSelect li{
+               float : left
+            }            

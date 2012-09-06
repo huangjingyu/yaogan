@@ -42,7 +42,7 @@ public class UserPlace {
       this.placeId = placeId;
    }
 
-   @ManyToOne(fetch = FetchType.LAZY, optional = true)
+   @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "user_id", insertable = false, updatable = false)
    public User getUser() {
       return user;
@@ -52,7 +52,7 @@ public class UserPlace {
       this.user = user;
    }
 
-   @ManyToOne(fetch = FetchType.LAZY, optional = true)
+   @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "place_id", insertable = false, updatable = false)
    public Place getPlace() {
       return place;

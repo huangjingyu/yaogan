@@ -1,0 +1,118 @@
+/* 全局定义 */
+*{padding:0; margin:0; list-style:none; font-family:Verdana}
+a:link,a:visited{color:#4e4e4e;text-decoration:none;}
+a:hover,a:active{color:#000;text-decoration:none;}
+body,html{color:#4e4e4e; font-size:12px; background:#c8dfc5; }
+img{ border:0}
+.clear {clear: both;}
+
+/* 头部 */
+#header_yg{ height:77px; background:url(../img/header_bg.gif) repeat-x top; padding-left:20px;}
+#header_left{ width:240px; height:71px; float:left; }
+#header_right{ width:60%; height:71px; float:left;}
+
+
+/* 主体 */
+#main{ background-color:#c8dfc5; width:100%; }
+
+/* 左侧菜单 */
+#left{ width:196px; min-height:700px; float:left; background:#f7f7f7; border:1px solid #a6bfaa; margin-left:10px; margin-top:10px;}
+.left_top { height:35px;background:url(../img/menu_top_bg.gif) repeat-x top; font-weight:bold; line-height:30px; padding-left:10px;}
+.left_user{ width:194px; height:92px; padding-top:20px; background:url(../img/left_user_bg.gif) no-repeat;}
+.left_photo{width:50px; float:left; padding-left:14px;}
+.left_member{width:116px;float:left; padding-left:8px;}
+.left_member h2{ font-size:14px; color:#487fbe; padding-bottom:10px; padding-top:2px;}
+
+.left_menu { width:180px; float:left; padding-left:10px;}
+.left_menu ul{width:180px;}
+.left_menu li{border-bottom: #dadada 1px solid; height:28px;}
+.left_menu li:hover { background-color:#a9d54d}
+.left_menu li img{ padding:6px 10px 0 10px;}
+
+.left_menu li a:hover{ color:#13927d}
+.left_menu li a:visited{ color:#13927d}
+
+
+/* 右侧主体 地图展示部分*/
+#right{width:80%; min-height:700px; float:left; background:#f7f7f7; border:1px solid #a6bfaa; margin-left:10px; margin-top:10px;}
+.mapmain{width:60%; height:688px;float:left;}
+.map{height:638px;background:#fff; border-right: #a6bfaa 1px solid; border-bottom: #a6bfaa 1px solid; }
+.map_top { height:35px;background:url(../img/menu_top_bg.gif) repeat-x top; line-height:30px; padding-left:10px;}
+.map_show{ height:580px;}
+.map_opt { height:20px;}
+.map_bottom{ height:40px; padding:10px 0 0 10px;}
+
+
+/* 右侧主体 管理列表部分*/
+.rtlist{ width:60%;min-height:700px;background:#fff;border:1px solid #a6bfaa; margin-left:10px; margin-top:10px; float:left;}
+.rtlistp_top { height:35px;background:url(../img/menu_top_bg.gif) repeat-x top; line-height:30px; padding-left:10px;font-weight:bold;}
+.rtnr{ width:96%; padding:20px 0 10px 20px;}
+.trnrmenu{ height:28px; background:url(../img/right_nr_bg.gif) repeat-x top; padding-top:8px; padding-left:10px;}
+.thnr_add {float:right; padding:0 0 0 20px; background:url(../img/add.gif) no-repeat left center; height:25px; line-height:25px }
+
+
+/* 表格样式 */
+#table_one{ border-top: #929292 1px solid;border-left: #c8c8c8 1px solid;border-bottom: #c8c8c8 1px solid;}
+#table_one td{ border-right: #c8c8c8 1px solid;border-top: #c8c8c8 1px solid; text-align:center; font-size:12px; padding:5px;}
+#table_one td img{ padding:0 3px}
+#table_one th{ border-right: #c8c8c8 1px solid; background:url(../img/table_title_bg.gif) repeat-x top; text-align:center; font-size:12px;color:#0b5d9a;height:28px}
+#table_one tr{ height:28px}
+#table_one a:hover{ color:#FF9900}
+#table_one a:link{ text-decoration:underline;}
+
+
+/* 右侧主体地图指数 */
+.mapmessage{width:15%; height:638px; float:left; background:#fff; border-left: #a6bfaa 1px solid; border-right: #a6bfaa 1px solid; border-bottom: #a6bfaa 1px solid; margin-left:10px; }
+.mapmessage_top { height:35px;background:url(../img/menu_top_bg.gif) repeat-x top; font-weight:bold; line-height:30px; padding-left:10px; }
+
+.message { width:180px; float:left; padding-left:10px; padding-bottom:40px;}
+.message h2{ font-size:12px; padding-bottom:20px; padding-top:10px;}
+.message ul{width:180px;}
+.message li{border-bottom: #dadada 1px dashed; line-height:25px;}
+.message li img{ padding:6px 10px 0 10px;}
+.message li span{ color:#1f8eec; font-weight:bold}
+
+
+
+
+
+/*翻页*/
+
+DIV.quotes {
+	TEXT-ALIGN: center;
+	padding: 3px;
+	margin-top: 3px;
+	margin-right: 30px;
+	margin-bottom: 15px;
+	margin-left: 23px;
+	float: right;
+	display:inline;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+DIV.quotes A {
+	BORDER-RIGHT: #ddd 1px solid; PADDING-RIGHT: 5px; BORDER-TOP: #ddd 1px solid; PADDING-LEFT: 5px; PADDING-BOTTOM: 2px; BORDER-LEFT: #ddd 1px solid; COLOR: #aaa; MARGIN-RIGHT: 2px; PADDING-TOP: 2px; BORDER-BOTTOM: #ddd 1px solid; TEXT-DECORATION: none
+}
+DIV.quotes A:hover {
+	BORDER-RIGHT: #a0a0a0 1px solid; PADDING-RIGHT: 5px; BORDER-TOP: #a0a0a0 1px solid; PADDING-LEFT: 5px; PADDING-BOTTOM: 2px; BORDER-LEFT: #a0a0a0 1px solid; MARGIN-RIGHT: 2px; PADDING-TOP: 2px; BORDER-BOTTOM: #a0a0a0 1px solid
+}
+DIV.quotes A:active {
+	BORDER-RIGHT: #a0a0a0 1px solid; PADDING-RIGHT: 5px; BORDER-TOP: #a0a0a0 1px solid; PADDING-LEFT: 5px; PADDING-BOTTOM: 2px; BORDER-LEFT: #a0a0a0 1px solid; MARGIN-RIGHT: 2px; PADDING-TOP: 2px; BORDER-BOTTOM: #a0a0a0 1px solid
+}
+DIV.quotes SPAN.current {
+	BORDER-RIGHT: #e0e0e0 1px solid;
+	PADDING-RIGHT: 5px;
+	BORDER-TOP: #e0e0e0 1px solid;
+	PADDING-LEFT: 5px;
+	FONT-WEIGHT: bold;
+	PADDING-BOTTOM: 2px;
+	BORDER-LEFT: #e0e0e0 1px solid;
+	COLOR: #aaa;
+	MARGIN-RIGHT: 2px;
+	PADDING-TOP: 2px;
+	BORDER-BOTTOM: #e0e0e0 1px solid;
+	BACKGROUND-COLOR: #f2f2f2
+}
+DIV.quotes SPAN.disabled {
+	BORDER-RIGHT: #f3f3f3 1px solid; PADDING-RIGHT: 5px; BORDER-TOP: #f3f3f3 1px solid; PADDING-LEFT: 5px; PADDING-BOTTOM: 2px; BORDER-LEFT: #f3f3f3 1px solid; COLOR: #ccc; MARGIN-RIGHT: 2px; PADDING-TOP: 2px; BORDER-BOTTOM: #f3f3f3 1px solid
+}
