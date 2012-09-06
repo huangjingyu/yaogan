@@ -133,4 +133,29 @@ public class Shapefile {
    public void setPlace(Place place) {
       this.place = place;
    }
+
+   // just a placeholder
+   public void setTypeString(String str) {
+      // nothing to do
+   }
+
+   public String getTypeString() {
+      switch (this._category) {
+      case FILE_LAND_COLLAPSE:
+         return "地塌陷";
+
+      case FILE_LAND_SOIL:
+         return "土壤侵蚀";
+
+      case FILE_LAND_FRACTURE:
+         return "地裂缝";
+      case FILE_LAND_TYPE:
+         return "地类";
+      case FILE_REGION_BOUNDARY:
+         return "边界";
+
+      }
+      // will never go to here
+      return "未知";
+   }
 }

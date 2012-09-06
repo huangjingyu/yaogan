@@ -17,13 +17,13 @@ import com.rockontrol.yaogan.util.CompressUtil;
 import com.rockontrol.yaogan.util.GlobalConfig;
 
 @Controller
-@RequestMapping("upload")
+@RequestMapping("admin/upload")
 public class UploadController {
 
    @Autowired
    private IYaoganService yaoganService;
 
-   @RequestMapping(value = "/gis")
+   @RequestMapping("/submit")
    public String handleFormUpload(@RequestParam("region") String region,
          @RequestParam("shootTime") String year,
          @RequestParam("landType") MultipartFile landTypeFile,
@@ -43,11 +43,16 @@ public class UploadController {
                region);
       } catch (IOException e) {
          e.printStackTrace();
-         return "/failed";
+         return "/admin/stats/shapefileList";
       }
 
-      return "/success";
+      return "/admin/stats/shapefileList";
 
+   }
+
+   @RequestMapping("/form")
+   public String uploadForm() {
+      return "/admin/upload";
    }
 
    private void checkPath(String path) {
