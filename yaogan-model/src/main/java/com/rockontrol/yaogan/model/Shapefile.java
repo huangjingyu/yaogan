@@ -22,12 +22,30 @@ import javax.persistence.NamedQuery;
 public class Shapefile {
 
    public enum Category {
-      FILE_REGION_BOUNDARY("边界"), FILE_LAND_TYPE("土地利用"), FILE_LAND_COLLAPSE("地表塌陷"), FILE_LAND_FRACTURE(
-            "地裂缝"), FILE_LAND_SOIL("土壤侵蚀"), FILE_HIG_DEF("高清遥感");
-      private final String name;
+      FILE_REGION_BOUNDARY("kq", "边界"), 
+      FILE_LAND_TYPE("tdly", "土地利用"), 
+      FILE_LAND_COLLAPSE("dbtx", "地表塌陷"), 
+      FILE_LAND_FRACTURE("dlf","地裂缝"), 
+      FILE_LAND_SOIL("trqs", "土壤侵蚀"), 
+      FILE_HIG_DEF("gqyg", "高清遥感");
+      
+      /**
+       * 名称
+       */
+       private final String name;
+       
+      /**
+       * 类型 前台页面使用的一个标识
+       */
+      private final String type;
 
-      private Category(String name) {
+      private Category(String type, String name) {
+         this.type = type;
          this.name = name;
+      }
+      
+      public String getType() {
+         return this.type;
       }
 
       public String getName() {
@@ -121,6 +139,9 @@ public class Shapefile {
          break;
       case FILE_REGION_BOUNDARY:
          this._category = Category.FILE_REGION_BOUNDARY;
+         break;
+      case FILE_HIG_DEF:
+         this._category = Category.FILE_HIG_DEF;
       }
    }
 
