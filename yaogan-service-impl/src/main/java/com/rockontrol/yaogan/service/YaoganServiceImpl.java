@@ -137,21 +137,49 @@ public class YaoganServiceImpl implements IYaoganService {
       try {
          for (Shapefile shapefile : list) {
             Category category = shapefile.getCategory();
-            if (category.equals(Shapefile.Category.FILE_LAND_TYPE)) {
+            switch (category) {
+            case FILE_LAND_TYPE:
                double abio = this.computeService.computeAbio(shapefile.getFilePath());
                double aveg = this.computeService.computeAveg(shapefile.getFilePath());
                stats.setAbio(abio);
                stats.setAveg(aveg);
-            } else if (category.equals(Shapefile.Category.FILE_LAND_SOIL)) {
+               break;
+            case FILE_LAND_SOIL:
                double aero = this.computeService.computeAero(shapefile.getFilePath());
                stats.setAero(aero);
-            } else if (category.equals(Shapefile.Category.FILE_LAND_FRACTURE)) {
+               break;
+            case FILE_LAND_FRACTURE:
                fractureFile = shapefile;
-            } else if (category.equals(Shapefile.Category.FILE_LAND_COLLAPSE)) {
+               break;
+            case FILE_LAND_COLLAPSE:
                collapseFile = shapefile;
-            } else if (category.equals(Shapefile.Category.FILE_REGION_BOUNDARY)) {
+               break;
+            case FILE_REGION_BOUNDARY:
                boundaryFile = shapefile;
+               break;
+
             }
+            // if (category.equals(Shapefile.Category.FILE_LAND_TYPE)) {
+            // double abio =
+            // this.computeService.computeAbio(shapefile.getFilePath());
+            // double aveg =
+            // this.computeService.computeAveg(shapefile.getFilePath());
+            // stats.setAbio(abio);
+            // stats.setAveg(aveg);
+            // } else if (category.equals(Shapefile.Category.FILE_LAND_SOIL)) {
+            // double aero =
+            // this.computeService.computeAero(shapefile.getFilePath());
+            // stats.setAero(aero);
+            // } else if
+            // (category.equals(Shapefile.Category.FILE_LAND_FRACTURE)) {
+            // fractureFile = shapefile;
+            // } else if
+            // (category.equals(Shapefile.Category.FILE_LAND_COLLAPSE)) {
+            // collapseFile = shapefile;
+            // } else if
+            // (category.equals(Shapefile.Category.FILE_REGION_BOUNDARY)) {
+            // boundaryFile = shapefile;
+            // }
          }
       } catch (IOException e) {
          e.printStackTrace();
@@ -184,25 +212,58 @@ public class YaoganServiceImpl implements IYaoganService {
       EnvStats stats = new EnvStats();
       try {
          for (Shapefile shapefile : list) {
+
             Category category = shapefile.getCategory();
-            if (category.equals(Shapefile.Category.FILE_LAND_TYPE)) {
+            switch (category) {
+            case FILE_LAND_TYPE:
                double abio = this.computeService.computeAbio(shapefile.getFilePath(),
                      geom_string);
                double aveg = this.computeService.computeAveg(shapefile.getFilePath(),
                      geom_string);
                stats.setAbio(abio);
                stats.setAveg(aveg);
-            } else if (category.equals(Shapefile.Category.FILE_LAND_SOIL)) {
+               break;
+            case FILE_LAND_SOIL:
                double aero = this.computeService.computeAero(shapefile.getFilePath(),
                      geom_string);
                stats.setAero(aero);
-            } else if (category.equals(Shapefile.Category.FILE_LAND_FRACTURE)) {
+               break;
+            case FILE_LAND_FRACTURE:
                fractureFile = shapefile;
-            } else if (category.equals(Shapefile.Category.FILE_LAND_COLLAPSE)) {
+               break;
+            case FILE_LAND_COLLAPSE:
                collapseFile = shapefile;
-            } else if (category.equals(Shapefile.Category.FILE_REGION_BOUNDARY)) {
+               break;
+            case FILE_REGION_BOUNDARY:
                boundaryFile = shapefile;
+               break;
+
             }
+
+            // if (category.equals(Shapefile.Category.FILE_LAND_TYPE)) {
+            // double abio =
+            // this.computeService.computeAbio(shapefile.getFilePath(),
+            // geom_string);
+            // double aveg =
+            // this.computeService.computeAveg(shapefile.getFilePath(),
+            // geom_string);
+            // stats.setAbio(abio);
+            // stats.setAveg(aveg);
+            // } else if (category.equals(Shapefile.Category.FILE_LAND_SOIL)) {
+            // double aero =
+            // this.computeService.computeAero(shapefile.getFilePath(),
+            // geom_string);
+            // stats.setAero(aero);
+            // } else if
+            // (category.equals(Shapefile.Category.FILE_LAND_FRACTURE)) {
+            // fractureFile = shapefile;
+            // } else if
+            // (category.equals(Shapefile.Category.FILE_LAND_COLLAPSE)) {
+            // collapseFile = shapefile;
+            // } else if
+            // (category.equals(Shapefile.Category.FILE_REGION_BOUNDARY)) {
+            // boundaryFile = shapefile;
+            // }
          }
       } catch (IOException e) {
          e.printStackTrace();
@@ -265,6 +326,7 @@ public class YaoganServiceImpl implements IYaoganService {
          placeDao.save(place);
       }
       shapefile.setPlaceId(place.getId());
+      shapefile.setFilePath(file.getAbsolutePath());
       // shapefile.setWmsUrl(geoService.publishShapeFile(file));
       shapefile.setWmsUrl(null);
       shapefileDao.save(shapefile);
@@ -308,6 +370,12 @@ public class YaoganServiceImpl implements IYaoganService {
 
    public void setComputeService(EcoFactorComputeService computeService) {
       this.computeService = computeService;
+   }
+
+   @Override
+   public List<Shapefile> getShapefiles(User caller) {
+
+      return null;
    }
 
 }

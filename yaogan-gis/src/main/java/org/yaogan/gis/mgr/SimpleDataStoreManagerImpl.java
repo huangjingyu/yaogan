@@ -8,6 +8,7 @@ import org.geotools.data.FileDataStore;
 import org.geotools.data.shapefile.ShapefileDataStore;
 
 //no cache datastore implemention
+
 public class SimpleDataStoreManagerImpl implements IDataStoreManager {
    private final DataFileManager _fileManager = new DataFileManager();
 

@@ -4,15 +4,15 @@ import java.io.IOException;
 
 import org.geotools.data.FileDataStore;
 import org.geotools.data.simple.SimpleFeatureSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.yaogan.gis.mgr.IDataStoreManager;
+import org.yaogan.gis.mgr.SimpleDataStoreManagerImpl;
 import org.yaogan.gis.util.EcoFactorCaculator;
 
 @Service
 public class EcoFactorComputeServiceImpl implements EcoFactorComputeService {
-   @Autowired
-   private IDataStoreManager dataStoreManager;
+
+   private IDataStoreManager dataStoreManager = new SimpleDataStoreManagerImpl();
 
    /**
     * 

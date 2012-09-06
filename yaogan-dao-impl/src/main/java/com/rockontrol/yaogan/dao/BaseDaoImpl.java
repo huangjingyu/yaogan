@@ -2,6 +2,9 @@ package com.rockontrol.yaogan.dao;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -45,6 +48,46 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
    @Override
    public void remove(T entity) {
       getSession().delete(entity);
+   }
+
+   @Override
+   public List<T> findByPage(String hql, int startIndex, int maxCount, Object[] params) {
+      Query query = this.getSession().createQuery(hql);
+      if (params != null && params.length > 0) {
+         for (int index = 0; index < params.length; index++) {
+            query.setParameter(index, params[index]);
+         }
+      }
+
+      query.setFirstResult(startIndex);
+      query.setMaxResults(maxCount);
+      return query.list();
+   }
+
+   @Override
+   public List<T> findByHQL(String hql, Object[] params) {
+      Query query = this.getSession().createQuery(hql);
+      if (params != null && params.length > 0) {
+         for (int index = 0; index < params.length; index++) {
+            query.setParameter(index, params[index]);
+         }
+      }
+      return query.list();
+   }
+
+   @Override
+   public List<T> findByPage(String hql, int startIndex, int maxCount,
+         Map<String, Object> map) {
+      Query query = this.getSession().createQuery(hql);
+      if (map != null && map.size() > 0) {
+         Set<Map.Entry<String, Object>> set = map.entrySet();
+         for (Entry<String, Object> entry : set) {
+            query.setParameter(entry.getKey(), entry.getValue());
+         }
+      }
+      query.setFirstResult(startIndex);
+      query.setMaxResults(maxCount);
+      return query.list();
    }
 
 }
