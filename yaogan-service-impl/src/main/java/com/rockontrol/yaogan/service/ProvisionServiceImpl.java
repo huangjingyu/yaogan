@@ -41,6 +41,7 @@ public class ProvisionServiceImpl implements IProvisionService {
    @Override
    public void createUser(Long orgId, User user) {
       user.setOrgId(orgId);
+      user.setPassword("password");
       userDao.save(user);
    }
 
@@ -49,6 +50,7 @@ public class ProvisionServiceImpl implements IProvisionService {
    public void updateUser(Long orgId, Long userId, User user) {
       user.setOrgId(orgId);
       user.setId(userId);
+      user.setPassword("password");
       userDao.update(user);
    }
 
