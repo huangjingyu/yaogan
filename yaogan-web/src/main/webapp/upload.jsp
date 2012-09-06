@@ -13,9 +13,11 @@
 		<label>地区</label><input type="text" name="region" /> <br/>
 		<label>拍摄时间</label><input type="text" name="shootTime" /> <br/>
 		<label>土地类型文件</label><input type="file" name="landType" /> <br/>
-		 <label>土壤侵蚀文件</label><input type="file" name="landSoil" /> <br/>
-		 <label>矿区边界文件</label><input type="file" name="boundary" /> <br/>
-		 <input type="submit" value="上传"/>
+		<label>土壤侵蚀文件</label><input type="file" name="landSoil" /> <br/>
+		<label>矿区边界文件</label><input type="file" name="boundary" /> <br/>
+		<label>地塌陷文件</label><input type="file" name="collapse" /> <br/>
+		<label>地裂缝文件</label><input type="file" name="fracture" /> <br/>
+		<input type="submit" value="上传"/>
 	</form>
 </body>
 </html>

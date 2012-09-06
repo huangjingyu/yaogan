@@ -18,7 +18,7 @@
    
    	<!--aop support-->
     <aop:aspectj-autoproxy/>
-    <context:component-scan base-package="org.she.**">
+    <context:component-scan base-package="com.rockontrol.**">
         <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation" />
     </context:component-scan>
     <!-- scan rockontrol package for autowired -->

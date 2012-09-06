@@ -156,6 +156,14 @@ public interface IYaoganService {
    public List<Shapefile> getShapefiles(User caller, Long placeId, String time);
 
    /**
+    * get all shapefiles
+    * 
+    * @param caller
+    * @return
+    */
+   public List<Shapefile> getShapefiles(User caller);
+
+   /**
     * get one shapefile
     * 
     * @param caller

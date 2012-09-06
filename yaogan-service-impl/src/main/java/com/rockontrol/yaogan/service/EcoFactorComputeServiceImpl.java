@@ -6,11 +6,13 @@ import org.geotools.data.FileDataStore;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.springframework.stereotype.Service;
 import org.yaogan.gis.mgr.IDataStoreManager;
+import org.yaogan.gis.mgr.SimpleDataStoreManagerImpl;
 import org.yaogan.gis.util.EcoFactorCaculator;
 
 @Service
 public class EcoFactorComputeServiceImpl implements EcoFactorComputeService {
-   private IDataStoreManager dataStoreManager;
+
+   private IDataStoreManager dataStoreManager = new SimpleDataStoreManagerImpl();
 
    /**
     * 
@@ -168,6 +170,86 @@ public class EcoFactorComputeServiceImpl implements EcoFactorComputeService {
          throw e;
       } finally {
          dataStoreManager.releaseDataStore(store);
+      }
+   }
+
+   @Override
+   public double computeAsus(String fractureFilePath, String collapseFilePath,
+         String boundaryFilePath, String geom_string, double water_descrement)
+         throws IOException {
+      FileDataStore facturestore = null;
+      FileDataStore collapsestore = null;
+      FileDataStore boundstore = null;
+      try {
+         facturestore = dataStoreManager.getDataStore(fractureFilePath);
+         collapsestore = dataStoreManager.getDataStore(collapseFilePath);
+         boundstore = dataStoreManager.getDataStore(boundaryFilePath);
+         double result = EcoFactorCaculator.computeAsus(facturestore.getFeatureSource(),
+               collapsestore.getFeatureSource(), boundstore.getFeatureSource(),
+               geom_string, water_descrement);
+         return result;
+      } catch (IOException e) {
+         throw e;
+      } finally {
+         if (facturestore != null)
+            dataStoreManager.releaseDataStore(facturestore);
+         if (collapsestore != null)
+            dataStoreManager.releaseDataStore(collapsestore);
+         if (boundstore != null)
+            dataStoreManager.releaseDataStore(boundstore);
+      }
+
+   }
+
+   @Override
+   public double computeAsus(String fractureFilePath, String collapseFilePath,
+         String boundaryFilePath, double water_descrement) throws IOException {
+
+      FileDataStore facturestore = null;
+      FileDataStore collapsestore = null;
+      FileDataStore boundstore = null;
+      try {
+         facturestore = dataStoreManager.getDataStore(fractureFilePath);
+         collapsestore = dataStoreManager.getDataStore(collapseFilePath);
+         boundstore = dataStoreManager.getDataStore(boundaryFilePath);
+         double result = EcoFactorCaculator.computeAsus(facturestore.getFeatureSource(),
+               collapsestore.getFeatureSource(), boundstore.getFeatureSource(),
+               water_descrement);
+         return result;
+      } catch (IOException e) {
+         throw e;
+      } finally {
+         if (facturestore != null)
+            dataStoreManager.releaseDataStore(facturestore);
+         if (collapsestore != null)
+            dataStoreManager.releaseDataStore(collapsestore);
+         if (boundstore != null)
+            dataStoreManager.releaseDataStore(boundstore);
+      }
+   }
+
+   @Override
+   public double computeAsus(String fractureFilePath, String collapseFilePath,
+         String boundaryFilePath, double water_descrement, double maxX, double maxY,
+         double minX, double minY) throws IOException {
+
+      FileDataStore facturestore = null;
+      FileDataStore collapsestore = null;
+      try {
+         facturestore = dataStoreManager.getDataStore(fractureFilePath);
+         collapsestore = dataStoreManager.getDataStore(collapseFilePath);
+         double result = EcoFactorCaculator.computeAsus(facturestore.getFeatureSource(),
+               collapsestore.getFeatureSource(), water_descrement, maxX, maxY, minX,
+               minY);
+         return result;
+      } catch (IOException e) {
+         throw e;
+      } finally {
+         if (facturestore != null)
+            dataStoreManager.releaseDataStore(facturestore);
+         if (collapsestore != null)
+            dataStoreManager.releaseDataStore(collapsestore);
+
       }
    }
 }

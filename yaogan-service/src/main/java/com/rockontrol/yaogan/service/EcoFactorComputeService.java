@@ -109,4 +109,31 @@ public interface EcoFactorComputeService {
    public double computeAveg(String shapeFilePath, double maxX, double maxY,
          double minX, double minY) throws IOException;
 
+   /**
+    * 土地环境指数
+    * 
+    * @param fractureFilePath
+    *           地裂缝文件
+    * @param collapseFilePath
+    *           土地塌陷文件
+    * @param boundaryFilePath
+    *           边界文件
+    * @param geom_string
+    *           选择区域字符串
+    * @param water_descrement
+    *           地下水位下降量
+    * @return
+    * @throws IOException
+    */
+   public double computeAsus(String fractureFilePath, String collapseFilePath,
+         String boundaryFilePath, String geom_string, double water_descrement)
+         throws IOException;
+
+   public double computeAsus(String fractureFilePath, String collapseFilePath,
+         String boundaryFilePath, double water_descrement) throws IOException;
+
+   public double computeAsus(String fractureFilePath, String collapseFilePath,
+         String boundaryFilePath, double water_descrement, double maxX, double maxY,
+         double minX, double minY) throws IOException;
+
 }

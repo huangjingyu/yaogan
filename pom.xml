@@ -137,6 +137,9 @@
 
     <yaogan.gis.shapefile.home>d:/test</yaogan.gis.shapefile.home>
     <yaogan.upload.tempdir>/WEB-INF/temp</yaogan.upload.tempdir>
+    
+    <geoserver.baseUrl>http://localhost:8888/geoserver</geoserver.baseUrl>
+    <geoserver.workDir>D:/pf/apache-tomcat-7.0.29/webapps/geoserver/data/yaogandata/</geoserver.workDir>        
   </properties>
 
   <build>

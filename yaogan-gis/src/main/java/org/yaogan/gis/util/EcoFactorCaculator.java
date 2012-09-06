@@ -42,6 +42,11 @@ public class EcoFactorCaculator {
 
    // end
 
+   // 土地环境指数
+   private static final double RATE_ASUS = 0.35;
+   private static final double RATE_ASUC = 0.35;
+   private static final double RATE_UWC = 0.3;
+
    /**
     * 
     * @param forest_area
@@ -243,6 +248,132 @@ public class EcoFactorCaculator {
    public static double computeAero(SimpleFeatureSource source) throws IOException {
       LandDeterioratedInfo info = getDeterioratedInfo(source.getFeatures());
       return computeAero(info);
+   }
+
+   /**
+    * 
+    * @param fracture_length
+    *           地裂缝长度
+    * @param collapse_area
+    *           地表塌陷面积
+    * @param water_descrement
+    *           地下水下降量
+    * @param total_area
+    *           区域总面积
+    * @return
+    */
+   private static double computeAsus(double fracture_length, double collapse_area,
+         double water_descrement, double total_area) {
+      double result = RATE_ASUS
+            * (100 - FactorCaculateConstant.ASUS * collapse_area / total_area)
+            + RATE_ASUC
+            * (100 - FactorCaculateConstant.ASUC * fracture_length / total_area)
+            + RATE_UWC * (100 - FactorCaculateConstant.AUWC * water_descrement);
+      return result;
+   }
+
+   public static double computeAsus(SimpleFeatureSource fractureSource,
+         SimpleFeatureSource collapseSource, SimpleFeatureSource boundarySource,
+         double water_descrement) throws IOException {
+      SimpleFeatureIterator iterator = fractureSource.getFeatures().features();
+      SimpleFeatureIterator collIterator = collapseSource.getFeatures().features();
+      SimpleFeatureIterator boundIterator = boundarySource.getFeatures().features();
+      double fracLength = 0;
+      double collapsArea = 0;
+      double totalArea = 0;
+      while (iterator.hasNext()) {
+         SimpleFeature feature = iterator.next();
+         Geometry geom = (Geometry) feature.getDefaultGeometry();
+         fracLength += geom.getLength();
+      }
+
+      while (collIterator.hasNext()) {
+         SimpleFeature feature = collIterator.next();
+         Geometry geom = (Geometry) feature.getDefaultGeometry();
+         collapsArea += geom.getArea();
+      }
+
+      while (boundIterator.hasNext()) {
+         SimpleFeature feature = boundIterator.next();
+         Geometry geom = (Geometry) feature.getDefaultGeometry();
+         totalArea += geom.getArea();
+      }
+      return computeAsus(fracLength, collapsArea, water_descrement, totalArea);
+   }
+
+   /**
+    * 
+    * @param fractureSource
+    *           地裂缝数据源
+    * @param collapseSource
+    *           地表塌陷数据源
+    * @param boundarySource
+    *           边界数据源
+    * @param geom_string
+    *           选择区域字符串
+    * @param water_descrement
+    *           地下水下降量
+    * @return
+    * @throws IOException
+    */
+   public static double computeAsus(SimpleFeatureSource fractureSource,
+         SimpleFeatureSource collapseSource, SimpleFeatureSource boundarySource,
+         String geom_string, double water_descrement) throws IOException {
+      SimpleFeatureIterator iterator = FeatureSelector.selectFeatureWithinBoundary(
+            geom_string, fractureSource).features();
+      SimpleFeatureIterator collIterator = FeatureSelector.selectFeatureWithinBoundary(
+            geom_string, collapseSource).features();
+      SimpleFeatureIterator boundIterator = FeatureSelector.selectFeatureWithinBoundary(
+            geom_string, boundarySource).features();
+      double fracLength = 0;
+      double collapsArea = 0;
+      double totalArea = 0;
+      while (iterator.hasNext()) {
+         SimpleFeature feature = iterator.next();
+         Geometry geom = (Geometry) feature.getDefaultGeometry();
+         fracLength += geom.getLength();
+      }
+
+      while (collIterator.hasNext()) {
+         SimpleFeature feature = collIterator.next();
+         Geometry geom = (Geometry) feature.getDefaultGeometry();
+         collapsArea += geom.getArea();
+      }
+
+      while (boundIterator.hasNext()) {
+         SimpleFeature feature = boundIterator.next();
+         Geometry geom = (Geometry) feature.getDefaultGeometry();
+         totalArea += geom.getArea();
+      }
+      return computeAsus(fracLength, collapsArea, water_descrement, totalArea);
+   }
+
+   public static double computeAsus(SimpleFeatureSource fractureSource,
+         SimpleFeatureSource collapseSource, double water_descrement, double maxX,
+         double maxY, double minX, double minY) throws IOException {
+      SimpleFeatureIterator iterator = FeatureSelector.selectFeatureWithinBBox(
+            fractureSource, maxX, maxY, minX, minY).features();
+      SimpleFeatureIterator collIterator = FeatureSelector.selectFeatureWithinBBox(
+            collapseSource, maxX, maxY, minX, minY).features();
+      // SimpleFeatureIterator boundIterator =
+      // FeatureSelector.selectFeatureWithinBoundary(
+      // geom_string, boundarySource).features();
+      double fracLength = 0;
+      double collapsArea = 0;
+      double totalArea = (maxX - minX) * (maxY - minY);
+      while (iterator.hasNext()) {
+         SimpleFeature feature = iterator.next();
+         Geometry geom = (Geometry) feature.getDefaultGeometry();
+         fracLength += geom.getLength();
+      }
+
+      while (collIterator.hasNext()) {
+         SimpleFeature feature = collIterator.next();
+         Geometry geom = (Geometry) feature.getDefaultGeometry();
+         collapsArea += geom.getArea();
+      }
+
+      return computeAsus(fracLength, collapsArea, water_descrement, totalArea);
    }
 
    private static LandTypeInfo getLandTypeInfo(SimpleFeatureCollection collection)
