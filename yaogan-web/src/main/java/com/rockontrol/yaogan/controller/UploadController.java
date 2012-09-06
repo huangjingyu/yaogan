@@ -25,6 +25,7 @@ public class UploadController {
 
    @RequestMapping("/submit")
    public String handleFormUpload(@RequestParam("region") String region,
+         @RequestParam("groundWaterDesc") String groundWaterDesc,
          @RequestParam("shootTime") String year,
          @RequestParam("landType") MultipartFile landTypeFile,
          @RequestParam("landSoil") MultipartFile landSoilFile,
@@ -41,12 +42,15 @@ public class UploadController {
                region);
          this.processUploadFile(fractureFile, DataFileType.FILE_LAND_FRACTURE, year,
                region);
+         if (groundWaterDesc != null) {
+
+         }
       } catch (IOException e) {
          e.printStackTrace();
-         return "/admin/stats/shapefileList";
+         return "redirect:/admin/place";
       }
 
-      return "/admin/stats/shapefileList";
+      return "redirect:/admin/place";
 
    }
 
@@ -90,7 +94,10 @@ public class UploadController {
          category = Category.FILE_LAND_SOIL;
       if (type.equals(DataFileType.FILE_REGION_BOUNDARY))
          category = Category.FILE_REGION_BOUNDARY;
-      yaoganService.saveShapefile(region, category, dLandTypeShpfile, year);
+      String fullPath = dLandTypeShpfile.getAbsolutePath();
+      String filePath = fullPath.substring(fullPath.indexOf(shapeFileHome)
+            + shapeFileHome.length(), fullPath.length());
+      yaoganService.saveShapefile(region, category, dLandTypeShpfile, filePath, year);
       dLandTypeFile.delete();
    }
 }

@@ -317,7 +317,13 @@ public class YaoganServiceImpl implements IYaoganService {
    }
 
    @Override
-   public void saveShapefile(String placeName, Category type, File file, String time) {
+   public PlaceParam getPlaceParam(String placeName, String time, String paramName) {
+      return placeParamDao.getPlaceParam(placeName, time, paramName);
+   }
+
+   @Override
+   public void saveShapefile(String placeName, Category type, File file,
+         String filePath, String time) {
       String wmsUrl = geoService.publishGeoFile(type, file);
       Shapefile shapefile = new Shapefile();
       shapefile.setCategory(type);
@@ -330,7 +336,8 @@ public class YaoganServiceImpl implements IYaoganService {
          placeDao.save(place);
       }
       shapefile.setPlaceId(place.getId());
-      shapefile.setFilePath(file.getAbsolutePath());
+
+      shapefile.setFilePath(filePath);
       shapefile.setWmsUrl(wmsUrl);
       shapefile.setWmsUrl(null);
       shapefileDao.save(shapefile);

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import com.rockontrol.yaogan.model.Place;
+import com.rockontrol.yaogan.model.PlaceParam;
 import com.rockontrol.yaogan.model.Shapefile;
 import com.rockontrol.yaogan.model.Shapefile.Category;
 import com.rockontrol.yaogan.model.User;
@@ -175,12 +176,26 @@ public interface IYaoganService {
    public Shapefile getShapefile(User caller, Long placeId, String category, String time);
 
    /**
-    * save shapefile.
+    * get place param
+    * 
+    * @param caller
+    * @param placeName
+    * @param time
+    * @param paramName
+    * @return
+    */
+   public PlaceParam getPlaceParam(String placeName, String time, String paramName);
+
+   /**
     * 
     * @param placeName
     * @param type
     * @param file
+    * @param filePath
+    *           path relative to shapefile home
     * @param time
     */
-   public void saveShapefile(String placeName, Category type, File file, String time);
+   public void saveShapefile(String placeName, Category type, File file,
+         String filePath, String time);
+
 }

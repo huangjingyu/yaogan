@@ -9,9 +9,9 @@
 <title>upload shapefile</title>
 </head>
 <body>
-	<form method="post" action="/admin/upload/submit" enctype="multipart/form-data">
+	<form method="post" action="${ctx}/admin/upload/submit" enctype="multipart/form-data">
 		<label>地区</label><input type="text" name="region" /> <br/>
-		<label>地下水下降量</label><input type="text" name="undergroundWaterDesc"></input><br/>
+		<label>地下水下降量</label><input type="text" name="groundWaterDesc"></input><br/>
 		<label>拍摄时间</label><input type="text" name="shootTime" /> <br/>
 		<label>土地类型文件</label><input type="file" name="landType" /> <br/>
 		<label>土壤侵蚀文件</label><input type="file" name="landSoil" /> <br/>
