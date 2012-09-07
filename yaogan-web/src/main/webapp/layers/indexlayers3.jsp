@@ -13,7 +13,7 @@
         <script src='<%=request.getContextPath()%>/static/js/yaoganlayers.js'></script>
    </head>
    <body>
-      <div id="yaoganlayers">
+      <div id="yaoganlayers" style="margin: 10px 0 0 10px">
          <%@include file="yaoganlayers.jsp" %>
       </div>
    </body>

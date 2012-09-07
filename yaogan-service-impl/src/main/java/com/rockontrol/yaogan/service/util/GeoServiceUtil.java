@@ -1,5 +1,7 @@
 package com.rockontrol.yaogan.service.util;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.logging.Log;
@@ -8,10 +10,35 @@ import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 
+import com.rockontrol.yaogan.model.Shapefile;
+
 public class GeoServiceUtil {
    
    public static final Log log = LogFactory.getLog(GeoServiceUtil.class);
+   
+   private static Map<Shapefile.Category, String> map = new HashMap<Shapefile.Category, String>();
+   
+   static {
+      /**矿区*/
+      map.put(Shapefile.Category.FILE_REGION_BOUNDARY, "kq");
+      /**土地利用*/
+      map.put(Shapefile.Category.FILE_LAND_TYPE, "2010");
+      /**地表塌陷*/
+      map.put(Shapefile.Category.FILE_LAND_COLLAPSE, "dbtx");
+      /**地裂缝*/
+      map.put(Shapefile.Category.FILE_LAND_FRACTURE, "dlf");
+      /**土壤侵蚀*/
+      map.put(Shapefile.Category.FILE_LAND_SOIL, "trqs");
+   }
 
+   /**
+    * 得到地图对应的样式
+    * @param category
+    * @return
+    */
+   public static String getStyle(Shapefile.Category category) {
+      return map.get(category);
+   }
    /**
     * 生成一个uuid标识
     * @return
@@ -36,8 +63,8 @@ public class GeoServiceUtil {
       } else {
          fromPos = html.indexOf((String) from);
          if(fromPos == -1) {
-            log.info("html:" + html);
-            throw new RuntimeException("from字符串搜索失败," + from);
+            log.debug("html:" + html + "\nfrom字符串搜索失败," + from);
+            return -1;
          }
       }
       while(fromPos-- >= 0) {
@@ -63,8 +90,8 @@ public class GeoServiceUtil {
          } else {
             fromPos = html.indexOf((String) from);
             if(fromPos == -1) {
-               log.info("html:" + html);
-               throw new RuntimeException("from字符串搜索失败," + from);
+               log.debug("html:" + html + "from字符串搜索失败," + from);
+               return null;
             }
          }
       }
@@ -74,8 +101,8 @@ public class GeoServiceUtil {
       } else {
             startPos = html.indexOf((String) start, fromPos);
             if(startPos == -1) {
-               log.info("html:" + html);
-               throw new RuntimeException("start字符串搜索失败," + start);
+               log.debug("html:" + html + "start字符串搜索失败," + start);
+               return null;
             }
       }
       if(startOffset == null) {
@@ -87,7 +114,8 @@ public class GeoServiceUtil {
       }
       int endPos = html.indexOf(end, startPos);
       if(endPos == -1) {
-         throw new RuntimeException("end字符串搜索失败," + end);
+         log.debug("html:" + html + "end字符串搜索失败," + end);
+         return null;
       }
       return html.substring(startPos, endPos);
    }
