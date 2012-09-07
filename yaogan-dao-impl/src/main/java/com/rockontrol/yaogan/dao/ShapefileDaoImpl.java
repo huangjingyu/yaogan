@@ -1,7 +1,6 @@
 package com.rockontrol.yaogan.dao;
 
 import java.util.List;
-import org.springframework.stereotype.Component;
 
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
@@ -28,4 +27,14 @@ public class ShapefileDaoImpl extends BaseDaoImpl<Shapefile> implements IShapefi
       return query.list();
    }
 
+   @Override
+   public List<Shapefile> getAvailableFilesOfUser(Long userId) {
+      String hql = "select file from com.rockontrol.yaogan.model.Shapefile as file,"
+            + "com.rockontrol.yaogan.model.Place p,com.rockontrol.yaogan.model.UserPlace up "
+            + "  where file.placeId=up.placeId and p.id=file.placeId and up.userId=:userId";
+      Query query = getSession().createQuery(hql);
+      query.setParameter("userId", userId);
+      List<Shapefile> list = query.list();
+      return list;
+   }
 }

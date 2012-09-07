@@ -122,6 +122,7 @@
       <version>3.1.1.RELEASE</version>
       <scope>test</scope>
     </dependency>
+    <!--  
     <dependency>
       <groupId>com.rockontrol.yaogan</groupId>
       <artifactId>yaogan-dao-impl</artifactId>
@@ -129,6 +130,7 @@
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
+    -->
   </dependencies>
 
 </project>

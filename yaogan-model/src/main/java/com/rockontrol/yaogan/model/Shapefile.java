@@ -22,6 +22,8 @@ import javax.persistence.TemporalType;
       @NamedQuery(name = "Shapefile.getAvailableTimesOfPlace", query = "select distinct shootTime from com.rockontrol.yaogan.model.Shapefile"
             + " where placeId = :placeId"),
       @NamedQuery(name = "Shapefile.getShapefilesByPlaceAndTime", query = "from com.rockontrol.yaogan.model.Shapefile"
+            + " where placeId = :placeId and shootTime = :time"),
+      @NamedQuery(name = "Shapefile.getAvailableFilesOfUser", query = "from com.rockontrol.yaogan.model.Shapefile"
             + " where placeId = :placeId and shootTime = :time") })
 public class Shapefile {
 

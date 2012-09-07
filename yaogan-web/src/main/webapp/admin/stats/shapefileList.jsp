@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div>
-		<form action="" method="post">
+		<form action="${ctx}/admin/place/fileList" method="post">
 			<lable>地区</lable>
 			<input type="text" name="place"></input>
 			<lable>年份</lable>

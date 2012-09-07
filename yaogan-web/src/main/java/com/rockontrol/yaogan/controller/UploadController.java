@@ -118,7 +118,7 @@ public class UploadController {
       String fullPath = dLandTypeShpfile.getParentFile().getAbsolutePath()
             + File.separator + uuidName + ".shp";
       String filePath = fullPath.substring(fullPath.indexOf(shapeFileHome)
-            + shapeFileHome.length() + 2, fullPath.length());
+            + shapeFileHome.length() + 1, fullPath.length());
       renameAllFiles(dLandTypeShpfile.getParentFile().getAbsolutePath(), uuidName);
       yaoganService.saveShapefile(_secMng.currentUser(), region, category,
             dLandTypeShpfile, filePath, year);
@@ -159,7 +159,7 @@ public class UploadController {
             + File.separator + uuidName + ".img";
       renameAllFiles(dLandTypeShpfile.getParentFile().getAbsolutePath(), uuidName);
       String filePath = fullPath.substring(fullPath.indexOf(shapeFileHome)
-            + shapeFileHome.length() + 2, fullPath.length());
+            + shapeFileHome.length() + 1, fullPath.length());
       yaoganService.saveShapefile(_secMng.currentUser(), region,
             Shapefile.Category.FILE_HIG_DEF, dLandTypeShpfile, filePath, year);
    }

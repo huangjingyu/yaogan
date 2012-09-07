@@ -12,6 +12,7 @@ import com.rockontrol.yaogan.model.UserPlace;
 
 @Repository("userPlaceDao")
 public class UserPlaceDaoIml extends BaseDaoImpl<UserPlace> implements IUserPlaceDao {
+   @Override
    public void delete(UserPlace userPlace) {
       getSession().delete(userPlace);
    }
