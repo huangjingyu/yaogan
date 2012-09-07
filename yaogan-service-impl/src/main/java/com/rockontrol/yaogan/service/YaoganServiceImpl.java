@@ -41,9 +41,6 @@ public class YaoganServiceImpl implements IYaoganService {
    protected IOrganizationDao orgDao;
 
    @Autowired
-   protected IUserPlaceDao upDao;
-
-   // private IUserDao userDao;
    protected IUserPlaceDao userPlaceDao;
 
    @Autowired
@@ -386,14 +383,6 @@ public class YaoganServiceImpl implements IYaoganService {
 
    public void setOrgDao(IOrganizationDao orgDao) {
       this.orgDao = orgDao;
-   }
-
-   public IUserPlaceDao getUpDao() {
-      return upDao;
-   }
-
-   public void setUpDao(IUserPlaceDao upDao) {
-      this.upDao = upDao;
    }
 
    public EcoFactorComputeService getComputeService() {
