@@ -1,7 +1,6 @@
 package com.rockontrol.yaogan.dao;
 
 import java.util.List;
-import org.springframework.stereotype.Component;
 
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
@@ -26,6 +25,15 @@ public class ShapefileDaoImpl extends BaseDaoImpl<Shapefile> implements IShapefi
       query.setLong("placeId", placeId);
       query.setString("time", time);
       return query.list();
+   }
+
+   @Override
+   public Shapefile getShapefile(Long placeId, String time, String category) {
+      Query query = getSession().getNamedQuery("Shapefile.getShapefileByPTC");
+      query.setLong("placeId", placeId);
+      query.setString("time", time);
+      query.setString("category", category);
+      return (Shapefile) query.uniqueResult();
    }
 
 }

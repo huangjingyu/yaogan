@@ -8,7 +8,6 @@ import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.opengis.feature.simple.SimpleFeature;
-import org.yaogan.gis.service.FactorCaculateConstant;
 import org.yaogan.gis.vo.LandDeterioratedInfo;
 import org.yaogan.gis.vo.LandTypeInfo;
 

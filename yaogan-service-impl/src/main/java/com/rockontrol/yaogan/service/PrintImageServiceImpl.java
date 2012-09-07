@@ -1,90 +1,190 @@
 package com.rockontrol.yaogan.service;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.geotools.data.FeatureSource;
 import org.geotools.data.FileDataStore;
-import org.geotools.factory.CommonFactoryFinder;
-import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.map.FeatureLayer;
-import org.geotools.map.MapContent;
-import org.geotools.renderer.lite.StreamingRenderer;
-import org.geotools.styling.SLDParser;
-import org.geotools.styling.Style;
-import org.geotools.styling.StyleFactory;
+import org.geotools.feature.FeatureCollection;
+import org.geotools.feature.FeatureIterator;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.yaogan.gis.mgr.IDataStoreManager;
 import org.yaogan.gis.mgr.SimpleDataStoreManagerImpl;
 
+import com.rockontrol.yaogan.dao.IPlaceDao;
+import com.rockontrol.yaogan.dao.IShapefileDao;
 import com.rockontrol.yaogan.model.Shapefile;
-import com.rockontrol.yaogan.model.User;
-import com.sun.media.jai.codec.PNGEncodeParam;
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
 
 @Service
 public class PrintImageServiceImpl implements IPrintImageService {
 
    @Autowired
-   private IYaoganService yaoganService;
+   private IPlaceDao placeDao;
+
+   @Autowired
+   private IShapefileDao shapefileDao;
 
    private IDataStoreManager dataStoreManager = new SimpleDataStoreManagerImpl();
+   /**
+    * width 插入shapefile的宽 height 插入shapefile的高 //TODO
+    */
+   private double width = 656;
+   private double heigth = 875;
 
    @Override
-   public void addShapeLayer(User caller, Long placeId, String category, String time)
+   public File addShapeLayer(Long placeId, String time, String category, File img)
          throws Exception {
+      StringBuilder url = new StringBuilder(
+            "http://localhost:8080/geoserver/china/wms?service=WMS&version=1.1.0&request=GetMap");
+      String place = placeDao.get(placeId).getName();
+      url.append("&layers=yaogan:").append(place);
+      url.append("&styles=");
+      double[] bbox = this.getbBox(placeId, time, category);
+      url.append("&bbox=").append(bbox);
+      url.append("&width=").append(width);
+      url.append("&height=").append(heigth);
+      url.append("&srs=WGS84");
+      url.append("&format=image%2Fjpeg");
 
-      Shapefile shapefile = yaoganService.getShapefile(caller, placeId, category, time);
-      FileDataStore store = dataStoreManager.getDataStore(shapefile.getFilePath());
-      FeatureSource featureSource = store.getFeatureSource();
-
-      File sldFile = new File("d:\\shape.sld");
-      StyleFactory styleFactory = CommonFactoryFinder.getStyleFactory();
-      SLDParser sldParser = new SLDParser(styleFactory, sldFile);
-      Style[] styles = sldParser.readXML();
-
-      FeatureLayer layer = new FeatureLayer(featureSource, styles[0]);
-      MapContent mapContent = new MapContent();
-      mapContent.addLayer(layer);
-      // 设置shapefile区域 //TODO
-      ReferencedEnvelope mapArea = new ReferencedEnvelope();
-      // 初始化渲染器
-      StreamingRenderer sr = new StreamingRenderer();
-      sr.setMapContent(mapContent);
-      // 初始化输出图像
-      BufferedImage bi = new BufferedImage(795, 1124, BufferedImage.TYPE_INT_ARGB);
-      Graphics2D g = bi.createGraphics();
-      // 使用抗锯齿模式完成呈现
-      g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
-      // 使用某种抗锯齿形式完成文本呈现
-      g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-            RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-      Rectangle rect = new Rectangle(0, 0, 795, 1124);
-      // 绘制地图
-      sr.paint(g, rect, mapArea);
-      // 编码图像
-      PNGEncodeParam encodeParam = PNGEncodeParam.getDefaultEncodeParam(bi);
-      if (encodeParam instanceof PNGEncodeParam.Palette) {
-         PNGEncodeParam.Palette p = (PNGEncodeParam.Palette) encodeParam;
-         byte[] b = new byte[] { -127 };
-         p.setPaletteTransparency(b);
+      File file = File.createTempFile("temp", "jpg");
+      HttpClient client = new DefaultHttpClient();
+      HttpGet get = new HttpGet(url.toString());
+      HttpResponse response = client.execute(get);
+      HttpEntity entity = response.getEntity();
+      if (entity != null) {
+         InputStream in = entity.getContent();
+         FileOutputStream out = new FileOutputStream(file);
+         byte[] b = new byte[250];
+         int temp = 0;
+         while ((temp = in.read(b)) != -1) {
+            out.write(b, 0, temp);
+         }
+         in.close();
+         out.close();
+         client.getConnectionManager().shutdown();
       }
-      // // 将图像数据输出到Servlet相应中
-      // response.setContentType("image/png");
-      // ServletOutputStream out = response.getOutputStream();
-      // com.sun.media.jai.codec.ImageEncoder encoder =
-      // ImageCodec.createImageEncoder(
-      // "PNG", out, encodeParam);
-      // encoder.encode(bi.getData(), bi.getColorModel());
-      FileOutputStream out = new FileOutputStream("c:\\Users\\RK\\Desktop\\test1.jpg");
-      ImageIO.write(bi, "jpeg", out);
+      return this.mergeImg(file, img, 64, 190);// TODO
+   }
+
+   @Override
+   public File addComment(File img, String comment) throws Exception {
+      BufferedImage image = ImageIO.read(new FileInputStream(img));
+      // 得到图形上下文
+      Graphics2D g = image.createGraphics();
+      // 设置画笔颜色
+      g.setColor(Color.BLACK);
+      // 设置字体
+      g.setFont(new Font("宋体", Font.LAYOUT_LEFT_TO_RIGHT, 50));
+      // 写入签名 TODO
+      g.drawString(comment, 404, 44);
+      g.dispose();
+      FileOutputStream out = new FileOutputStream(img);
+      ImageIO.write(image, "JPEG", out);
       out.close();
+      return img;
+   }
+
+   /**
+    * img2 贴到 img1 的(x,y)位置上
+    * 
+    * @param img1
+    * @param img2
+    * @param x
+    * @param y
+    * @return
+    * @throws Exception
+    */
+   private File mergeImg(File img1, File img2, int x, int y) throws Exception {
+      BufferedImage image = ImageIO.read(new FileInputStream(img1));
+      Graphics2D g = image.createGraphics();// 得到图形上下文
+      BufferedImage image2 = ImageIO.read(new FileInputStream(img2));
+      g.drawImage(image2, x, y, image2.getWidth(), image2.getHeight(), null);
+      g.dispose();
+      FileOutputStream out = new FileOutputStream(img1);
+      ImageIO.write(image, "JPEG", out);
+      out.close();
+      return img1;
+   }
+
+   private double[] getbBox(Long placeId, String time, String category) throws Exception {
+      double[] bBox = new double[4];
+      Shapefile shapefile = shapefileDao.getShapefile(placeId, time, category);
+      FileDataStore dataStore = dataStoreManager.getDataStore(shapefile.getFilePath());
+      String typeName = dataStore.getTypeNames()[0];
+      FeatureSource<SimpleFeatureType, SimpleFeature> featureSource = (FeatureSource<SimpleFeatureType, SimpleFeature>) dataStore
+            .getFeatureSource(typeName);
+      FeatureCollection<SimpleFeatureType, SimpleFeature> result = featureSource
+            .getFeatures();
+      ;
+      FeatureIterator<SimpleFeature> itertor = result.features();
+      while (itertor.hasNext()) {
+         SimpleFeature feature = itertor.next();
+         Geometry multipolygon = (Geometry) feature.getDefaultGeometry();
+         Coordinate[] cords = multipolygon.getEnvelope().getCoordinates();
+         double maxX = 0, maxY = 0, minX = 0, minY = 0;
+         boolean flag = true;
+         for (Coordinate cor : cords) {
+            if (flag) {
+               maxX = cor.x;
+               minX = cor.x;
+               minY = cor.y;
+               maxY = cor.y;
+               flag = false;
+               continue;
+            }
+            if (maxX < cor.x) {
+               maxX = cor.x;
+            }
+            if (maxY < cor.y) {
+               maxY = cor.y;
+            }
+            if (minX > cor.x) {
+               minX = cor.x;
+            }
+            if (minY < cor.y) {
+               minY = cor.y;
+            }
+         }
+         bBox[0] = minX;
+         bBox[1] = minY;
+         bBox[2] = maxX;
+         bBox[3] = maxY;
+      }
+      return bBox;
+   }
+
+   @Override
+   public File copyTemplate(String templatePath, String imagePath) throws Exception {
+      int read = 0;
+      File template = new File(templatePath);
+      File image = new File(imagePath);
+      if (template.exists()) {
+         InputStream in = new FileInputStream(template);
+         FileOutputStream out = new FileOutputStream(image);
+         byte[] buffer = new byte[1024];
+         while ((read = in.read(buffer)) != -1) {
+            out.write(buffer, 0, read);
+         }
+         in.close();
+      }
+      return image;
    }
 }
