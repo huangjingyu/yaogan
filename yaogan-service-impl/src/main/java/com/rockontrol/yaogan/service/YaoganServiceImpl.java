@@ -103,7 +103,6 @@ public class YaoganServiceImpl implements IYaoganService {
    @Transactional
    @Override
    public void unsharePlaceToUser(User caller, Long userId, Long placeId) {
-      // TODO Auto-generated method stub
 
       UserPlace userPlace = new UserPlace();
       Long id = this.userPlaceDao.getIdByUserIdPlaceId(userId, placeId);
@@ -348,7 +347,7 @@ public class YaoganServiceImpl implements IYaoganService {
 
       String wmsUrl = null;
       // if (!type.equals(Shapefile.Category.FILE_HIG_DEF))
-      // wmsUrl = geoService.publishGeoFile(type, file);
+      wmsUrl = geoService.publishGeoFile(type, file);
       Shapefile shapefile = new Shapefile();
       shapefile.setCategory(type);
       shapefile.setFileName(file.getName());
