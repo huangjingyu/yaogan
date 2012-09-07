@@ -10,23 +10,15 @@
 </style>
 <script type="text/javascript">
 	function timeCompare() {
-		var testData = [ {
-			"first" : "2008",
-			"second" : {
-				"abio" : 2.5,
-				"aveg" : 1.3,
-				"aero" : 1.0
-			}
-		}, {
-			"first" : "2009",
-			"second" : {
-				"abio" : 2.5,
-				"aveg" : 1.3,
-				"aero" : 1.0
-			}
-		} ];
-		var placeId = "1";
-		var times = "2010,2011";
+		dojo.empty("chartNode");
+		var placeId = dijit.byId("placeId").attr("value");
+		var timeArr = [];
+		require([ "dojo/query", "dojo/NodeList-dom" ], function(query) {
+			query("input:checked", "timesDiv").forEach(function(node) {
+				timeArr.push(node.value);
+			});
+		});
+		var times = timeArr.join(",");
 		var statsKeys = [ "abio", "aveg", "aero" ];
 		var axisLabels = [ {
 			value : 1,
@@ -133,37 +125,81 @@
 	}
 
 	function showAvaTimes(placeId) {
-		dojo.empty("timesDiv");
-		var times = [ "2008", "2009" ];
+		var timesDiv = dojo.byId("timesDiv");
 		require([ "dojo/_base/array" ], function(arrayUtil) {
-			arrayUtil.forEach(times, function(time, i) {
-				require([ "dijit/form/CheckBox" ], function(CheckBox) {
-					var chkId = "time" + i;
-					var checkBox = new CheckBox({
-						id : chkId,
-						name : "time",
-						value : time,
-						checked : false
-					}, "checkBox");
-					var chkLabel = dojo.create("label", {
-						"for" : chkId,
-						innerHTML : time
+			arrayUtil.forEach(dijit.findWidgets(timesDiv), function(w) {
+				w.destroy();
+			});
+		});
+		dojo.empty(timesDiv);
+		if (!placeId)
+			return;
+		var times = [];
+		require([ "dojo/_base/xhr" ], function(xhr) {
+			xhr.get({
+				url : "${ctx}/api/place/" + placeId + "/availableTimes.json",
+				handleAs : "json",
+				load : function(times) {
+					require([ "dojo/_base/array" ], function(arrayUtil) {
+						arrayUtil.forEach(times, function(time, i) {
+							require([ "dijit/form/CheckBox" ], function(
+									CheckBox) {
+								var chkId = "time" + i;
+								var checkBox = new CheckBox({
+									id : chkId,
+									name : "time",
+									value : time,
+									checked : false
+								}, "checkBox");
+								var chkLabel = dojo.create("label", {
+									"for" : chkId,
+									innerHTML : time
+								});
+								dojo.attr(chkLabel, "class",
+										"dijitFocusedLabel");
+								checkBox.placeAt("timesDiv");
+								dojo.place(chkLabel, "timesDiv");
+							});
+						});
 					});
-					dojo.attr(chkLabel, "class", "dijitFocusedLabel");
-					checkBox.placeAt("timesDiv");
-					dojo.place(chkLabel, "timesDiv");
-				});
+				},
+				error : function() {
+				}
 			});
 		});
 	}
 </script>
+<script type="text/javascript">
+	require([ "dijit/form/Select" ]);
+	require([ "dojo/ready" ],
+			function(ready) {
+				ready(function() {
+					require([ "dojo/parser", "dijit/form/Select",
+							"dijit/form/Button" ], function(parser, Select,
+							Button) {
+						MySelect = Select;
+						MyButton = Button;
+						parser.parse();
+					});
+				});
+			});
+</script>
 </head>
 <body class="claro">
-	<div>
-		<input type="button" value="time" onclick="showAvaTimes(1)" />
+	<div id="placeDiv">
+		<select id="placeId" name="placeId" data-dojo-type="MySelect"
+			onchange="showAvaTimes(this.value)">
+			<option value="">请选择</option>
+			<c:forEach var="place" items="${places}">
+				<option value="${place.id}">${place.name}</option>
+			</c:forEach>
+		</select>
 	</div>
 	<div id="timesDiv"></div>
-	<input type="button" value="test" onclick="timeCompare()" />
+	<button data-dojo-type="MyButton" type="button">
+		比较
+		<script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">timeCompare();</script>
+	</button>
 	<div id="chartNode" style="width: 700px; height: 480px;"></div>
 </body>
 </html>

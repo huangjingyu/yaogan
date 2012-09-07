@@ -119,7 +119,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.source.version>1.6</java.source.version>
     <java.target.version>1.6</java.target.version>
-    <she.version>3.5.0</she.version>
 
     <cas.login.url>https://sso.rkcloud.cn/cas/</cas.login.url>
     <cas.logout.url>https://sso.rkcloud.cn/cas/logout</cas.logout.url>
@@ -137,7 +136,45 @@
 
     <yaogan.gis.shapefile.home>d:/test</yaogan.gis.shapefile.home>
     <yaogan.upload.tempdir>/WEB-INF/temp</yaogan.upload.tempdir>
+    <homepage.admin>/admin/place</homepage.admin>
+    <homepage.user>/user/layers</homepage.user>
+
+    <geoserver.baseUrl>http://localhost:8888/geoserver</geoserver.baseUrl>
+    <geoserver.workDir>D:/pf/apache-tomcat-7.0.29/webapps/geoserver/data/yaogandata/</geoserver.workDir>
   </properties>
+
+  <profiles>
+    <profile>
+      <id>beijing_demo</id>
+      <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.source.version>1.6</java.source.version>
+        <java.target.version>1.6</java.target.version>
+
+        <cas.login.url>https://sso.rkcloud.cn/cas/</cas.login.url>
+        <cas.logout.url>https://sso.rkcloud.cn/cas/logout</cas.logout.url>
+        <cas.client.cloudportals>/j_spring_cas_security_check</cas.client.cloudportals>
+
+        <hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect>
+        <datasource.db.driver>org.postgresql.Driver</datasource.db.driver>
+        <datasource.db.url>jdbc:postgresql://192.168.1.71:5432/yaogan_bj_demo</datasource.db.url>
+        <datasource.db.user>postgres</datasource.db.user>
+        <datasource.db.password>postgres</datasource.db.password>
+        <datasource.pool.init>3</datasource.pool.init>
+        <datasource.pool.min>3</datasource.pool.min>
+        <datasource.pool.max>12</datasource.pool.max>
+        <datasource.pool.increment>3</datasource.pool.increment>
+
+        <yaogan.gis.shapefile.home>/home/ubuntu/yaogan/gisfile</yaogan.gis.shapefile.home>
+        <yaogan.upload.tempdir>/home/ubuntu/yaogan/temp</yaogan.upload.tempdir>
+        <homepage.admin>/admin/place</homepage.admin>
+        <homepage.user>/user/layers</homepage.user>
+
+        <geoserver.baseUrl>http://localhost:8080/geoserver</geoserver.baseUrl>
+        <geoserver.workDir>/home/ubuntu/apache-tomcat-7.0.27-sso/webapps/geoserver/data/yaogandata/</geoserver.workDir>
+      </properties>
+    </profile>
+  </profiles>
 
   <build>
     <resources>

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import com.rockontrol.yaogan.model.Place;
+import com.rockontrol.yaogan.model.PlaceParam;
 import com.rockontrol.yaogan.model.Shapefile;
 import com.rockontrol.yaogan.model.Shapefile.Category;
 import com.rockontrol.yaogan.model.User;
@@ -156,6 +157,14 @@ public interface IYaoganService {
    public List<Shapefile> getShapefiles(User caller, Long placeId, String time);
 
    /**
+    * get all shapefiles
+    * 
+    * @param caller
+    * @return
+    */
+   public List<Shapefile> getShapefiles(User caller);
+
+   /**
     * get one shapefile
     * 
     * @param caller
@@ -167,12 +176,33 @@ public interface IYaoganService {
    public Shapefile getShapefile(User caller, Long placeId, String category, String time);
 
    /**
-    * save shapefile.
+    * get place param
+    * 
+    * @param caller
+    * @param placeName
+    * @param time
+    * @param paramName
+    * @return
+    */
+   public PlaceParam getPlaceParam(String placeName, String time, String paramName);
+
+   public void addPlaceParam(PlaceParam param);
+
+   public void addPlaceParam(User caller, String placeName, String time,
+         String paramName, String paramValue);
+
+   public void deletePlaceParam(String placeName, String time, String paramName);
+
+   /**
     * 
     * @param placeName
     * @param type
     * @param file
+    * @param filePath
+    *           path relative to shapefile home
     * @param time
     */
-   public void saveShapefile(String placeName, Category type, File file, String time);
+   public void saveShapefile(User caller, String placeName, Category type, File file,
+         String filePath, String time);
+
 }

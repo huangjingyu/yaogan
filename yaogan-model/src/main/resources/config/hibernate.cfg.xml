@@ -10,5 +10,6 @@
     <mapping class="com.rockontrol.yaogan.model.Place" />
     <mapping class="com.rockontrol.yaogan.model.Shapefile" />
     <mapping class="com.rockontrol.yaogan.model.UserPlace" />
+    <mapping class="com.rockontrol.yaogan.model.PlaceParam" />
   </session-factory>
 </hibernate-configuration>

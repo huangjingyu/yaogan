@@ -1,5 +1,7 @@
 package com.rockontrol.yaogan.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity(name = "shapefiles")
 @NamedQueries({
@@ -19,23 +23,40 @@ import javax.persistence.NamedQuery;
             + " where placeId = :placeId"),
       @NamedQuery(name = "Shapefile.getShapefilesByPlaceAndTime", query = "from com.rockontrol.yaogan.model.Shapefile"
             + " where placeId = :placeId and shootTime = :time"),
-      @NamedQuery(name = "Shapefile.getShapefileByPTC", query = "from com.rockontrol.yaogan.model.Shapefile"
-            + "where placeId = :placeId and shootTime = :time and category = :category") })
+// @NamedQuery(name = "Shapefile.getShapefileByPTC", query =
+// "from com.rockontrol.yaogan.model.Shapefile"
+// +
+// "where placeId = :placeId and shootTime = :time and category.toString() = :category")
+})
 public class Shapefile {
 
    public enum Category {
-      FILE_REGION_BOUNDARY("边界"), FILE_LAND_TYPE("地类"), FILE_LAND_COLLAPSE("地塌陷"), FILE_LAND_FRACTURE(
-            "地裂缝"), FILE_LAND_SOIL("土壤侵蚀");
+      FILE_REGION_BOUNDARY("kq", "边界"), FILE_LAND_TYPE("tdly", "土地利用"), FILE_LAND_COLLAPSE(
+            "dbtx", "地表塌陷"), FILE_LAND_FRACTURE("dlf", "地裂缝"), FILE_LAND_SOIL("trqs",
+            "土壤侵蚀"), FILE_HIG_DEF("gqyg", "高清遥感");
+
+      /**
+       * 名称
+       */
       private final String name;
 
-      private Category(String name) {
+      /**
+       * 类型 前台页面使用的一个标识
+       */
+      private final String type;
+
+      private Category(String type, String name) {
+         this.type = type;
          this.name = name;
+      }
+
+      public String getType() {
+         return this.type;
       }
 
       public String getName() {
          return this.name;
       }
-
    }
 
    private Long _id;
@@ -46,6 +67,7 @@ public class Shapefile {
    private String _shootTime;
    private Category _category;
    private Place place;
+   private Date _uploadTime;
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -121,8 +143,10 @@ public class Shapefile {
          this._category = Category.FILE_LAND_SOIL;
       } else if (Category.FILE_LAND_TYPE.equals(category)) {
          this._category = Category.FILE_LAND_TYPE;
-      } else {
+      } else if (Category.FILE_REGION_BOUNDARY.equals(category)) {
          this._category = Category.FILE_REGION_BOUNDARY;
+      } else {
+         this._category = Category.FILE_HIG_DEF;
       }
    }
 
@@ -134,5 +158,39 @@ public class Shapefile {
 
    public void setPlace(Place place) {
       this.place = place;
+   }
+
+   public void setUploadTime(Date date) {
+      this._uploadTime = date;
+   }
+
+   @Column(name = "upload_time")
+   @Temporal(TemporalType.TIMESTAMP)
+   public Date getUploadTime() {
+      return this._uploadTime;
+   }
+
+   // just a placeholder
+   public void setTypeString(String str) {
+      // nothing to do
+   }
+
+   public String getTypeString() {
+      switch (this._category) {
+      case FILE_LAND_COLLAPSE:
+         return "地塌陷";
+      case FILE_LAND_SOIL:
+         return "土壤侵蚀";
+      case FILE_LAND_FRACTURE:
+         return "地裂缝";
+      case FILE_LAND_TYPE:
+         return "地类";
+      case FILE_REGION_BOUNDARY:
+         return "边界";
+      case FILE_HIG_DEF:
+         return "高清遥感";
+      }
+      // will never go to here
+      return "未知";
    }
 }

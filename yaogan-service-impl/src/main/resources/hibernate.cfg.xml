@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+  xmlns:p="http://www.springframework.org/schema/p" xmlns:aop="http://www.springframework.org/schema/aop"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+    http://www.springframework.org/schema/jdbc
+	http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+  <context:annotation-config />
+  <aop:aspectj-autoproxy />
+
+  <bean id="dataSource"
+    class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="org.postgresql.Driver" />
+    <property name="url"
+      value="jdbc:postgresql://192.168.1.71:5432/yaogan_test" />
+    <property name="username" value="postgres" />
+    <property name="password" value="postgres" />
+  </bean>
+
+  <bean id="sessionFactory"
+    class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSource" />
+    <property name="configLocation" value="classpath:config/hibernate.cfg.xml" />
+    <property name="namingStrategy">
+      <bean class="org.hibernate.cfg.ImprovedNamingStrategy" />
+    </property>
+  </bean>
+
+  <!-- transaction declaration -->
+  <bean id="transactionManager"
+    class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory" />
+  </bean>
+
+  <tx:annotation-driven transaction-manager="transactionManager" />
+  <!-- transaction declaration end -->
+
+  <!-- scan rockontrol package for autowired -->
+  <context:component-scan base-package="com.rockontrol.**">
+    <context:exclude-filter expression="org.springframework.stereotype.Controller"
+      type="annotation" />
+  </context:component-scan>
+</beans>

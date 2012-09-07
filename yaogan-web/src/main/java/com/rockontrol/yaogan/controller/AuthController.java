@@ -15,7 +15,7 @@ public class AuthController {
 
    @RequestMapping(value = "/auth/login")
    public String login() {
-      return "redirect:/home";
+      return "redirect:/";
    }
 
    @RequestMapping(value = "/doLogout")
