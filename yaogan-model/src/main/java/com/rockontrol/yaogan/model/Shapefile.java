@@ -23,11 +23,10 @@ import javax.persistence.TemporalType;
             + " where placeId = :placeId"),
       @NamedQuery(name = "Shapefile.getShapefilesByPlaceAndTime", query = "from com.rockontrol.yaogan.model.Shapefile"
             + " where placeId = :placeId and shootTime = :time"),
-// @NamedQuery(name = "Shapefile.getShapefileByPTC", query =
-// "from com.rockontrol.yaogan.model.Shapefile"
-// +
-// "where placeId = :placeId and shootTime = :time and category.toString() = :category")
-})
+      @NamedQuery(name = "Shapefile.getShapefileByPTC", query = "from com.rockontrol.yaogan.model.Shapefile"
+            + "where placeId = :placeId and shootTime = :time and category.toString() = :category"),
+      @NamedQuery(name = "Shapefile.getAvailableFilesOfUser", query = "from com.rockontrol.yaogan.model.Shapefile"
+            + " where placeId = :placeId and shootTime = :time") })
 public class Shapefile {
 
    public enum Category {
