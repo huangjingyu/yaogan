@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +46,8 @@ public class YaoganServiceImpl implements IYaoganService {
    protected IUserPlaceDao upDao;
 
    // private IUserDao userDao;
-   protected IUserPlaceDao userPlaceDao;
+//   @Resource(name="userPlaceDao")
+//   protected IUserPlaceDao userPlaceDao;
 
    @Autowired
    private EcoFactorComputeService computeService;
@@ -70,7 +73,7 @@ public class YaoganServiceImpl implements IYaoganService {
    // 需要实现的借口
    @Override
    public List<Place> getPlacesVisibleToUser(User caller, Long userId) {
-      List<Place> list = this.userPlaceDao.getPlacesVisibleToUser(userId);
+      List<Place> list = this.upDao.getPlacesVisibleToUser(userId);
       return list;
    }
 
@@ -97,7 +100,7 @@ public class YaoganServiceImpl implements IYaoganService {
       userPlace.setUserId(userId);
       for (long i = 0; i < placeIds.length; i++) {
          userPlace.setPlaceId(i);
-         this.userPlaceDao.save(userPlace);
+         this.upDao.save(userPlace);
       }
 
    }
@@ -109,11 +112,11 @@ public class YaoganServiceImpl implements IYaoganService {
       // TODO Auto-generated method stub
 
       UserPlace userPlace = new UserPlace();
-      Long id = this.userPlaceDao.getIdByUserIdPlaceId(userId, placeId);
+      Long id = this.upDao.getIdByUserIdPlaceId(userId, placeId);
       userPlace.setId(id);
       userPlace.setUserId(userId);
       userPlace.setPlaceId(placeId);
-      userPlaceDao.delete(userPlace);
+      upDao.delete(userPlace);
    }
 
    @Override

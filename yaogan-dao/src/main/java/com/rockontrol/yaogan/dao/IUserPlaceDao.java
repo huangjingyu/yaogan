@@ -10,4 +10,5 @@ public interface IUserPlaceDao extends IBaseDao<UserPlace> {
    public List<Place> getPlacesVisibleToUser(Long userId);
 
    public Long getIdByUserIdPlaceId(Long userId, Long placeId);
+   public void delete(UserPlace userPlace);
 }

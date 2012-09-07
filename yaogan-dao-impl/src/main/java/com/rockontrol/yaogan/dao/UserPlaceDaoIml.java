@@ -20,7 +20,7 @@ public class UserPlaceDaoIml extends BaseDaoImpl<UserPlace> implements IUserPlac
    public List<Place> getPlacesVisibleToUser(Long userId) {
       List<Place> li = new ArrayList<Place>();
       Query query = getSession().createQuery(
-            "select up.placeId from UserPlace as up where up.userId=" + userId);
+            "select up.placeId from com.rockontrol.yaogan.model.UserPlace as up where up.userId=" + userId);
       List list = query.list();
       for (int i = 0; i < list.size(); i++) {
          Long uId = (Long) list.get(i);
@@ -33,7 +33,7 @@ public class UserPlaceDaoIml extends BaseDaoImpl<UserPlace> implements IUserPlac
 
    public Long getIdByUserIdPlaceId(Long userId, Long placeId) {
       Query query = getSession().createQuery(
-            "select up.id from UserPlace as up where up.userId=" + userId + "and"
+            "select up.id from com.rockontrol.yaogan.model.UserPlace as up where up.userId=" + userId + "and"
                   + "up.placeId=" + placeId);
       Long i = (Long) query.uniqueResult();
       return i;
