@@ -23,6 +23,8 @@ import javax.persistence.TemporalType;
             + " where placeId = :placeId"),
       @NamedQuery(name = "Shapefile.getShapefilesByPlaceAndTime", query = "from com.rockontrol.yaogan.model.Shapefile"
             + " where placeId = :placeId and shootTime = :time"),
+      @NamedQuery(name = "Shapefile.getShapefileByPTC", query = "from com.rockontrol.yaogan.model.Shapefile"
+            + "where placeId = :placeId and shootTime = :time and category.toString() = :category"),
       @NamedQuery(name = "Shapefile.getAvailableFilesOfUser", query = "from com.rockontrol.yaogan.model.Shapefile"
             + " where placeId = :placeId and shootTime = :time") })
 public class Shapefile {
@@ -128,23 +130,21 @@ public class Shapefile {
    }
 
    public void setCategory(Category category) {
-      switch (category) {
-      case FILE_LAND_COLLAPSE:
+      this._category = category;
+   }
+
+   public void setCategory(String category) {
+      if (Category.FILE_LAND_COLLAPSE.equals(category)) {
          this._category = Category.FILE_LAND_COLLAPSE;
-         break;
-      case FILE_LAND_SOIL:
-         this._category = Category.FILE_LAND_SOIL;
-         break;
-      case FILE_LAND_FRACTURE:
+      } else if (Category.FILE_LAND_FRACTURE.equals(category)) {
          this._category = Category.FILE_LAND_FRACTURE;
-         break;
-      case FILE_LAND_TYPE:
+      } else if (Category.FILE_LAND_SOIL.equals(category)) {
+         this._category = Category.FILE_LAND_SOIL;
+      } else if (Category.FILE_LAND_TYPE.equals(category)) {
          this._category = Category.FILE_LAND_TYPE;
-         break;
-      case FILE_REGION_BOUNDARY:
+      } else if (Category.FILE_REGION_BOUNDARY.equals(category)) {
          this._category = Category.FILE_REGION_BOUNDARY;
-         break;
-      case FILE_HIG_DEF:
+      } else {
          this._category = Category.FILE_HIG_DEF;
       }
    }

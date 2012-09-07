@@ -28,6 +28,14 @@ public class ShapefileDaoImpl extends BaseDaoImpl<Shapefile> implements IShapefi
    }
 
    @Override
+   public Shapefile getShapefile(Long placeId, String time, String category) {
+      Query query = getSession().getNamedQuery("Shapefile.getShapefileByPTC");
+      query.setLong("placeId", placeId);
+      query.setString("time", time);
+      query.setString("category", category);
+      return (Shapefile) query.uniqueResult();
+   }
+
    public List<Shapefile> getAvailableFilesOfUser(Long userId) {
       String hql = "select file from com.rockontrol.yaogan.model.Shapefile as file,"
             + "com.rockontrol.yaogan.model.Place p,com.rockontrol.yaogan.model.UserPlace up "
