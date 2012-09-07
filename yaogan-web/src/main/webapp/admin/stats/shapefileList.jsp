@@ -25,6 +25,7 @@
 				<td>年份</td>
 				<td>文件类型</td>
 				<td>文件名</td>
+				<td>上传时间</td>
 			</tr>
 			<c:forEach items="${shapefiles}" var="file">
 				<tr>
@@ -32,6 +33,7 @@
 					<td>${file.shootTime}</td>
 					<td>${file.typeString}</td>
 					<td>${file.fileName}</td>
+					<td>${file.uploadTime}</td>
 				</tr>
 			</c:forEach>
 		</table>

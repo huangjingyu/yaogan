@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -328,14 +329,17 @@ public class YaoganServiceImpl implements IYaoganService {
    @Override
    public void saveShapefile(User caller, String placeName, Category type, File file,
          String filePath, String time) {
-      String wmsUrl = geoService.publishGeoFile(type, file);
+
+      String wmsUrl = null;
+      // if (!type.equals(Shapefile.Category.FILE_HIG_DEF))
+      // wmsUrl = geoService.publishGeoFile(type, file);
       Shapefile shapefile = new Shapefile();
       shapefile.setCategory(type);
       shapefile.setFileName(file.getName());
       shapefile.setShootTime(time);
       Place place = this.checkAndCreatePlace(placeName);
       shapefile.setPlaceId(place.getId());
-
+      shapefile.setUploadTime(new Date());
       shapefile.setFilePath(filePath);
       shapefile.setWmsUrl(wmsUrl);
       shapefileDao.save(shapefile);

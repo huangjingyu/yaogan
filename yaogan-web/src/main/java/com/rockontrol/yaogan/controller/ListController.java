@@ -1,6 +1,7 @@
 package com.rockontrol.yaogan.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,7 @@ public class ListController {
          file.setShootTime("2010");
          file.setPlace(place);
          file.setCategory(cas[i]);
+         file.setUploadTime(new Date());
          list.add(file);
       }
       return list;

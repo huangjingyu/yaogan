@@ -1,5 +1,7 @@
 package com.rockontrol.yaogan.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity(name = "shapefiles")
 @NamedQueries({
@@ -22,18 +26,15 @@ import javax.persistence.NamedQuery;
 public class Shapefile {
 
    public enum Category {
-      FILE_REGION_BOUNDARY("kq", "边界"), 
-      FILE_LAND_TYPE("tdly", "土地利用"), 
-      FILE_LAND_COLLAPSE("dbtx", "地表塌陷"), 
-      FILE_LAND_FRACTURE("dlf","地裂缝"), 
-      FILE_LAND_SOIL("trqs", "土壤侵蚀"), 
-      FILE_HIG_DEF("gqyg", "高清遥感");
-      
+      FILE_REGION_BOUNDARY("kq", "边界"), FILE_LAND_TYPE("tdly", "土地利用"), FILE_LAND_COLLAPSE(
+            "dbtx", "地表塌陷"), FILE_LAND_FRACTURE("dlf", "地裂缝"), FILE_LAND_SOIL("trqs",
+            "土壤侵蚀"), FILE_HIG_DEF("gqyg", "高清遥感");
+
       /**
        * 名称
        */
-       private final String name;
-       
+      private final String name;
+
       /**
        * 类型 前台页面使用的一个标识
        */
@@ -43,7 +44,7 @@ public class Shapefile {
          this.type = type;
          this.name = name;
       }
-      
+
       public String getType() {
          return this.type;
       }
@@ -61,6 +62,7 @@ public class Shapefile {
    private String _shootTime;
    private Category _category;
    private Place place;
+   private Date _uploadTime;
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -155,6 +157,16 @@ public class Shapefile {
       this.place = place;
    }
 
+   public void setUploadTime(Date date) {
+      this._uploadTime = date;
+   }
+
+   @Column(name = "upload_time")
+   @Temporal(TemporalType.TIMESTAMP)
+   public Date getUploadTime() {
+      return this._uploadTime;
+   }
+
    // just a placeholder
    public void setTypeString(String str) {
       // nothing to do
@@ -164,17 +176,16 @@ public class Shapefile {
       switch (this._category) {
       case FILE_LAND_COLLAPSE:
          return "地塌陷";
-
       case FILE_LAND_SOIL:
          return "土壤侵蚀";
-
       case FILE_LAND_FRACTURE:
          return "地裂缝";
       case FILE_LAND_TYPE:
          return "地类";
       case FILE_REGION_BOUNDARY:
          return "边界";
-
+      case FILE_HIG_DEF:
+         return "高清遥感";
       }
       // will never go to here
       return "未知";
