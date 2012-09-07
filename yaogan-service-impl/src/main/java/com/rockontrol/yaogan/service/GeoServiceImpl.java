@@ -39,6 +39,7 @@ public class GeoServiceImpl implements GeoService {
    public static final String WS_KEY = "WS";
    public static final String SHP_FILE_KEY = "SHP_FILE";
    public static final String LL_KEY = "LL";
+   public static final String NATIVE_KEY = "NATIVE";
    /**
     * geoserver启动的地址
     */
@@ -129,18 +130,18 @@ public class GeoServiceImpl implements GeoService {
          addLayer(client, context);
          /**发布layer 主要是添加样式*/
          if(GeoServiceUtil.getStyle(type) != null) {
-//            response = publlishLayer(client, context);
-//            HttpGet get = new HttpGet(GeoServiceUtil.getLocation(response));
-//            response = GisHttpUtil.execute(client, get);
-//            System.out.println(GeoServiceUtil.getContent(response));
-//            System.out.println(GeoServiceUtil.getLocation(response));
+            response = publlishLayer(client, context);
          }
       } finally {
          if (client != null) {
             client.getConnectionManager().shutdown();
          }
       }
-     return WORKSPACE_NAME + ":" + context.storeName;
+      String[] bounds = (String[]) context.get(NATIVE_KEY);
+      String bound = bounds[0].replace(",", "") + "," + bounds[1].replace(",", "")  + "," + bounds[2].replace(",", "")  + "," + bounds[3].replace(",", "") + "]";
+      String wmsInfo = WORKSPACE_NAME + ":" + context.storeName + "?" + bound;
+      log.info("wmsInfo:" + wmsInfo);
+      return wmsInfo;
    }
 
    /**
@@ -410,6 +411,7 @@ public class GeoServiceImpl implements GeoService {
          params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:srsHandling", "REPROJECT_TO_DECLARED"));
       }
       String[] nativeBound = getNativeBound(client, context, params);
+      context.put(NATIVE_KEY, nativeBound);
       params.add(new BasicNameValuePair(
             "tabs:panel:theList:0:content:referencingForm:nativeBoundingBox:minX", nativeBound[0]));
       params.add(new BasicNameValuePair(
@@ -578,7 +580,18 @@ public class GeoServiceImpl implements GeoService {
       BasicNameValuePair linkType = new BasicNameValuePair("tabs:tabs-container:tabs:1:link", "x");
       params.add(linkType);
       params.add(new BasicNameValuePair("tabs:panel:theList:0:content:name", context.storeName));
+      params.add(new BasicNameValuePair("tabs:panel:theList:0:content:title", context.storeName));
+      params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:nativeSRS:srs", "UNKNOWN"));
       params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:declaredSRS:srs", "EPSG:4326"));
+      String[] nativeBound = (String[]) context.get(NATIVE_KEY);
+      params.add(new BasicNameValuePair(
+            "tabs:panel:theList:0:content:referencingForm:nativeBoundingBox:minX", nativeBound[0]));
+      params.add(new BasicNameValuePair(
+            "tabs:panel:theList:0:content:referencingForm:nativeBoundingBox:minY", nativeBound[1]));
+      params.add(new BasicNameValuePair(
+            "tabs:panel:theList:0:content:referencingForm:nativeBoundingBox:maxX", nativeBound[2]));
+      params.add(new BasicNameValuePair(
+            "tabs:panel:theList:0:content:referencingForm:nativeBoundingBox:maxY", nativeBound[3]));
       String[] llBound = (String[]) context.get(LL_KEY);
       params.add(new BasicNameValuePair(
             "tabs:panel:theList:0:content:referencingForm:latLonBoundingBox:minX", llBound[0]));
@@ -609,8 +622,11 @@ public class GeoServiceImpl implements GeoService {
       styleParams.add(new BasicNameValuePair("tabs:panel:theList:3:content:styles:defaultStyle", styleId));
       String styleAction = GeoServiceUtil.search(html, "tabs:panel:theList:3:content:styles:defaultStyle", "?", 0, "'");
       post = new HttpPost(getWebLocation(styleAction));
+      post.addHeader("Wicket-Ajax", "true");
+      post.addHeader("Accept", "text/xml");
       response = GisHttpUtil.execute(styleParams, client, post);
-      System.out.println(GeoServiceUtil.getContent(response));
+      String content = GeoServiceUtil.getContent(response);
+      
       params = new ArrayList<NameValuePair>();
       params.add(new BasicNameValuePair("save", "x"));
       params.add(new BasicNameValuePair("tabs:panel:theList:0:content:enabled", "on"));

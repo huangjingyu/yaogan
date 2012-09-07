@@ -27,8 +27,8 @@ public class GisHttpUtil {
       DefaultHttpClient client = new DefaultHttpClient(manager);
 //      HttpHost proxy = new HttpHost("127.0.0.1", 8080);
 //      client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
-//      HttpClientParams.setCookiePolicy(client.getParams(),
-//            CookiePolicy.BROWSER_COMPATIBILITY);
+      HttpClientParams.setCookiePolicy(client.getParams(),
+            CookiePolicy.BROWSER_COMPATIBILITY);
       return client;
    }
 
