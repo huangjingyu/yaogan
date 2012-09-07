@@ -41,7 +41,7 @@ public class ShapefileDaoImpl extends BaseDaoImpl<Shapefile> implements IShapefi
             + "com.rockontrol.yaogan.model.Place p,com.rockontrol.yaogan.model.UserPlace up "
             + "  where file.placeId=up.placeId and p.id=file.placeId and up.userId=:userId";
       Query query = getSession().createQuery(hql);
-      query.setParameter("userId", userId);
+      query.setLong("userId", userId);
       List<Shapefile> list = query.list();
       return list;
    }

@@ -16,7 +16,6 @@ import com.rockontrol.yaogan.dao.IPlaceDao;
 import com.rockontrol.yaogan.dao.IPlaceParamDao;
 import com.rockontrol.yaogan.dao.IShapefileDao;
 import com.rockontrol.yaogan.dao.IUserPlaceDao;
-import com.rockontrol.yaogan.dao.UserPlaceDaoIml;
 import com.rockontrol.yaogan.model.Organization;
 import com.rockontrol.yaogan.model.Place;
 import com.rockontrol.yaogan.model.PlaceParam;
@@ -45,6 +44,7 @@ public class YaoganServiceImpl implements IYaoganService {
    protected IUserPlaceDao upDao;
 
    // private IUserDao userDao;
+   protected IUserPlaceDao userPlaceDao;
 
    @Autowired
    private EcoFactorComputeService computeService;
@@ -70,11 +70,7 @@ public class YaoganServiceImpl implements IYaoganService {
    // 需要实现的借口
    @Override
    public List<Place> getPlacesVisibleToUser(User caller, Long userId) {
-      // TODO Auto-generated method stub
-      // User user=new User();
-      // user.setId(userId);
-      UserPlaceDaoIml userPlaceDaoIml = new UserPlaceDaoIml();
-      List<Place> list = userPlaceDaoIml.getPlacesVisibleToUser(userId);
+      List<Place> list = this.userPlaceDao.getPlacesVisibleToUser(userId);
       return list;
    }
 
@@ -97,13 +93,11 @@ public class YaoganServiceImpl implements IYaoganService {
    @Override
    // @Resource(name="user_PlaceDao")
    public void sharePlacesToUser(User caller, Long userId, Long[] placeIds) {
-      // TODO Auto-generated method stub
-      UserPlaceDaoIml userDao = new UserPlaceDaoIml();
       UserPlace userPlace = new UserPlace();
       userPlace.setUserId(userId);
       for (long i = 0; i < placeIds.length; i++) {
          userPlace.setPlaceId(i);
-         userDao.save(userPlace);
+         this.userPlaceDao.save(userPlace);
       }
 
    }
@@ -113,13 +107,13 @@ public class YaoganServiceImpl implements IYaoganService {
    @Override
    public void unsharePlaceToUser(User caller, Long userId, Long placeId) {
       // TODO Auto-generated method stub
-      UserPlaceDaoIml userPlaceDaoIml = new UserPlaceDaoIml();
+
       UserPlace userPlace = new UserPlace();
-      Long id = userPlaceDaoIml.getIdByUserIdPlaceId(userId, placeId);
+      Long id = this.userPlaceDao.getIdByUserIdPlaceId(userId, placeId);
       userPlace.setId(id);
       userPlace.setUserId(userId);
       userPlace.setPlaceId(placeId);
-      userPlaceDaoIml.delete(userPlace);
+      userPlaceDao.delete(userPlace);
    }
 
    @Override
