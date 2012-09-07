@@ -16,12 +16,14 @@ import com.rockontrol.yaogan.dao.IPlaceDao;
 import com.rockontrol.yaogan.dao.IPlaceParamDao;
 import com.rockontrol.yaogan.dao.IShapefileDao;
 import com.rockontrol.yaogan.dao.IUserPlaceDao;
+import com.rockontrol.yaogan.dao.UserPlaceDaoIml;
 import com.rockontrol.yaogan.model.Organization;
 import com.rockontrol.yaogan.model.Place;
 import com.rockontrol.yaogan.model.PlaceParam;
 import com.rockontrol.yaogan.model.Shapefile;
 import com.rockontrol.yaogan.model.Shapefile.Category;
 import com.rockontrol.yaogan.model.User;
+import com.rockontrol.yaogan.model.UserPlace;
 import com.rockontrol.yaogan.vo.EnvStats;
 
 @Service
@@ -41,6 +43,8 @@ public class YaoganServiceImpl implements IYaoganService {
 
    @Autowired
    protected IUserPlaceDao upDao;
+
+   // private IUserDao userDao;
 
    @Autowired
    private EcoFactorComputeService computeService;
@@ -63,10 +67,15 @@ public class YaoganServiceImpl implements IYaoganService {
       return placeDao.getPlaceByName(placeName);
    }
 
+   // 需要实现的借口
    @Override
    public List<Place> getPlacesVisibleToUser(User caller, Long userId) {
       // TODO Auto-generated method stub
-      return null;
+      // User user=new User();
+      // user.setId(userId);
+      UserPlaceDaoIml userPlaceDaoIml = new UserPlaceDaoIml();
+      List<Place> list = userPlaceDaoIml.getPlacesVisibleToUser(userId);
+      return list;
    }
 
    @Override
@@ -83,18 +92,34 @@ public class YaoganServiceImpl implements IYaoganService {
       return org == null ? null : org.getEmployees();
    }
 
+   // 需要实现的借口
    @Transactional
    @Override
+   // @Resource(name="user_PlaceDao")
    public void sharePlacesToUser(User caller, Long userId, Long[] placeIds) {
       // TODO Auto-generated method stub
+      UserPlaceDaoIml userDao = new UserPlaceDaoIml();
+      UserPlace userPlace = new UserPlace();
+      userPlace.setUserId(userId);
+      for (long i = 0; i < placeIds.length; i++) {
+         userPlace.setPlaceId(i);
+         userDao.save(userPlace);
+      }
 
    }
 
+   // 需要实现的借口
    @Transactional
    @Override
    public void unsharePlaceToUser(User caller, Long userId, Long placeId) {
       // TODO Auto-generated method stub
-
+      UserPlaceDaoIml userPlaceDaoIml = new UserPlaceDaoIml();
+      UserPlace userPlace = new UserPlace();
+      Long id = userPlaceDaoIml.getIdByUserIdPlaceId(userId, placeId);
+      userPlace.setId(id);
+      userPlace.setUserId(userId);
+      userPlace.setPlaceId(placeId);
+      userPlaceDaoIml.delete(userPlace);
    }
 
    @Override
@@ -337,7 +362,7 @@ public class YaoganServiceImpl implements IYaoganService {
       shapefile.setCategory(type);
       shapefile.setFileName(file.getName());
       shapefile.setShootTime(time);
-      Place place = this.checkAndCreatePlace(placeName);
+      Place place = this.checkAndCreatePlace(caller.getOrgId(), placeName);
       shapefile.setPlaceId(place.getId());
       shapefile.setUploadTime(new Date());
       shapefile.setFilePath(filePath);
@@ -411,9 +436,9 @@ public class YaoganServiceImpl implements IYaoganService {
    }
 
    @Override
-   public void addPlaceParam(String placeName, String time, String paramName,
-         String paramValue) {
-      Place place = this.checkAndCreatePlace(placeName);
+   public void addPlaceParam(User caller, String placeName, String time,
+         String paramName, String paramValue) {
+      Place place = this.checkAndCreatePlace(caller.getOrgId(), placeName);
       PlaceParam param = new PlaceParam();
       param.setParamName(paramName);
       param.setParamValue(paramValue);
@@ -422,11 +447,12 @@ public class YaoganServiceImpl implements IYaoganService {
       this.placeParamDao.save(param);
    }
 
-   private Place checkAndCreatePlace(String placeName) {
+   private Place checkAndCreatePlace(Long orgId, String placeName) {
       Place place = placeDao.getPlaceByName(placeName);
       if (place == null) {
          place = new Place();
          place.setName(placeName);
+         place.setOrgId(orgId);
          placeDao.save(place);
       }
       return place;
