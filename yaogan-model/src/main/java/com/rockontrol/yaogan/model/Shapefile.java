@@ -12,28 +12,39 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Transient;
 
 @Entity(name = "shapefiles")
 @NamedQueries({
       @NamedQuery(name = "Shapefile.getAvailableTimesOfPlace", query = "select distinct shootTime from com.rockontrol.yaogan.model.Shapefile"
             + " where placeId = :placeId"),
+      @NamedQuery(name = "Shapefile.getAvailableTimesOfOrg", query = "select distinct sf.shootTime from com.rockontrol.yaogan.model.Shapefile sf,"
+            + " com.rockontrol.yaogan.model.Place p where sf.placeId = p.id"
+            + " and p.orgId = :orgId order by sf.shootTime desc"),
+      @NamedQuery(name = "Shapefile.getAvailableTimesOfUser", query = "select distinct sf.shootTime from com.rockontrol.yaogan.model.Shapefile sf,"
+            + " com.rockontrol.yaogan.model.UserPlace up where sf.placeId = up.placeId"
+            + " and up.userId = :userId order by sf.shootTime desc"),
       @NamedQuery(name = "Shapefile.getShapefilesByPlaceAndTime", query = "from com.rockontrol.yaogan.model.Shapefile"
-            + " where placeId = :placeId and shootTime = :time") })
+            + " where placeId = :placeId and shootTime = :time"),
+      @NamedQuery(name = "Shapefile.getAvailablePlacesOfOrg", query = "select distinct p from com.rockontrol.yaogan.model.Shapefile sf,"
+            + " com.rockontrol.yaogan.model.Place p where p.id = sf.placeId"
+            + " and sf.shootTime = :time and p.orgId = :orgId"),
+      @NamedQuery(name = "Shapefile.getAvailablePlacesOfUser", query = "select distinct p from com.rockontrol.yaogan.model.Shapefile sf,"
+            + " com.rockontrol.yaogan.model.Place p, com.rockontrol.yaogan.model.UserPlace up"
+            + " where up.placeId = sf.placeId and p.id = up.placeId"
+            + " and sf.shootTime = :time and up.userId = :userId") })
 public class Shapefile {
 
    public enum Category {
-      FILE_REGION_BOUNDARY("kq", "边界"), 
-      FILE_LAND_TYPE("tdly", "土地利用"), 
-      FILE_LAND_COLLAPSE("dbtx", "地表塌陷"), 
-      FILE_LAND_FRACTURE("dlf","地裂缝"), 
-      FILE_LAND_SOIL("trqs", "土壤侵蚀"), 
-      FILE_HIG_DEF("gqyg", "高清遥感");
-      
+      FILE_REGION_BOUNDARY("kq", "边界"), FILE_LAND_TYPE("tdly", "土地利用"), FILE_LAND_COLLAPSE(
+            "dbtx", "地表塌陷"), FILE_LAND_FRACTURE("dlf", "地裂缝"), FILE_LAND_SOIL("trqs",
+            "土壤侵蚀"), FILE_HIG_DEF("gqyg", "高清遥感");
+
       /**
        * 名称
        */
-       private final String name;
-       
+      private final String name;
+
       /**
        * 类型 前台页面使用的一个标识
        */
@@ -43,7 +54,7 @@ public class Shapefile {
          this.type = type;
          this.name = name;
       }
-      
+
       public String getType() {
          return this.type;
       }
@@ -160,21 +171,21 @@ public class Shapefile {
       // nothing to do
    }
 
+   @Transient
    public String getTypeString() {
+      if (this._category == null)
+         return "未知";
       switch (this._category) {
       case FILE_LAND_COLLAPSE:
          return "地塌陷";
-
       case FILE_LAND_SOIL:
          return "土壤侵蚀";
-
       case FILE_LAND_FRACTURE:
          return "地裂缝";
       case FILE_LAND_TYPE:
          return "地类";
       case FILE_REGION_BOUNDARY:
          return "边界";
-
       }
       // will never go to here
       return "未知";

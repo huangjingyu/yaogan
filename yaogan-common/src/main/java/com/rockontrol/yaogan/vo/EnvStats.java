@@ -13,6 +13,16 @@ public class EnvStats {
    // 土地环境指数
    private double asus;
 
+   public EnvStats() {
+   }
+
+   public EnvStats(double abio, double aveg, double aero, double asus) {
+      this.abio = abio;
+      this.aveg = aveg;
+      this.aero = aero;
+      this.asus = asus;
+   }
+
    public double getAbio() {
       return abio;
    }

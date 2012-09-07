@@ -19,6 +19,7 @@ import com.rockontrol.yaogan.dao.IUserDao;
 import com.rockontrol.yaogan.dao.IUserPlaceDao;
 import com.rockontrol.yaogan.model.Organization;
 import com.rockontrol.yaogan.model.Place;
+import com.rockontrol.yaogan.model.Shapefile;
 import com.rockontrol.yaogan.model.User;
 
 @RunWith(value = SpringJUnit4ClassRunner.class)
@@ -80,6 +81,16 @@ public class BaseTest extends AbstractTransactionalJUnit4SpringContextTests {
       place.setName(UUID.randomUUID().toString());
       place.setOrgId(orgId);
       return place;
+   }
+
+   protected Shapefile mockShapefile(Long placeId, String time) {
+      Shapefile sf = new Shapefile();
+      sf.setFileName(UUID.randomUUID().toString());
+      sf.setFilePath(UUID.randomUUID().toString());
+      sf.setPlaceId(placeId);
+      sf.setWmsUrl("luokejiahua");
+      sf.setShootTime(time);
+      return sf;
    }
 
    @Test

@@ -46,6 +46,8 @@ public interface IYaoganService {
     */
    public List<Place> getPlacesVisibleToUser(User caller, Long userId);
 
+   public List<Place> getPlacesVisibleToUser(User caller, Long userId, String time);
+
    /**
     * get all available times in which there is data(shapefiles) for the place
     * of placeId.
@@ -55,6 +57,16 @@ public interface IYaoganService {
     * @return
     */
    public List<String> getAvailableTimeOptions(User caller, Long placeId);
+
+   /**
+    * get all available times in which there is data(shapefiles) for the org of
+    * orgId, in desc order.
+    * 
+    * @param caller
+    * @param orgId
+    * @return
+    */
+   public List<String> getAvailableTimesForUser(User caller, Long userId);
 
    /**
     * get all users in the organization of orgId.

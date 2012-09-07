@@ -19,7 +19,7 @@
 			});
 		});
 		var times = timeArr.join(",");
-		var statsKeys = [ "abio", "aveg", "aero" ];
+		var statsKeys = [ "abio", "aveg", "aero", "asus" ];
 		var axisLabels = [ {
 			value : 1,
 			text : "生物丰度指数"
@@ -29,6 +29,9 @@
 		}, {
 			value : 3,
 			text : "土地退化指数"
+		}, {
+			value : 4,
+			text : "土地环境指数"
 		} ];
 		var apiUrl = "${ctx}/api/envstats/place/" + placeId + "/times/" + times
 				+ ".json";
@@ -186,20 +189,38 @@
 </script>
 </head>
 <body class="claro">
-	<div id="placeDiv">
-		<select id="placeId" name="placeId" data-dojo-type="MySelect"
-			onchange="showAvaTimes(this.value)">
-			<option value="">请选择</option>
-			<c:forEach var="place" items="${places}">
-				<option value="${place.id}">${place.name}</option>
-			</c:forEach>
-		</select>
+	<div>
+		<c:if test="${currentUser.isAdmin}">
+			<a href="${ctx}/admin/envstats/timeCompare">时间分析</a>&nbsp;
+			<a href="${ctx}/admin/envstats/placeCompare">空间分析</a>
+		</c:if>
 	</div>
-	<div id="timesDiv"></div>
-	<button data-dojo-type="MyButton" type="button">
-		比较
-		<script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">timeCompare();</script>
-	</button>
+	<table border="0">
+		<tr>
+			<td width="10%" align="right">请选择区域:</td>
+			<td align="left"><div id="placeDiv">
+					<select id="placeId" name="placeId" data-dojo-type="MySelect"
+						onchange="showAvaTimes(this.value)">
+						<option value="">请选择</option>
+						<c:forEach var="place" items="${places}">
+							<option value="${place.id}">${place.name}</option>
+						</c:forEach>
+					</select>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>请选择时间:</td>
+			<td><div id="timesDiv"></div></td>
+		</tr>
+		<tr>
+			<td><button data-dojo-type="MyButton" type="button">
+					分析
+					<script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">timeCompare();</script>
+				</button></td>
+			<td></td>
+		</tr>
+	</table>
 	<div id="chartNode" style="width: 700px; height: 480px;"></div>
 </body>
 </html>

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import com.rockontrol.yaogan.dao.IOrganizationDao;
 import com.rockontrol.yaogan.dao.IPlaceDao;
 import com.rockontrol.yaogan.dao.IPlaceParamDao;
 import com.rockontrol.yaogan.dao.IShapefileDao;
+import com.rockontrol.yaogan.dao.IUserDao;
 import com.rockontrol.yaogan.dao.IUserPlaceDao;
 import com.rockontrol.yaogan.dao.UserPlaceDaoIml;
 import com.rockontrol.yaogan.model.Organization;
@@ -43,7 +45,8 @@ public class YaoganServiceImpl implements IYaoganService {
    @Autowired
    protected IUserPlaceDao upDao;
 
-   // private IUserDao userDao;
+   @Autowired
+   private IUserDao userDao;
 
    @Autowired
    private EcoFactorComputeService computeService;
@@ -66,15 +69,25 @@ public class YaoganServiceImpl implements IYaoganService {
       return placeDao.getPlaceByName(placeName);
    }
 
-   // 需要实现的借口
    @Override
    public List<Place> getPlacesVisibleToUser(User caller, Long userId) {
-      // TODO Auto-generated method stub
-      // User user=new User();
-      // user.setId(userId);
-      UserPlaceDaoIml userPlaceDaoIml = new UserPlaceDaoIml();
-      List<Place> list = userPlaceDaoIml.getPlacesVisibleToUser(userId);
+      User user = userDao.get(userId);
+      if (user.getIsAdmin()) {
+         return placeDao.getPlacesOfOrg(user.getOrgId());
+      }
+      List<Place> list = upDao.getPlacesVisibleToUser(userId);
       return list;
+   }
+
+   @Override
+   public List<Place> getPlacesVisibleToUser(User caller, Long userId, String time) {
+      if (StringUtils.isEmpty(time))
+         return getPlacesVisibleToUser(caller, userId);
+      User user = userDao.get(userId);
+      if (user.getIsAdmin()) {
+         return shapefileDao.getAvailablePlacesOfOrg(user.getOrgId(), time);
+      }
+      return shapefileDao.getAvailablePlacesOfUser(userId, time);
    }
 
    @Override
@@ -83,6 +96,15 @@ public class YaoganServiceImpl implements IYaoganService {
             shapefileDao.getAvailableTimesOfPlace(placeId));
       Collections.sort(list);
       return list;
+   }
+
+   @Override
+   public List<String> getAvailableTimesForUser(User caller, Long userId) {
+      User user = userDao.get(userId);
+      if (user.getIsAdmin()) {
+         return shapefileDao.getAvailableTimesOfOrg(user.getOrgId());
+      }
+      return shapefileDao.getAvailableTimesOfUser(userId);
    }
 
    @Override
