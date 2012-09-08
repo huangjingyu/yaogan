@@ -12,6 +12,8 @@ import com.rockontrol.yaogan.vo.EnvStats;
 
 public interface IYaoganService {
 
+   public User getUser(User caller, Long userId);
+
    /**
     * get all places of the organization of orgId.
     * 

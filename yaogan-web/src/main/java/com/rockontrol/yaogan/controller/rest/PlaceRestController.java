@@ -15,6 +15,7 @@ import com.rockontrol.yaogan.model.Place;
 import com.rockontrol.yaogan.model.User;
 import com.rockontrol.yaogan.service.ISecurityManager;
 import com.rockontrol.yaogan.service.IYaoganService;
+import com.rockontrol.yaogan.util.Constants;
 
 @Controller
 @RequestMapping(value = "/api")
@@ -51,5 +52,31 @@ public class PlaceRestController {
    public List<String> avaialbeTimesOfCurrentUser() {
       User user = _secMng.currentUser();
       return _service.getAvailableTimesForUser(user, user.getId());
+   }
+
+   @RequestMapping(value = "places/{placeIds}/share/user/{userId}")
+   public void sharePlacesToUser(@PathVariable("placeIds") String placeIdsStr,
+         @PathVariable("userId") Long userId) {
+      User user = _secMng.currentUser();
+      String[] arr = Constants.PAT_COMMA.split(placeIdsStr);
+      Long[] placeIds = new Long[arr.length];
+      for (int i = 0; i < arr.length; i++) {
+         placeIds[i] = Long.valueOf(arr[i]);
+      }
+      _service.sharePlacesToUser(user, userId, placeIds);
+   }
+
+   @RequestMapping(value = "places/{placeIds}/unshare/user/{userId}")
+   public void unsharePlacesFromUser(@PathVariable("placeIds") String placeIdsStr,
+         @PathVariable("userId") Long userId) {
+      User user = _secMng.currentUser();
+      String[] arr = Constants.PAT_COMMA.split(placeIdsStr);
+      Long[] placeIds = new Long[arr.length];
+      for (int i = 0; i < arr.length; i++) {
+         placeIds[i] = Long.valueOf(arr[i]);
+      }
+      for (Long placeId : placeIds) {
+         _service.unsharePlaceToUser(user, userId, placeId);
+      }
    }
 }

@@ -17,7 +17,6 @@ import com.rockontrol.yaogan.dao.IPlaceParamDao;
 import com.rockontrol.yaogan.dao.IShapefileDao;
 import com.rockontrol.yaogan.dao.IUserDao;
 import com.rockontrol.yaogan.dao.IUserPlaceDao;
-import com.rockontrol.yaogan.dao.UserPlaceDaoIml;
 import com.rockontrol.yaogan.model.Organization;
 import com.rockontrol.yaogan.model.Place;
 import com.rockontrol.yaogan.model.PlaceParam;
@@ -53,6 +52,11 @@ public class YaoganServiceImpl implements IYaoganService {
 
    @Autowired
    private GeoService geoService;
+
+   @Override
+   public User getUser(User caller, Long userId) {
+      return userDao.get(userId);
+   }
 
    @Override
    public List<Place> getPlacesOfOrg(User caller, Long orgId) {
@@ -113,34 +117,23 @@ public class YaoganServiceImpl implements IYaoganService {
       return org == null ? null : org.getEmployees();
    }
 
-   // 需要实现的借口
    @Transactional
    @Override
-   // @Resource(name="user_PlaceDao")
    public void sharePlacesToUser(User caller, Long userId, Long[] placeIds) {
-      // TODO Auto-generated method stub
-      UserPlaceDaoIml userDao = new UserPlaceDaoIml();
-      UserPlace userPlace = new UserPlace();
-      userPlace.setUserId(userId);
-      for (long i = 0; i < placeIds.length; i++) {
-         userPlace.setPlaceId(i);
-         userDao.save(userPlace);
+      for (int i = 0; i < placeIds.length; i++) {
+         UserPlace userPlace = new UserPlace();
+         userPlace.setUserId(userId);
+         userPlace.setPlaceId(placeIds[i]);
+         upDao.save(userPlace);
       }
-
    }
 
    // 需要实现的借口
    @Transactional
    @Override
    public void unsharePlaceToUser(User caller, Long userId, Long placeId) {
-      // TODO Auto-generated method stub
-      UserPlaceDaoIml userPlaceDaoIml = new UserPlaceDaoIml();
-      UserPlace userPlace = new UserPlace();
-      Long id = userPlaceDaoIml.getIdByUserIdPlaceId(userId, placeId);
-      userPlace.setId(id);
-      userPlace.setUserId(userId);
-      userPlace.setPlaceId(placeId);
-      userPlaceDaoIml.delete(userPlace);
+      Long id = upDao.getIdByUserIdPlaceId(userId, placeId);
+      upDao.deleteById(id);
    }
 
    @Override

@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <%@ include file="/common/head.jsp"%>
 <style type="text/css">
-#timesDiv div {
+#placesDiv div {
 	margin-left: 15px;
 }
 </style>
@@ -12,7 +12,7 @@
 	function placeCompare() {
 		dojo.empty("chartNode");
 		var time = dijit.byId("time").attr("value");
-		var placeIdArr = [];		
+		var placeIdArr = [];
 		require([ "dojo/query", "dojo/NodeList-dom" ], function(query) {
 			query("input:checked", "placesDiv").forEach(function(node) {
 				var w = dijit.getEnclosingWidget(node);
@@ -173,19 +173,8 @@
 	}
 </script>
 <script type="text/javascript">
-	require([ "dijit/form/Select" ]);
-	require([ "dojo/ready" ],
-			function(ready) {
-				ready(function() {
-					require([ "dojo/parser", "dijit/form/Select",
-							"dijit/form/Button" ], function(parser, Select,
-							Button) {
-						MySelect = Select;
-						MyButton = Button;
-						parser.parse();
-					});
-				});
-			});
+	require([ "dijit/form/Select", "dijit/form/Button",
+			"dojox/layout/TableContainer", "dijit/layout/ContentPane" ]);
 </script>
 </head>
 <body class="claro">
@@ -195,33 +184,24 @@
 			<a href="${ctx}/admin/envstats/placeCompare">空间分析</a>
 		</c:if>
 	</div>
-	<table border="0">
-		<tr>
-			<td width="10%" align="right">请选择时间:</td>
-			<td align="left"><div id="timeDiv">
-					<select id="time" name="time" data-dojo-type="MySelect"
-						onchange="showAvaPlaces(this.value)">
-						<option value="">请选择</option>
-						<c:forEach var="time" items="${times}">
-							<option value="${time}">${time}</option>
-						</c:forEach>
-					</select>
-				</div></td>
-		</tr>
-		<tr>
-			<td>请选择矿区:</td>
-			<td><div id="placesDiv"></div>
-			</td>
-		</tr>
-		<tr>
-			<td><button data-dojo-type="MyButton" type="button">
-					分析
-					<script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">placeCompare();</script>
-				</button>
-			</td>
-			<td></td>
-		</tr>
-	</table>
+	<div data-dojo-type="dojox.layout.TableContainer"
+		data-dojo-props="cols:1" id="tc1">
+		<select id="time" name="time" data-dojo-type="dijit.form.Select"
+			title="请选择时间:" onchange="showAvaPlaces(this.value)">
+			<option value="">请选择</option>
+			<c:forEach var="time" items="${times}">
+				<option value="${time}">${time}</option>
+			</c:forEach>
+		</select>
+		<div id="placesDiv" data-dojo-type="dijit.layout.ContentPane"
+			title="请选择矿区:"></div>
+	</div>
+	<div>
+		<button data-dojo-type="dijit.form.Button" type="button">
+			分析
+			<script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">placeCompare();</script>
+		</button>
+	</div>
 	<div id="chartNode" style="width: 700px; height: 480px;"></div>
 </body>
 </html>
