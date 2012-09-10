@@ -10,10 +10,10 @@
 </head>
 <body>
 	<div>
-		<p>文件上传失败</p>
+		<h3 color="red">文件上传失败</h3>
 	</div>
 	<div>
-		<a href="${ctx}/admin/place"><img width="50" height="24" alt="返回" src="${ctx}/static/img/butt_search.gif"></a>
+		<a href="${ctx}/admin/place">返回</a>
 	</div>
 </body>
 </html>
