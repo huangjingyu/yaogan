@@ -120,8 +120,8 @@ public class UploadController {
       String filePath = fullPath.substring(fullPath.indexOf(shapeFileHome)
             + shapeFileHome.length() + 1, fullPath.length());
       renameAllFiles(dLandTypeShpfile.getParentFile().getAbsolutePath(), uuidName);
-      yaoganService.saveShapefile(_secMng.currentUser(), region, category,
-            dLandTypeShpfile, filePath, year);
+      yaoganService.saveShapefile(_secMng.currentUser(), region, category, new File(
+            fullPath), filePath, year);
 
    }
 
@@ -161,7 +161,6 @@ public class UploadController {
       String filePath = fullPath.substring(fullPath.indexOf(shapeFileHome)
             + shapeFileHome.length() + 1, fullPath.length());
       yaoganService.saveShapefile(_secMng.currentUser(), region,
-            Shapefile.Category.FILE_HIG_DEF, dLandTypeShpfile, filePath, year);
+            Shapefile.Category.FILE_HIG_DEF, new File(fullPath), filePath, year);
    }
-
 }

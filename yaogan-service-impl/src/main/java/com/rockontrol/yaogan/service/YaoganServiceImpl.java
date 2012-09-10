@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -370,10 +369,9 @@ public class YaoganServiceImpl implements IYaoganService {
    @Override
    public void saveShapefile(User caller, String placeName, Category type, File file,
          String filePath, String time) {
-
+      System.out.println("exists:file-" + file.getAbsolutePath() + "::" + file.exists());
       String wmsUrl = null;
-      // if (!type.equals(Shapefile.Category.FILE_HIG_DEF))
-      // wmsUrl = geoService.publishGeoFile(type, file);
+      wmsUrl = geoService.publishGeoFile(type, file);
       Shapefile shapefile = new Shapefile();
       shapefile.setCategory(type);
       shapefile.setFileName(file.getName());

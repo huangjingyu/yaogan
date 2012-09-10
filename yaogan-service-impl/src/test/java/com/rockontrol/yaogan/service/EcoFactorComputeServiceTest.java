@@ -1,5 +1,7 @@
 package com.rockontrol.yaogan.service;
 
+import java.io.IOException;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.yaogan.gis.mgr.SimpleDataStoreManagerImpl;
@@ -10,40 +12,26 @@ public class EcoFactorComputeServiceTest {
    @Before
    public void prepare() {
       System.setProperty("yaogan.gis.shapefile.home", "f:/shapeFile");
+
       service.setDataStoreManager(new SimpleDataStoreManagerImpl());
    }
 
    @Test
-   public void testComputeAbioWholeRegion() {
-      // try {
-      // double result_2010 = service.computeAbio("平朔", 2010);
-      // double result_2011 = service.computeAbio("平朔", 2011);
-      // System.out.println(result_2010);
-      // System.out.println(result_2011);
-      // } catch (IOException e) {
-      // e.printStackTrace();
-      // }
+   public void testComputeAbioWholeRegion() throws IOException {
+
+      double result = service.computeAbio("shapeFile\\地类\\2010/平朔_地类_2010.shp");
+      System.out.println(result);
    }
 
    @Test
-   public void testComputeAvegWholeRegion() {
-      // try {
-      // double result_2010 = service.computeAveg("平朔", 2010);
-      // double result_2011 = service.computeAveg("平朔", 2011);
-      // System.out.println(result_2010);
-      // System.out.println(result_2011);
-      // } catch (IOException e) {
-      // e.printStackTrace();
-      // }
+   public void testComputeAvegWholeRegion() throws IOException {
+      double result = service.computeAveg("shapeFile\\地类\\2010/平朔_地类_2010.shp");
+      System.out.println(result);
    }
 
    @Test
    public void testComputeAeroWholeRegion() {
-      // try {
-      // double result_2010 = service.computeAero("平朔", 2010);
-      // System.out.println(result_2010);
-      // } catch (IOException e) {
-      // e.printStackTrace();
-      // }
+      // double result = service.computeAsus(fractureFilePath, collapseFilePath,
+      // boundaryFilePath, water_descrement)
    }
 }
