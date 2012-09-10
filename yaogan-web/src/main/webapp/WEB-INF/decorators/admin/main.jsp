@@ -54,9 +54,7 @@
 				<page:applyDecorator name="adminMenu" />
 			</div>
 		</div>
-		<div id="middle2">
-			<decorator:body />
-		</div>
+		<decorator:body />
 		<div class="clear"></div>
 	</div>
 </body>
