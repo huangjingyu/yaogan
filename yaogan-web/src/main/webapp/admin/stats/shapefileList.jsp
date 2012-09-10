@@ -11,15 +11,14 @@
 <body>
 
 
-<div id="middle2">
        <div class="rtlist">
          <div class="map_top">
          <form action="${ctx}/admin/place/fileList" method="post">
            <table cellspacing="0" cellpadding="0" border="0">
              <tbody><tr>
-               <td width="65">矿区名称：</td>
-               <td width="155"><input type="text" size="20" name="place"></input>     </td>
-               <td width="65">年份：</td>
+               <td width="65">地区名称:</td>
+               <td width="155"><input type="text" size="20" name="place"></input></td>
+               <td width="65">拍摄年份:</td>
                <td width="90"><input type="text" size="20" name="shootTime"></input></td>
                <td width="79"><a href="${ctx}/admin/place/fileList"><img width="50" height="24" alt="查询" src="${ctx}/static/img/butt_search.gif"></a></td>
              </tr>
@@ -49,6 +48,5 @@
            </div>
        </div>
         <div class="clear"></div>
-   </div>
 </body>
 </html>
