@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Resource;
+import org.apache.commons.lang.StringUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +17,7 @@ import com.rockontrol.yaogan.dao.IOrganizationDao;
 import com.rockontrol.yaogan.dao.IPlaceDao;
 import com.rockontrol.yaogan.dao.IPlaceParamDao;
 import com.rockontrol.yaogan.dao.IShapefileDao;
+import com.rockontrol.yaogan.dao.IUserDao;
 import com.rockontrol.yaogan.dao.IUserPlaceDao;
 import com.rockontrol.yaogan.model.Organization;
 import com.rockontrol.yaogan.model.Place;
@@ -45,17 +46,19 @@ public class YaoganServiceImpl implements IYaoganService {
    @Autowired
    protected IUserPlaceDao upDao;
 
-   // private IUserDao userDao;
-//   @Resource(name="userPlaceDao")
-//   protected IUserPlaceDao userPlaceDao;
-
-
+   @Autowired
+   private IUserDao userDao;
 
    @Autowired
    private EcoFactorComputeService computeService;
 
    @Autowired
    private GeoService geoService;
+
+   @Override
+   public User getUser(User caller, Long userId) {
+      return userDao.get(userId);
+   }
 
    @Override
    public List<Place> getPlacesOfOrg(User caller, Long orgId) {
@@ -72,11 +75,25 @@ public class YaoganServiceImpl implements IYaoganService {
       return placeDao.getPlaceByName(placeName);
    }
 
-   // 需要实现的借口
    @Override
    public List<Place> getPlacesVisibleToUser(User caller, Long userId) {
-      List<Place> list = this.upDao.getPlacesVisibleToUser(userId);
+      User user = userDao.get(userId);
+      if (user.getIsAdmin()) {
+         return placeDao.getPlacesOfOrg(user.getOrgId());
+      }
+      List<Place> list = upDao.getPlacesVisibleToUser(userId);
       return list;
+   }
+
+   @Override
+   public List<Place> getPlacesVisibleToUser(User caller, Long userId, String time) {
+      if (StringUtils.isEmpty(time))
+         return getPlacesVisibleToUser(caller, userId);
+      User user = userDao.get(userId);
+      if (user.getIsAdmin()) {
+         return shapefileDao.getAvailablePlacesOfOrg(user.getOrgId(), time);
+      }
+      return shapefileDao.getAvailablePlacesOfUser(userId, time);
    }
 
    @Override
@@ -88,37 +105,37 @@ public class YaoganServiceImpl implements IYaoganService {
    }
 
    @Override
+   public List<String> getAvailableTimesForUser(User caller, Long userId) {
+      User user = userDao.get(userId);
+      if (user.getIsAdmin()) {
+         return shapefileDao.getAvailableTimesOfOrg(user.getOrgId());
+      }
+      return shapefileDao.getAvailableTimesOfUser(userId);
+   }
+
+   @Override
    public List<User> getAllUsersOfOrg(User caller, Long orgId) {
       Organization org = orgDao.get(orgId);
       return org == null ? null : org.getEmployees();
    }
 
-   // 需要实现的借口
    @Transactional
    @Override
-   // @Resource(name="user_PlaceDao")
    public void sharePlacesToUser(User caller, Long userId, Long[] placeIds) {
-      UserPlace userPlace = new UserPlace();
-      userPlace.setUserId(userId);
-      for (long i = 0; i < placeIds.length; i++) {
-         userPlace.setPlaceId(i);
-         this.upDao.save(userPlace);
+      for (int i = 0; i < placeIds.length; i++) {
+         UserPlace userPlace = new UserPlace();
+         userPlace.setUserId(userId);
+         userPlace.setPlaceId(placeIds[i]);
+         upDao.save(userPlace);
       }
-
    }
 
    // 需要实现的借口
    @Transactional
    @Override
    public void unsharePlaceToUser(User caller, Long userId, Long placeId) {
-      // TODO Auto-generated method stub
-
-      UserPlace userPlace = new UserPlace();
-      Long id = this.upDao.getIdByUserIdPlaceId(userId, placeId);
-      userPlace.setId(id);
-      userPlace.setUserId(userId);
-      userPlace.setPlaceId(placeId);
-      upDao.delete(userPlace);
+      Long id = upDao.getIdByUserIdPlaceId(userId, placeId);
+      upDao.deleteById(id);
    }
 
    @Override
@@ -391,6 +408,14 @@ public class YaoganServiceImpl implements IYaoganService {
 
    public void setOrgDao(IOrganizationDao orgDao) {
       this.orgDao = orgDao;
+   }
+
+   public IUserPlaceDao getUpDao() {
+      return upDao;
+   }
+
+   public void setUpDao(IUserPlaceDao upDao) {
+      this.upDao = upDao;
    }
 
    public EcoFactorComputeService getComputeService() {

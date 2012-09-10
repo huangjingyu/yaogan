@@ -1,58 +1,54 @@
 package com.rockontrol.yaogan.dao;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.rockontrol.yaogan.BaseTest;
-import com.rockontrol.yaogan.model.Organization;
 import com.rockontrol.yaogan.model.Place;
 import com.rockontrol.yaogan.model.Shapefile;
-import com.rockontrol.yaogan.model.User;
 
-public class ShapefileDaoTest extends BaseTest{
-   private Shapefile shap;
+public class ShapefileDaoTest extends BaseTest {
+
+   private Shapefile sf1;
+   private Shapefile sf2;
+   private Shapefile sf3;
+
    @Before
    public void setUp() {
-     // super.setUp();
-    shap=new Shapefile();
-      shap.setFileName("shapefile");
-      shap.setFilePath("rock");
-      shap.setPlaceId(12l);
-      shap.setWmsUrl("luokejiahua");
-      
-//      Place place=new Place();
-//      place.setName("taiyuan");
-//      Organization orga=new Organization();
-//      orga.setName("guowuyaun");
-//      User user1=new User();
-//     user1.setUserName("pa");
-//     user1.setEmail("1226734725@qq.com");
-//     user1.setPassword("123456");
-//     List<User> list1=new ArrayList<User>();
-//     
-//      orga.setEmployees(list1);
-//      
-//      place.setOrganization(orga);
-      //shap.setPlace(place);
-      shap.setShootTime("2007");
+      super.setUp();
+      sf1 = mockShapefile(place.getId(), "2010");
+      shapefileDao.save(sf1);
+      sf2 = mockShapefile(place.getId(), "2010");
+      shapefileDao.save(sf2);
+      sf3 = mockShapefile(place.getId(), "2011");
+      shapefileDao.save(sf3);
    }
 
    @Test
-   public void testGetUserByName() throws Exception {
-//      User dbUser = userDao.getUserByName(user.getUserName());
-//      assertNotNull(dbUser);
-//      assertEquals(user.getId(), dbUser.getId());
-//      assertEquals(user.getUserName(), dbUser.getUserName());
-      ShapefileDaoImpl shapefiledaoimpl=new ShapefileDaoImpl();
-      //shapefiledaoimpl.getShapefiles(placeId, time)
-     List<String> s= shapefiledaoimpl.getAvailableTimesOfPlace(12l);
-     
+   public void testGetAvailableTimesOfPlace() throws Exception {
+      List<String> list = shapefileDao.getAvailableTimesOfPlace(place.getId());
+      assertEquals(2, list.size());
+      assertEquals("2010", list.get(0));
+      assertEquals("2011", list.get(1));
+   }
+
+   @Test
+   public void testGetAvailablePlacesForTime() throws Exception {
+      List<Place> list = shapefileDao.getAvailablePlacesOfOrg(place.getOrgId(), "2010");
+      assertEquals(1, list.size());
+      assertEquals(place.getId(), list.get(0).getId());
+   }
+
+   @Test
+   public void testGetAvailableTimesOfOrg() throws Exception {
+      List<String> list = shapefileDao.getAvailableTimesOfOrg(org.getId());
+      assertEquals(2, list.size());
+      assertEquals("2011", list.get(0));
+      assertEquals("2010", list.get(1));
    }
 
 }

@@ -25,13 +25,18 @@ public class EnvStatsController {
    @RequestMapping("timeCompare")
    public String timeCompare(Model model) {
       User user = _secMng.currentUser();
-      List<Place> places = null;
-      if (user.getIsAdmin()) {
-         places = _service.getPlacesOfOrg(user, user.getOrgId());
-      } else {
-         places = _service.getPlacesVisibleToUser(user, user.getId());
-      }
+      List<Place> places = _service.getPlacesVisibleToUser(user, user.getId());
+      model.addAttribute("currentUser", user);
       model.addAttribute("places", places);
       return "/share/stats/timeCompare";
+   }
+
+   @RequestMapping("placeCompare")
+   public String placeCompare(Model model) {
+      User user = _secMng.currentUser();
+      List<String> times = _service.getAvailableTimesForUser(user, user.getId());
+      model.addAttribute("times", times);
+      model.addAttribute("currentUser", user);
+      return "/share/stats/placeCompare";
    }
 }
