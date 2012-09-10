@@ -31,7 +31,7 @@ public class UserPlaceDaoImpl extends BaseDaoImpl<UserPlace> implements IUserPla
    public Long getIdByUserIdPlaceId(Long userId, Long placeId) {
       Query query = getSession().createQuery(
             "select up.id from com.rockontrol.yaogan.model.UserPlace as up where up.userId="
-                  + userId + "and" + "up.placeId=" + placeId);
+                  + userId + " and up.placeId=" + placeId);
       Long i = (Long) query.uniqueResult();
       return i;
    }

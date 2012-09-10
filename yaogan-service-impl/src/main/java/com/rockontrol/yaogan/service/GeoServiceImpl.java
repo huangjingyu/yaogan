@@ -81,6 +81,9 @@ public class GeoServiceImpl implements GeoService {
       HttpClient client = null;
       CallContext context = new CallContext();
       context.category = type;
+      if(! geoFile.exists()) {
+         throw new RuntimeException("文件:" + geoFile.getAbsolutePath() + "不存在");
+      }
       try {
          String fileName = geoFile.getName();
          context.fileName = fileName;
