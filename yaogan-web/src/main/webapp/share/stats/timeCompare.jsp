@@ -178,31 +178,33 @@
 </script>
 </head>
 <body class="claro">
-	<div class="middle_tab">
-		<ul class="tabs">
-			<li><a href="${ctx}/admin/envstats/timeCompare" class="current">时间分析</a></li>
-			<li><a href="${ctx}/admin/envstats/placeCompare" class="">空间分析</a></li>
-		</ul>
-		<div data-dojo-type="dojox.layout.TableContainer"
-			data-dojo-props="cols:1" id="tc1">
-			<select id="placeId" name="placeId"
-				data-dojo-type="dijit.form.Select" title="请选择区域:"
-				onchange="showAvaTimes(this.value)">
-				<option value="">请选择</option>
-				<c:forEach var="place" items="${places}">
-					<option value="${place.id}">${place.name}</option>
-				</c:forEach>
-			</select>
-			<div id="timesDiv" data-dojo-type="dijit.layout.ContentPane"
-				title="请选择时间:"></div>
+	<div id="middle2">
+		<div class="middle_tab">
+			<ul class="tabs">
+				<li><a href="${ctx}/admin/envstats/timeCompare" class="current">时间分析</a></li>
+				<li><a href="${ctx}/admin/envstats/placeCompare" class="">空间分析</a></li>
+			</ul>
+			<div data-dojo-type="dojox.layout.TableContainer"
+				data-dojo-props="cols:1" id="tc1">
+				<select id="placeId" name="placeId"
+					data-dojo-type="dijit.form.Select" title="请选择区域:"
+					onchange="showAvaTimes(this.value)">
+					<option value="">请选择</option>
+					<c:forEach var="place" items="${places}">
+						<option value="${place.id}">${place.name}</option>
+					</c:forEach>
+				</select>
+				<div id="timesDiv" data-dojo-type="dijit.layout.ContentPane"
+					title="请选择时间:"></div>
+			</div>
+			<div>
+				<button data-dojo-type="dijit.form.Button" type="button">
+					分析
+					<script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">timeCompare();</script>
+				</button>
+			</div>
+			<div id="chartNode" style="width: 700px; height: 480px;"></div>
 		</div>
-		<div>
-			<button data-dojo-type="dijit.form.Button" type="button">
-				分析
-				<script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">timeCompare();</script>
-			</button>
-		</div>
-		<div id="chartNode" style="width: 700px; height: 480px;"></div>
 	</div>
 </body>
 </html>
