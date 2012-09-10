@@ -47,7 +47,7 @@
 	   }
 	%>
 	<page:applyDecorator name="adminHeader" />
-	<div id="main">
+	<div id="wrap">
 		<div id="left">
 			<div class="left_top">用户操作</div>
 			<div class="left_menu">
