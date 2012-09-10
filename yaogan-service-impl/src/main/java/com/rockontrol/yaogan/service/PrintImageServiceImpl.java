@@ -54,25 +54,30 @@ public class PrintImageServiceImpl implements IPrintImageService {
          throws Exception {
       StringBuilder url = new StringBuilder(
             "http://localhost:8080/geoserver/china/wms?service=WMS&version=1.1.0&request=GetMap");
-      String place = placeDao.get(placeId).getName();
-      url.append("&layers=yaogan:").append(place);
+      // String place = placeDao.get(placeId).getName();
+      url.append("&layers=china:").append("province");
+      // url.append("&layers=yaogan:").append(place);
       url.append("&styles=");
-      double[] bbox = this.getbBox(placeId, time, category);
-      url.append("&bbox=").append(bbox);
+      // double[] bbox = this.getbBox(placeId, time, category);
+      double[] bbox = { 73.44696044921875, 6.318641185760498, 135.08583068847656,
+            53.557926177978516 };
+      url.append("&bbox=").append(bbox[0] + ",").append(bbox[1] + ",")
+            .append(bbox[2] + ",").append(bbox[3]);
       url.append("&width=").append(width);
       url.append("&height=").append(heigth);
       url.append("&srs=WGS84");
       url.append("&format=image%2Fjpeg");
 
-      File file = File.createTempFile("temp", "jpg");
+      File file = File.createTempFile("temp", ".jpg");
       HttpClient client = new DefaultHttpClient();
+      System.out.println(url.toString());
       HttpGet get = new HttpGet(url.toString());
       HttpResponse response = client.execute(get);
       HttpEntity entity = response.getEntity();
       if (entity != null) {
          InputStream in = entity.getContent();
          FileOutputStream out = new FileOutputStream(file);
-         byte[] b = new byte[250];
+         byte[] b = new byte[100];
          int temp = 0;
          while ((temp = in.read(b)) != -1) {
             out.write(b, 0, temp);
@@ -81,6 +86,9 @@ public class PrintImageServiceImpl implements IPrintImageService {
          out.close();
          client.getConnectionManager().shutdown();
       }
+
+      System.out.println("file" + file);
+      System.out.println("img" + img);
       return this.mergeImg(file, img, 64, 190);// TODO
    }
 
@@ -173,9 +181,12 @@ public class PrintImageServiceImpl implements IPrintImageService {
 
    @Override
    public File copyTemplate(String templatePath, String imagePath) throws Exception {
+      System.out.println("templatePath==" + templatePath);
+      System.out.println("imagePath==" + imagePath);
       int read = 0;
       File template = new File(templatePath);
       File image = new File(imagePath);
+      image.createNewFile();
       if (template.exists()) {
          InputStream in = new FileInputStream(template);
          FileOutputStream out = new FileOutputStream(image);

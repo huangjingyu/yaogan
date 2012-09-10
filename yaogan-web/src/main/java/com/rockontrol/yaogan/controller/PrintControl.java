@@ -21,19 +21,34 @@ public class PrintControl {
          @RequestParam("placeId") Long placeId, @RequestParam("time") String time,
          @RequestParam("category") String category) {
       try {
+         // TODO
+         String webRootPath = this.getWebRootPath();
 
-         URI uri = PrintControl.class.getResource("/").toURI();
-         String classPathRoot = uri.toURL().toString();
-         System.out.println(classPathRoot);
-
-         File img = service.copyTemplate("..//" + classPathRoot
-               + "//template//template1.jpg", "..//..//themeImage//temp.jpg");
+         File img = service.copyTemplate(webRootPath + "WEB-INF/template/template1.jpg",
+               webRootPath + "themeImage/temp.jpg");
          service.addComment(img, comment);
          service.addShapeLayer(placeId, time, category, img);
 
       } catch (Exception e) {
          e.printStackTrace();
       }
-      return "redirect:print.jsp";
+      return "redirect:/print.jsp";
+   }
+
+   /**
+    * 带"/"
+    * 
+    * @return
+    * @throws Exception
+    */
+   private String getWebRootPath() throws Exception {
+      URI uri = PrintControl.class.getResource("/").toURI();
+      String webRootPath = uri.toURL().toString();
+      System.out.println(webRootPath);
+      String flag = "WEB-INF";
+      int begin = webRootPath.indexOf("/") + 1;
+      int end = webRootPath.indexOf(flag);
+      webRootPath = webRootPath.substring(begin, end);
+      return webRootPath;
    }
 }
