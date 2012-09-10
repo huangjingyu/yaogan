@@ -15,20 +15,22 @@ import com.rockontrol.yaogan.model.Shapefile;
 public class GeoServiceUtil {
    
    public static final Log log = LogFactory.getLog(GeoServiceUtil.class);
-   
+   /**存放每种地图的样式名称 名称在geoserver中添加*/
    private static Map<Shapefile.Category, String> map = new HashMap<Shapefile.Category, String>();
    
    static {
       /**矿区*/
-      map.put(Shapefile.Category.FILE_REGION_BOUNDARY, "kq");
+      map.put(Shapefile.Category.FILE_REGION_BOUNDARY, "kuangqu");
       /**土地利用*/
-      map.put(Shapefile.Category.FILE_LAND_TYPE, "2010");
+      map.put(Shapefile.Category.FILE_LAND_TYPE, "tudiliyong");
       /**地表塌陷*/
-      map.put(Shapefile.Category.FILE_LAND_COLLAPSE, "dbtx");
+      map.put(Shapefile.Category.FILE_LAND_COLLAPSE, "ditaxian");
       /**地裂缝*/
-      map.put(Shapefile.Category.FILE_LAND_FRACTURE, "dlf");
+      map.put(Shapefile.Category.FILE_LAND_FRACTURE, "diliefeng");
       /**土壤侵蚀*/
-      map.put(Shapefile.Category.FILE_LAND_SOIL, "trqs");
+      map.put(Shapefile.Category.FILE_LAND_SOIL, "turangqinshi");
+      /**高清遥感*/
+      map.put(Shapefile.Category.FILE_HIG_DEF, "TM");
    }
 
    /**
