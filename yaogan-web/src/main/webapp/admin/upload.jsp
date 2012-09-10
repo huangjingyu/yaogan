@@ -26,7 +26,7 @@
 				<table width="100%" border="0" cellspacing="0" cellpadding="0"
 					id="table_two">
 					<tr>
-						<td width="17%"><label>地区：</label></td>
+						<td width="17%"><label>地区名称：</label></td>
 						<td width="83%"><label> <input name="region"
 								type="text" id="textfield" size="30" />
 						</label></td>
