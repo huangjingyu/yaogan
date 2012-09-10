@@ -4,30 +4,39 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="${ctx}/static/css/style.css" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Shapefiles</title>
 </head>
 <body>
-	<div>
-		<form action="${ctx}/admin/place/fileList" method="post">
-			<lable>地区</lable>
-			<input type="text" name="place"></input>
-			<lable>年份</lable>
-			<input type="text" name="shootTime"></input> <input type="submit"
-				value="查询"></input>
-		</form>
-		<div>
-			<a href="${ctx}/admin/upload/form">矿区数据上传</a>
-		</div>
-		<table border="1">
-			<tr>
-				<td>地区名称</td>
-				<td>年份</td>
-				<td>文件类型</td>
-				<td>文件名</td>
-				<td>上传时间</td>
-			</tr>
-			<c:forEach items="${shapefiles}" var="file">
+
+
+<div id="middle2">
+       <div class="rtlist">
+         <div class="map_top">
+         <form action="${ctx}/admin/place/fileList" method="post">
+           <table cellspacing="0" cellpadding="0" border="0">
+             <tbody><tr>
+               <td width="65">矿区名称：</td>
+               <td width="155"><input type="text" size="20" name="place"></input>     </td>
+               <td width="65">年份：</td>
+               <td width="90"><input type="text" size="20" name="shootTime"></input></td>
+               <td width="79"><a href="${ctx}/admin/place/fileList"><img width="50" height="24" alt="查询" src="${ctx}/static/img/butt_search.gif"></a></td>
+             </tr>
+           </tbody></table>
+           </form>
+         </div>
+         <div class="rtnr">
+           <div class="thnr_add"><a href="${ctx}/admin/upload/form">上传新矿区数据</a></div>
+           <table width="100%" cellspacing="0" cellpadding="0" border="0" id="table_one">
+             <tbody><tr>
+               <th width="32%">地区名称</th>
+               <th width="15%">年份</th>
+               <th width="15%">文件类型</th>
+               <th width="15%">文件名</th>
+               <th width="15%">上传时间</th>
+             </tr>
+             <c:forEach items="${shapefiles}" var="file">
 				<tr>
 					<td>${file.place.name}</td>
 					<td>${file.shootTime}</td>
@@ -36,7 +45,10 @@
 					<td>${file.uploadTime}</td>
 				</tr>
 			</c:forEach>
-		</table>
-	</div>
+           </tbody></table>
+           </div>
+       </div>
+        <div class="clear"></div>
+   </div>
 </body>
 </html>

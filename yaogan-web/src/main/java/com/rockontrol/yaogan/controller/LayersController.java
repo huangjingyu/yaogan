@@ -30,7 +30,7 @@ public class LayersController {
    @Autowired
    private ISecurityManager _secMng;
 
-   private final boolean mock = false;
+   private final boolean mock = true;
 
    /**
     * 地图图层展示页面
