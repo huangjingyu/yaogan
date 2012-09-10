@@ -77,13 +77,20 @@
 				data-dojo-type="dijit.form.CheckBox" value="${place.id}" />
 			<label for="sharedPlace${status.index}">${place.name}</label>
 		</c:forEach>
-		<div>
-			<button data-dojo-type="dijit.form.Button" type="button">
-				撤销权限
-				<script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">unsharePlaces();</script>
-			</button>
-		</div>
+		<div style="height: 10px;"></div>
+		<c:if test="${not empty sharedPlaces}">
+			<div>
+				<button data-dojo-type="dijit.form.Button" type="button">
+					撤销权限
+					<script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">unsharePlaces();</script>
+				</button>
+			</div>
+		</c:if>
+		<c:if test="${empty sharedPlaces}">
+		还没有分配任何矿区给此用户
+		</c:if>
 	</div>
+	<br />
 	<div id="toSharePlacesDiv" data-dojo-type="dijit.TitlePane"
 		data-dojo-props="title: '待分配权限矿区'">
 		<c:forEach var="place" items="${toSharePlaces}" varStatus="status">
@@ -91,6 +98,7 @@
 				data-dojo-type="dijit.form.CheckBox" value="${place.id}" />
 			<label for="toSharePlace${status.index}">${place.name}</label>
 		</c:forEach>
+		<div style="height: 10px;"></div>
 		<div>
 			<button data-dojo-type="dijit.form.Button" type="button">
 				分配权限

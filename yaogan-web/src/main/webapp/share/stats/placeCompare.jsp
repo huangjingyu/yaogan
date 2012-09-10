@@ -5,7 +5,7 @@
 <%@ include file="/common/head.jsp"%>
 <style type="text/css">
 #placesDiv div {
-	margin-left: 15px;
+	margin-left: 5px;
 }
 </style>
 <script type="text/javascript">
@@ -178,30 +178,30 @@
 </script>
 </head>
 <body class="claro">
-	<div>
-		<c:if test="${currentUser.isAdmin}">
-			<a href="${ctx}/admin/envstats/timeCompare">时间分析</a>&nbsp;
-			<a href="${ctx}/admin/envstats/placeCompare">空间分析</a>
-		</c:if>
+	<div class="middle_tab">
+		<ul class="tabs">
+			<li><a href="${ctx}/admin/envstats/timeCompare" class="">时间分析</a></li>
+			<li><a href="${ctx}/admin/envstats/placeCompare" class="current">空间分析</a></li>
+		</ul>
+		<div data-dojo-type="dojox.layout.TableContainer"
+			data-dojo-props="cols:1" id="tc1">
+			<select id="time" name="time" data-dojo-type="dijit.form.Select"
+				title="请选择时间:" onchange="showAvaPlaces(this.value)">
+				<option value="">请选择</option>
+				<c:forEach var="time" items="${times}">
+					<option value="${time}">${time}</option>
+				</c:forEach>
+			</select>
+			<div id="placesDiv" data-dojo-type="dijit.layout.ContentPane"
+				title="请选择矿区:"></div>
+		</div>
+		<div>
+			<button data-dojo-type="dijit.form.Button" type="button">
+				分析
+				<script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">placeCompare();</script>
+			</button>
+		</div>
+		<div id="chartNode" style="width: 700px; height: 480px;"></div>
 	</div>
-	<div data-dojo-type="dojox.layout.TableContainer"
-		data-dojo-props="cols:1" id="tc1">
-		<select id="time" name="time" data-dojo-type="dijit.form.Select"
-			title="请选择时间:" onchange="showAvaPlaces(this.value)">
-			<option value="">请选择</option>
-			<c:forEach var="time" items="${times}">
-				<option value="${time}">${time}</option>
-			</c:forEach>
-		</select>
-		<div id="placesDiv" data-dojo-type="dijit.layout.ContentPane"
-			title="请选择矿区:"></div>
-	</div>
-	<div>
-		<button data-dojo-type="dijit.form.Button" type="button">
-			分析
-			<script type="dojo/on" data-dojo-event="click" data-dojo-args="evt">placeCompare();</script>
-		</button>
-	</div>
-	<div id="chartNode" style="width: 700px; height: 480px;"></div>
 </body>
 </html>
