@@ -1,7 +1,12 @@
 package com.rockontrol.yaogan.service;
 
-import com.rockontrol.yaogan.model.User;
+import java.io.File;
 
 public interface IPrintImageService {
-   void addShapeLayer(User caller, Long placeId, String category, String time);
+   File addShapeLayer(Long placeId, String time, String category, File img)
+         throws Exception;
+
+   File addComment(File img, String comment) throws Exception;
+
+   File copyTemplate(String templatePath, String imagePath) throws Exception;
 }
