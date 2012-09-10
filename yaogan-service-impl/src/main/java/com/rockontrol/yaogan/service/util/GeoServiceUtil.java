@@ -30,7 +30,7 @@ public class GeoServiceUtil {
       /**土壤侵蚀*/
       map.put(Shapefile.Category.FILE_LAND_SOIL, "turangqinshi");
       /**高清遥感*/
-     // map.put(Shapefile.Category.FILE_HIG_DEF, "TM");
+      map.put(Shapefile.Category.FILE_HIG_DEF, "TM");
    }
 
    /**

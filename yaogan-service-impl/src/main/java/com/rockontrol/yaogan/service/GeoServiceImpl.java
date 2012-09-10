@@ -584,7 +584,17 @@ public class GeoServiceImpl implements GeoService {
       params.add(linkType);
       params.add(new BasicNameValuePair("tabs:panel:theList:0:content:name", context.storeName));
       params.add(new BasicNameValuePair("tabs:panel:theList:0:content:title", context.storeName));
+      if(SF_ATTR.equals(context.fileAttr)) {
       params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:nativeSRS:srs", "UNKNOWN"));
+      } else {
+         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:nativeSRS:srs", "EPSG:4326"));   
+         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:srsHandling", "REPROJECT_TO_DECLARED")); 
+         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:abstract", "")); 
+         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:keywords:newKeyword", "")); 
+         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:keywords:lang", "")); 
+         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:keywords:vocab", "")); 
+         params.add(new BasicNameValuePair("tabs:panel:theList:1:content:parameters:0:parameterPanel:border:paramValue", ""));
+      }
       params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:declaredSRS:srs", "EPSG:4326"));
       String[] nativeBound = (String[]) context.get(NATIVE_KEY);
       params.add(new BasicNameValuePair(
@@ -619,7 +629,7 @@ public class GeoServiceImpl implements GeoService {
          log.info("未配置样式");
          return null;
       }
-      System.out.println(html);
+
       int startPos = GeoServiceUtil.reverseSearch(html, ">" + style + "</option>", '=');
       if(startPos == -1) {
          log.info("未找到匹配样式");
