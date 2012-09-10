@@ -18,7 +18,7 @@
                 /*二维layer配置*/
                 tdLayer : {
                   wmsUrl : layerGroupWmsUrl,
-                  layerName : "shanxi"
+                  layerName : "shanximap"
                 },
                 /*遥感层名字*/
                 YG_LNAME : "ygLayer",
@@ -87,11 +87,11 @@
                 /*请求的url*/
                 reqUrl: {
                 	/*根据地区选择时间*/
-                	GETTIME : "./getAvailableTime",
+                	GETTIME : "./layers/getAvailableTime",
                 	/*查询地图信息*/
-                	QUERYMAP : "./queryMap",
+                	QUERYMAP : "./layers/queryMap",
                 	/*查询指数信息*/
-                	QUERYSTATS : "./queryEnvStats"
+                	QUERYSTATS : "./layers/queryEnvStats"
                 }                
         };
         
