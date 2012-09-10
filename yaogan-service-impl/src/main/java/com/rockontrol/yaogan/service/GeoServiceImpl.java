@@ -38,6 +38,8 @@ public class GeoServiceImpl implements GeoService {
 
    public static final String WS_KEY = "WS";
    public static final String SHP_FILE_KEY = "SHP_FILE";
+   public static final String LL_KEY = "LL";
+   public static final String NATIVE_KEY = "NATIVE";
    /**
     * geoserver启动的地址
     */
@@ -78,10 +80,10 @@ public class GeoServiceImpl implements GeoService {
    public String publishGeoFile(Shapefile.Category type, File geoFile) {
       HttpClient client = null;
       CallContext context = new CallContext();
+      context.category = type;
       try {
          String fileName = geoFile.getName();
          context.fileName = fileName;
-         int pos = fileName.lastIndexOf('.');
          context.storeName = GeoServiceUtil.getUUID();
          log.info(fileName + ":" + context.storeName);
          /**根据文件后缀判断文件属性*/
@@ -126,13 +128,20 @@ public class GeoServiceImpl implements GeoService {
          context.location = getWebLocation(GeoServiceUtil.search(html, "<form", "?wicket:interface", 0, "\""));
          /** 添加layer */
          addLayer(client, context);
-
+         /**发布layer 主要是添加样式*/
+         if(GeoServiceUtil.getStyle(type) != null) {
+            response = publlishLayer(client, context);
+         }
       } finally {
          if (client != null) {
             client.getConnectionManager().shutdown();
          }
       }
-     return WORKSPACE_NAME + ":" + context.storeName;
+      String[] bounds = (String[]) context.get(NATIVE_KEY);
+      String bound = bounds[0].replace(",", "") + "," + bounds[1].replace(",", "")  + "," + bounds[2].replace(",", "")  + "," + bounds[3].replace(",", "") + "]";
+      String wmsInfo = WORKSPACE_NAME + ":" + context.storeName + "?" + bound;
+      log.info("wmsInfo:" + wmsInfo);
+      return wmsInfo;
    }
 
    /**
@@ -198,6 +207,9 @@ public class GeoServiceImpl implements GeoService {
     */
    private String getWorkspaceId(String html) {
       int idStart = GeoServiceUtil.reverseSearch(html, WORKSPACE_NAME, '=');
+      if(idStart == -1) {
+         throw new RuntimeException("请先创建名称为:" + WORKSPACE_NAME + "的工作空间");
+      }
       return GeoServiceUtil.search(html, null, idStart, 2, "\"");
    }
 
@@ -399,6 +411,7 @@ public class GeoServiceImpl implements GeoService {
          params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:srsHandling", "REPROJECT_TO_DECLARED"));
       }
       String[] nativeBound = getNativeBound(client, context, params);
+      context.put(NATIVE_KEY, nativeBound);
       params.add(new BasicNameValuePair(
             "tabs:panel:theList:0:content:referencingForm:nativeBoundingBox:minX", nativeBound[0]));
       params.add(new BasicNameValuePair(
@@ -408,6 +421,7 @@ public class GeoServiceImpl implements GeoService {
       params.add(new BasicNameValuePair(
             "tabs:panel:theList:0:content:referencingForm:nativeBoundingBox:maxY", nativeBound[3]));
       String[] llBound = getLLBound(client, context, params);
+      context.put(LL_KEY, llBound);
       params.add(new BasicNameValuePair(
             "tabs:panel:theList:0:content:referencingForm:latLonBoundingBox:minX", llBound[0]));
       params.add(new BasicNameValuePair(
@@ -549,6 +563,85 @@ public class GeoServiceImpl implements GeoService {
       return response;
    }
 
+   /**
+    * 发布图层 主要是添加样式
+    * @param client
+    * @param context
+    * @return
+    */
+   public HttpResponse publlishLayer(HttpClient client, CallContext context) {
+      /**打开图层页面*/
+      String location = "?wicket:bookmarkablePage=:org.geoserver.web.data.resource.ResourceConfigurationPage&name=" + context.storeName + "&wsName=" + WORKSPACE_NAME;
+      HttpGet get = new HttpGet(getWebLocation(location));
+      HttpResponse response;
+      response = GisHttpUtil.execute(client, get);
+      String html = GeoServiceUtil.getContent(response);
+      List<NameValuePair> params = new ArrayList<NameValuePair>();
+      BasicNameValuePair linkType = new BasicNameValuePair("tabs:tabs-container:tabs:1:link", "x");
+      params.add(linkType);
+      params.add(new BasicNameValuePair("tabs:panel:theList:0:content:name", context.storeName));
+      params.add(new BasicNameValuePair("tabs:panel:theList:0:content:title", context.storeName));
+      params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:nativeSRS:srs", "UNKNOWN"));
+      params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:declaredSRS:srs", "EPSG:4326"));
+      String[] nativeBound = (String[]) context.get(NATIVE_KEY);
+      params.add(new BasicNameValuePair(
+            "tabs:panel:theList:0:content:referencingForm:nativeBoundingBox:minX", nativeBound[0]));
+      params.add(new BasicNameValuePair(
+            "tabs:panel:theList:0:content:referencingForm:nativeBoundingBox:minY", nativeBound[1]));
+      params.add(new BasicNameValuePair(
+            "tabs:panel:theList:0:content:referencingForm:nativeBoundingBox:maxX", nativeBound[2]));
+      params.add(new BasicNameValuePair(
+            "tabs:panel:theList:0:content:referencingForm:nativeBoundingBox:maxY", nativeBound[3]));
+      String[] llBound = (String[]) context.get(LL_KEY);
+      params.add(new BasicNameValuePair(
+            "tabs:panel:theList:0:content:referencingForm:latLonBoundingBox:minX", llBound[0]));
+      params.add(new BasicNameValuePair(
+            "tabs:panel:theList:0:content:referencingForm:latLonBoundingBox:minY", llBound[1]));
+      params.add(new BasicNameValuePair(
+            "tabs:panel:theList:0:content:referencingForm:latLonBoundingBox:maxX", llBound[2]));
+      params.add(new BasicNameValuePair(
+            "tabs:panel:theList:0:content:referencingForm:latLonBoundingBox:maxY", llBound[3]));
+      String action = GeoServiceUtil.search(html, "<form", "?", 0, "\"");
+      /**点击publish 得到一个重定向地址*/
+      HttpPost post = new HttpPost(getWebLocation(action));
+      response = GisHttpUtil.execute(params, client, post);
+      location = GeoServiceUtil.getLocation(response);
+      /**请求重定向地址 得到页面html*/
+      get = new HttpGet(location);
+      response = GisHttpUtil.execute(client, get);
+      html = GeoServiceUtil.getContent(response);
+      
+      String style = GeoServiceUtil.getStyle(context.category);
+      int startPos = GeoServiceUtil.reverseSearch(html, ">" + style + "</option>", '=');
+      if(startPos == -1) {
+         log.info("未找到匹配样式");
+         return null;
+      }
+      String styleId = GeoServiceUtil.search(html, null, startPos, 2, "\"");
+      List<NameValuePair> styleParams = new ArrayList<NameValuePair>();
+      styleParams.add(new BasicNameValuePair("tabs:panel:theList:3:content:styles:defaultStyle", styleId));
+      String styleAction = GeoServiceUtil.search(html, "tabs:panel:theList:3:content:styles:defaultStyle", "?", 0, "'");
+      post = new HttpPost(getWebLocation(styleAction));
+      post.addHeader("Wicket-Ajax", "true");
+      post.addHeader("Accept", "text/xml");
+      response = GisHttpUtil.execute(styleParams, client, post);
+      String content = GeoServiceUtil.getContent(response);
+      
+      params = new ArrayList<NameValuePair>();
+      params.add(new BasicNameValuePair("save", "x"));
+      params.add(new BasicNameValuePair("tabs:panel:theList:0:content:enabled", "on"));
+      params.add(new BasicNameValuePair("tabs:panel:theList:0:content:advertised", "on"));
+      params.add(new BasicNameValuePair("tabs:panel:theList:2:content:perReqFeaturesBorder:perReqFeatureLimit", "0"));
+      params.add(new BasicNameValuePair("tabs:panel:theList:2:content:maxDecimalsBorder:maxDecimals", "0"));
+      params.add(new BasicNameValuePair("abs:panel:theList:3:content:queryableEnabled", "on"));
+      params.add(new BasicNameValuePair("tabs:panel:theList:3:content:styles:defaultStyle", styleId));
+      params.add(new BasicNameValuePair("tabs:panel:theList:4:content:wms.attribution.width", "0"));
+      params.add(new BasicNameValuePair("tabs:panel:theList:4:content:wms.attribution.height", "0"));
+      action = GeoServiceUtil.search(html, "<form", "?", 0, "\"");
+      post = new HttpPost(getWebLocation(action));
+      response = GisHttpUtil.execute(params, client, post);
+      return response;
+   }
 
 
 

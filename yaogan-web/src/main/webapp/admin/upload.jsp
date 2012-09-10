@@ -18,6 +18,7 @@
 		<label>矿区边界文件</label><input type="file" name="boundary" /> <br/>
 		<label>地塌陷文件</label><input type="file" name="collapse" /> <br/>
 		<label>地裂缝文件</label><input type="file" name="fracture" /> <br/>
+		<label>高清遥感文件</label><input type="file" name="hig_def" /> <br/>
 		<input type="submit" value="提交"/>
 	</form>
 </body>

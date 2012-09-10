@@ -2,6 +2,8 @@ package com.rockontrol.yaogan.service.util;
 
 import java.util.HashMap;
 
+import com.rockontrol.yaogan.model.Shapefile;
+
 /**
  * GeoService调用时的上下文
  * @author liyuliang
@@ -37,6 +39,8 @@ public class CallContext extends HashMap<String, Object> {
     * 新文件名称
     */
    public String newFileName;
+   
+   public Shapefile.Category category;
 
    public CallContext() {
 

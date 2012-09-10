@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -368,14 +370,17 @@ public class YaoganServiceImpl implements IYaoganService {
    @Override
    public void saveShapefile(User caller, String placeName, Category type, File file,
          String filePath, String time) {
-      String wmsUrl = geoService.publishGeoFile(type, file);
+
+      String wmsUrl = null;
+      // if (!type.equals(Shapefile.Category.FILE_HIG_DEF))
+      // wmsUrl = geoService.publishGeoFile(type, file);
       Shapefile shapefile = new Shapefile();
       shapefile.setCategory(type);
       shapefile.setFileName(file.getName());
       shapefile.setShootTime(time);
-      Place place = this.checkAndCreatePlace(caller.getOrgId(), placeName);
+      Place place = this.checkAndCreatePlace(caller, placeName);
       shapefile.setPlaceId(place.getId());
-
+      shapefile.setUploadTime(new Date());
       shapefile.setFilePath(filePath);
       shapefile.setWmsUrl(wmsUrl);
       shapefileDao.save(shapefile);
@@ -431,8 +436,7 @@ public class YaoganServiceImpl implements IYaoganService {
 
    @Override
    public List<Shapefile> getShapefiles(User caller) {
-
-      return null;
+      return this.shapefileDao.getAvailableFilesOfUser(caller.getId());
    }
 
    @Override
@@ -449,7 +453,7 @@ public class YaoganServiceImpl implements IYaoganService {
    @Override
    public void addPlaceParam(User caller, String placeName, String time,
          String paramName, String paramValue) {
-      Place place = this.checkAndCreatePlace(caller.getOrgId(), placeName);
+      Place place = this.checkAndCreatePlace(caller, placeName);
       PlaceParam param = new PlaceParam();
       param.setParamName(paramName);
       param.setParamValue(paramValue);
@@ -458,12 +462,12 @@ public class YaoganServiceImpl implements IYaoganService {
       this.placeParamDao.save(param);
    }
 
-   private Place checkAndCreatePlace(Long orgId, String placeName) {
+   private Place checkAndCreatePlace(User caller, String placeName) {
       Place place = placeDao.getPlaceByName(placeName);
       if (place == null) {
          place = new Place();
          place.setName(placeName);
-         place.setOrgId(orgId);
+         place.setOrgId(caller.getOrgId());
          placeDao.save(place);
       }
       return place;

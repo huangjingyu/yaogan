@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+
+
 @Entity(name = "user_place")
 public class UserPlace {
    private Long id;

@@ -306,9 +306,9 @@
          this.selectOp = $("#selectOp input").val();
          /*调整控件可用性*/
          this.adjustControls();
-         
+         var bounds = R[R.KQ_LNAME].bounds ? R[R.KQ_LNAME].bounds : R.BOUNDS;
          /*将地图调整为边界大小*/
-         this.map.zoomToExtent(R.BOUNDS);
+         this.map.zoomToExtent(bounds);
         };
     })();
     
@@ -351,6 +351,7 @@
     	      /*设置新的当前的专题图层名称*/
     	      for(var i = 0; i < result.length; i++) {
     	    	  R[result[i].type + "Layer"].layerName = result[i].layerName;
+    	    	  R[result[i].type + "Layer"].bounds = result[i].bounds;
     	      }
     	      /*清空现有地图*/
               R.layerMap.map.destroy();
