@@ -272,7 +272,7 @@
          /*创建地图*/
          this.createMap();
         	/*基础图层名称*/
-         this.baseLayerName = $("#mapSelect input[type='radio'][checked='checked']").val() + "Layer";
+         this.baseLayerName = $("#mapSelect input[type='radio']:checked").val() + "Layer";
         	/*添加基础图层*/
          this.addWmsLayer(this.baseLayerName, {isBaseLayer : true});
          
