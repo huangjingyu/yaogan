@@ -2,6 +2,7 @@ package com.rockontrol.yaogan.service;
 
 import java.io.IOException;
 
+//all file path is relative to shapefile home
 public interface EcoFactorComputeService {
    /**
     * 生物丰度指数

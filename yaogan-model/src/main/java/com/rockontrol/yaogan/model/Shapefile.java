@@ -16,17 +16,31 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity(name = "shapefiles")
 @NamedQueries({
       @NamedQuery(name = "Shapefile.getAvailableTimesOfPlace", query = "select distinct shootTime from com.rockontrol.yaogan.model.Shapefile"
             + " where placeId = :placeId"),
+      @NamedQuery(name = "Shapefile.getAvailableTimesOfOrg", query = "select distinct sf.shootTime from com.rockontrol.yaogan.model.Shapefile sf,"
+            + " com.rockontrol.yaogan.model.Place p where sf.placeId = p.id"
+            + " and p.orgId = :orgId order by sf.shootTime desc"),
+      @NamedQuery(name = "Shapefile.getAvailableTimesOfUser", query = "select distinct sf.shootTime from com.rockontrol.yaogan.model.Shapefile sf,"
+            + " com.rockontrol.yaogan.model.UserPlace up where sf.placeId = up.placeId"
+            + " and up.userId = :userId order by sf.shootTime desc"),
       @NamedQuery(name = "Shapefile.getShapefilesByPlaceAndTime", query = "from com.rockontrol.yaogan.model.Shapefile"
             + " where placeId = :placeId and shootTime = :time"),
       @NamedQuery(name = "Shapefile.getShapefileByPTC", query = "from com.rockontrol.yaogan.model.Shapefile "
             + "where placeId = :placeId and shootTime = :time and category = :category"),
       @NamedQuery(name = "Shapefile.getAvailableFilesOfUser", query = "from com.rockontrol.yaogan.model.Shapefile"
-            + " where placeId = :placeId and shootTime = :time") })
+            + " where placeId = :placeId and shootTime = :time"),
+      @NamedQuery(name = "Shapefile.getAvailablePlacesOfOrg", query = "select distinct p from com.rockontrol.yaogan.model.Shapefile sf,"
+            + " com.rockontrol.yaogan.model.Place p where p.id = sf.placeId"
+            + " and sf.shootTime = :time and p.orgId = :orgId"),
+      @NamedQuery(name = "Shapefile.getAvailablePlacesOfUser", query = "select distinct p from com.rockontrol.yaogan.model.Shapefile sf,"
+            + " com.rockontrol.yaogan.model.Place p, com.rockontrol.yaogan.model.UserPlace up"
+            + " where up.placeId = sf.placeId and p.id = up.placeId"
+            + " and sf.shootTime = :time and up.userId = :userId") })
 public class Shapefile {
 
    public enum Category {
@@ -40,7 +54,7 @@ public class Shapefile {
       private final String name;
 
       /**
-       * 类型 前台页面使用的一个标识
+       * 类型 前台页面使用的一个标�
        */
       private final String type;
 
@@ -169,27 +183,13 @@ public class Shapefile {
       return this._uploadTime;
    }
 
-   // just a placeholder
    public void setTypeString(String str) {
-      // nothing to do
    }
 
+   @Transient
    public String getTypeString() {
-      switch (this._category) {
-      case FILE_LAND_COLLAPSE:
-         return "地塌陷";
-      case FILE_LAND_SOIL:
-         return "土壤侵蚀";
-      case FILE_LAND_FRACTURE:
-         return "地裂缝";
-      case FILE_LAND_TYPE:
-         return "地类";
-      case FILE_REGION_BOUNDARY:
-         return "边界";
-      case FILE_HIG_DEF:
-         return "高清遥感";
-      }
-      // will never go to here
-      return "未知";
+      if (this._category == null)
+         return "未知";
+      return _category.getName();
    }
 }

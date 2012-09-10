@@ -81,6 +81,9 @@ public class GeoServiceImpl implements GeoService {
       HttpClient client = null;
       CallContext context = new CallContext();
       context.category = type;
+      if(! geoFile.exists()) {
+         throw new RuntimeException("文件:" + geoFile.getAbsolutePath() + "不存在");
+      }
       try {
          String fileName = geoFile.getName();
          context.fileName = fileName;
@@ -138,7 +141,7 @@ public class GeoServiceImpl implements GeoService {
          }
       }
       String[] bounds = (String[]) context.get(NATIVE_KEY);
-      String bound = bounds[0].replace(",", "") + "," + bounds[1].replace(",", "")  + "," + bounds[2].replace(",", "")  + "," + bounds[3].replace(",", "") + "]";
+      String bound = bounds[0].replace(",", "") + "," + bounds[1].replace(",", "")  + "," + bounds[2].replace(",", "")  + "," + bounds[3].replace(",", "");
       String wmsInfo = WORKSPACE_NAME + ":" + context.storeName + "?" + bound;
       log.info("wmsInfo:" + wmsInfo);
       return wmsInfo;
@@ -581,7 +584,17 @@ public class GeoServiceImpl implements GeoService {
       params.add(linkType);
       params.add(new BasicNameValuePair("tabs:panel:theList:0:content:name", context.storeName));
       params.add(new BasicNameValuePair("tabs:panel:theList:0:content:title", context.storeName));
+      if(SF_ATTR.equals(context.fileAttr)) {
       params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:nativeSRS:srs", "UNKNOWN"));
+      } else {
+         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:nativeSRS:srs", "EPSG:4326"));   
+         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:srsHandling", "REPROJECT_TO_DECLARED")); 
+         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:abstract", "")); 
+         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:keywords:newKeyword", "")); 
+         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:keywords:lang", "")); 
+         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:keywords:vocab", "")); 
+         params.add(new BasicNameValuePair("tabs:panel:theList:1:content:parameters:0:parameterPanel:border:paramValue", ""));
+      }
       params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:declaredSRS:srs", "EPSG:4326"));
       String[] nativeBound = (String[]) context.get(NATIVE_KEY);
       params.add(new BasicNameValuePair(
@@ -612,6 +625,11 @@ public class GeoServiceImpl implements GeoService {
       html = GeoServiceUtil.getContent(response);
       
       String style = GeoServiceUtil.getStyle(context.category);
+      if(style == null) {
+         log.info("未配置样式");
+         return null;
+      }
+
       int startPos = GeoServiceUtil.reverseSearch(html, ">" + style + "</option>", '=');
       if(startPos == -1) {
          log.info("未找到匹配样式");
@@ -631,9 +649,16 @@ public class GeoServiceImpl implements GeoService {
       params.add(new BasicNameValuePair("save", "x"));
       params.add(new BasicNameValuePair("tabs:panel:theList:0:content:enabled", "on"));
       params.add(new BasicNameValuePair("tabs:panel:theList:0:content:advertised", "on"));
-      params.add(new BasicNameValuePair("tabs:panel:theList:2:content:perReqFeaturesBorder:perReqFeatureLimit", "0"));
-      params.add(new BasicNameValuePair("tabs:panel:theList:2:content:maxDecimalsBorder:maxDecimals", "0"));
-      params.add(new BasicNameValuePair("abs:panel:theList:3:content:queryableEnabled", "on"));
+      if(SF_ATTR.equals(context.fileAttr)) {
+         params.add(new BasicNameValuePair("tabs:panel:theList:2:content:perReqFeaturesBorder:perReqFeatureLimit", "0"));
+         params.add(new BasicNameValuePair("tabs:panel:theList:2:content:maxDecimalsBorder:maxDecimals", "0"));
+         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:srsHandling", "FORCE_DECLARED"));
+      } else {
+         params.add(new BasicNameValuePair("tabs:panel:theList:2:content:interpolationMethods:recorder", "nearest+neighbor,bilinear,bicubic"));
+         params.add(new BasicNameValuePair("tabs:panel:theList:2:content:formatPalette:recorder", "Gtopo30,GIF,PNG,JPEG,TIFF,ImageMosaic,GEOTIFF,ArcGrid"));
+         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:srsHandling", "REPROJECT_TO_DECLARED"));
+      }
+      params.add(new BasicNameValuePair("tabs:panel:theList:3:content:queryableEnabled", "on"));
       params.add(new BasicNameValuePair("tabs:panel:theList:3:content:styles:defaultStyle", styleId));
       params.add(new BasicNameValuePair("tabs:panel:theList:4:content:wms.attribution.width", "0"));
       params.add(new BasicNameValuePair("tabs:panel:theList:4:content:wms.attribution.height", "0"));

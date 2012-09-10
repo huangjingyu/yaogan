@@ -65,7 +65,8 @@ public class PrintImageServiceImpl implements IPrintImageService {
             .append(bbox[2] + ",").append(bbox[3]);
       url.append("&width=").append(width);
       url.append("&height=").append(heigth);
-      url.append("&srs=WGS84");
+      // url.append("&srs=WGS84");
+      url.append("&srs=EPSG:4326");
       url.append("&format=image%2Fjpeg");
 
       File file = File.createTempFile("temp", ".jpg");
