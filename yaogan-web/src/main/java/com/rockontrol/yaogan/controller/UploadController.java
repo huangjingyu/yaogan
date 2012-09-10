@@ -56,9 +56,9 @@ public class UploadController {
             yaoganService.addPlaceParam(_secMng.currentUser(), region, region,
                   PlaceParam.GROUND_WATER_DESC, groundWaterDesc);
          }
-      } catch (IOException e) {
+      } catch (Exception e) {
          e.printStackTrace();
-         return "redirect:/admin/place";
+         return "/admin/failed";
       }
 
       return "redirect:/admin/place";
