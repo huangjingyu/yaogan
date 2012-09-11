@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=utf-8"%>
-<%@ include file="/common/includes.jsp"%>
+<%@ include file="/common/tag.jsp"%>
 <%
 String servletPath=request.getServletPath();
 //System.out.println("servletPath=" + servletPath);
