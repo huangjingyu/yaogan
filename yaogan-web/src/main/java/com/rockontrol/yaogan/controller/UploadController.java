@@ -150,13 +150,13 @@ public class UploadController {
       File dLandTypeFile = new File(landTypePath + File.separator + region + "_" + type
             + "_" + year + ".zip");
       File dLandTypeShpfile = new File(landTypePath + File.separator + region + "_"
-            + type + "_" + year + ".img");
+            + type + "_" + year + ".tif");
       file.transferTo(dLandTypeFile);
       unZip(dLandTypeFile);
       dLandTypeFile.delete();
       String uuidName = UUID.randomUUID().toString();
       String fullPath = dLandTypeShpfile.getParentFile().getAbsolutePath()
-            + File.separator + uuidName + ".img";
+            + File.separator + uuidName + ".tif";
       renameAllFiles(dLandTypeShpfile.getParentFile().getAbsolutePath(), uuidName);
       String filePath = fullPath.substring(fullPath.indexOf(shapeFileHome)
             + shapeFileHome.length() + 1, fullPath.length());

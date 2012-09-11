@@ -2,10 +2,12 @@ package com.rockontrol.yaogan.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,11 @@ import com.rockontrol.yaogan.vo.EnvStats;
 
 @Service
 public class YaoganServiceImpl implements IYaoganService {
+   public YaoganServiceImpl() {
+      this.init();
+   }
 
+   private String shapeFileHome = "";
    @Autowired
    protected IPlaceDao placeDao;
 
@@ -182,13 +188,16 @@ public class YaoganServiceImpl implements IYaoganService {
             Category category = shapefile.getCategory();
             switch (category) {
             case FILE_LAND_TYPE:
-               double abio = this.computeService.computeAbio(shapefile.getFilePath());
-               double aveg = this.computeService.computeAveg(shapefile.getFilePath());
+               double abio = this.computeService.computeAbio(this
+                     .combineFullPath(shapefile));
+               double aveg = this.computeService.computeAveg(this
+                     .combineFullPath(shapefile));
                stats.setAbio(abio);
                stats.setAveg(aveg);
                break;
             case FILE_LAND_SOIL:
-               double aero = this.computeService.computeAero(shapefile.getFilePath());
+               double aero = this.computeService.computeAero(this
+                     .combineFullPath(shapefile));
                stats.setAero(aero);
                break;
             case FILE_LAND_FRACTURE:
@@ -230,8 +239,8 @@ public class YaoganServiceImpl implements IYaoganService {
 
       try {
          if (fractureFile != null && collapseFile != null && boundaryFile != null) {
-            double asus = computeService.computeAsus(fractureFile.getFilePath(),
-                  collapseFile.getFilePath(), boundaryFile.getFilePath(),
+            double asus = computeService.computeAsus(this.combineFullPath(fractureFile),
+                  combineFullPath(collapseFile), combineFullPath(boundaryFile),
                   Double.parseDouble(param.getParamValue()));
             stats.setAsus(asus);
          }
@@ -259,15 +268,15 @@ public class YaoganServiceImpl implements IYaoganService {
             Category category = shapefile.getCategory();
             switch (category) {
             case FILE_LAND_TYPE:
-               double abio = this.computeService.computeAbio(shapefile.getFilePath(),
+               double abio = this.computeService.computeAbio(combineFullPath(shapefile),
                      geom_string);
-               double aveg = this.computeService.computeAveg(shapefile.getFilePath(),
+               double aveg = this.computeService.computeAveg(combineFullPath(shapefile),
                      geom_string);
                stats.setAbio(abio);
                stats.setAveg(aveg);
                break;
             case FILE_LAND_SOIL:
-               double aero = this.computeService.computeAero(shapefile.getFilePath(),
+               double aero = this.computeService.computeAero(combineFullPath(shapefile),
                      geom_string);
                stats.setAero(aero);
                break;
@@ -314,9 +323,9 @@ public class YaoganServiceImpl implements IYaoganService {
 
       try {
          if (fractureFile != null && collapseFile != null && boundaryFile != null) {
-            double asus = computeService.computeAsus(fractureFile.getFilePath(),
-                  collapseFile.getFilePath(), boundaryFile.getFilePath(), geom_string,
-                  Double.parseDouble(param.getParamValue()));
+            double asus = computeService.computeAsus(combineFullPath(fractureFile),
+                  combineFullPath(collapseFile), combineFullPath(boundaryFile),
+                  geom_string, Double.parseDouble(param.getParamValue()));
             stats.setAsus(asus);
          }
       } catch (IOException e) {
@@ -369,9 +378,7 @@ public class YaoganServiceImpl implements IYaoganService {
    @Override
    public void saveShapefile(User caller, String placeName, Category type, File file,
          String filePath, String time) {
-      System.out.println("exists:file-" + file.getAbsolutePath() + "::" + file.exists());
-      String wmsUrl = null;
-      wmsUrl = geoService.publishGeoFile(type, file);
+      String wmsUrl = geoService.publishGeoFile(type, file);
       Shapefile shapefile = new Shapefile();
       shapefile.setCategory(type);
       shapefile.setFileName(file.getName());
@@ -470,4 +477,27 @@ public class YaoganServiceImpl implements IYaoganService {
       }
       return place;
    }
+
+   private void init() {
+      InputStream is = YaoganServiceImpl.class
+            .getResourceAsStream("/config/ShapeFileStore.properties");
+      Properties props = new Properties();
+      try {
+         props.load(is);
+         this.shapeFileHome = props.getProperty("yaogan.gis.shapefile.home");
+         if (shapeFileHome.endsWith("/") || shapeFileHome.endsWith("\\"))
+            shapeFileHome = shapeFileHome.substring(0, shapeFileHome.length() - 1);
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
+   }
+
+   private String combineFullPath(Shapefile file) {
+      String repath = file.getFilePath();
+      if (repath.startsWith("\\") || repath.startsWith("/"))
+         repath = repath.substring(1);
+      String path = shapeFileHome + File.separator + repath;
+      return path;
+   }
+
 }
