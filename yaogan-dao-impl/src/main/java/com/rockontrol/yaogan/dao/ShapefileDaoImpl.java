@@ -94,7 +94,7 @@ public class ShapefileDaoImpl extends BaseDaoImpl<Shapefile> implements IShapefi
    @Override
    public List<Shapefile> getShapefilesOfOrg(Long orgId, Long placeId, String time) {
       String hql = "select file from com.rockontrol.yaogan.model.Shapefile file "
-            + ",com.rockontrol.yaogan.model.Place p where file.placeId=:placeId and p.orgId=:orgId and file.placeId=p.id "
+            + ",com.rockontrol.yaogan.model.Place p where file.placeId=:placeId and file.placeId=p.id and p.orgId=:orgId "
             + " and file.shootTime=:time";
 
       Query query = getSession().createQuery(hql);

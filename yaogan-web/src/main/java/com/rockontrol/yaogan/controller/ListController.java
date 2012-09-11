@@ -44,7 +44,8 @@ public class ListController {
       List<Shapefile> list = new ArrayList<Shapefile>();
       if (place != null && shootTime != null) {
          if (caller.getIsAdmin()) {
-            _service.getShapefileOfOrg(caller.getOrgId(), place.getId(), shootTime);
+            list = _service.getShapefileOfOrg(caller.getOrgId(), place.getId(),
+                  shootTime);
          } else {
             list = _service.getShapefiles(caller, place.getId(), shootTime);
          }
