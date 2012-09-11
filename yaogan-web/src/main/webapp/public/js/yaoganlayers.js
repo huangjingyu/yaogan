@@ -339,8 +339,13 @@
     		  return;
     	  }
     	  $.getJSON(R.reqUrl.QUERYMAP + "?placeId=" + placeId + "&time=" + time, function(result) {
+    		  if(result == null) {
+    			  alert("地图查询失败");
+    			  return;
+    		  }
     		  if(result.length == 0) {
     			  alert("目前没有该地区和日期的数据");
+    			  return;
     		  }
     		  /*重新设置当前地图的placeId和time*/
     		  R.layerMap.placeId = placeId;
@@ -446,6 +451,9 @@
    var queryPlaceData = function(placeId,time) {
 	   $.getJSON(R.reqUrl.QUERYSTATS + "?placeId=" + placeId + "&time=" + time, function(result) {
 		   $("#placeData span").empty();
+		   if(result == null) {
+			   return;
+		   }
 		   if($("#queryType input[name='swfd']").attr("checked") == "checked") {
 			   $("#plcswfd").text(result.abio);
 		   }
@@ -466,6 +474,10 @@
     */
    var queryAreaData = function(placeId,time,geometry) {
 	   $.getJSON(R.reqUrl.QUERYSTATS + "?placeId=" + placeId + "&time=" + time + "&" + geometry, function(result) {
+		   if(result == null) {
+			   alert("未查询到相关指数");
+			   return;
+		   }
 		   $("#areaData span").empty();
 		   if($("#queryType input[name='swfd']").attr("checked") == "checked") {
 			   $("#areaswfd").text(result.abio);
@@ -492,12 +504,14 @@
 	   }
 	   var features = R.layerMap[R.SELECT_LNAME].selectedFeatures;
 	   if(features.length > 1) {
-		   alert("目前仅支持单个图形查询");
+		   alert("目前仅支持单个区域查询");
 		   return;
 	   }
 	   var geometry = "";
 	   if(features.length > 0) {
 		   geometry = "geometry=" + features[0].geometry;
+	   } else {
+		   alert("请先选择区域");
 	   }
 	   queryAreaData(placeId,time,geometry);
   
