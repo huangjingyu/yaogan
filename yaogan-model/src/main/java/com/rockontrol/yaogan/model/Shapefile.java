@@ -30,6 +30,10 @@ import javax.persistence.Transient;
             + " and up.userId = :userId order by sf.shootTime desc"),
       @NamedQuery(name = "Shapefile.getShapefilesByPlaceAndTime", query = "from com.rockontrol.yaogan.model.Shapefile"
             + " where placeId = :placeId and shootTime = :time"),
+      @NamedQuery(name = "Shapefile.getShapefileByPTC", query = "from com.rockontrol.yaogan.model.Shapefile "
+            + "where placeId = :placeId and shootTime = :time and category = :category"),
+      @NamedQuery(name = "Shapefile.getAvailableFilesOfUser", query = "from com.rockontrol.yaogan.model.Shapefile"
+            + " where placeId = :placeId and shootTime = :time"),
       @NamedQuery(name = "Shapefile.getAvailablePlacesOfOrg", query = "select distinct p from com.rockontrol.yaogan.model.Shapefile sf,"
             + " com.rockontrol.yaogan.model.Place p where p.id = sf.placeId"
             + " and sf.shootTime = :time and p.orgId = :orgId"),

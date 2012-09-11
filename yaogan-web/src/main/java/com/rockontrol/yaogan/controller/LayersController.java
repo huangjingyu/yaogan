@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +25,8 @@ import com.rockontrol.yaogan.vo.EnvStats;
 @Controller
 @RequestMapping(value = { "/admin", "/user" })
 public class LayersController {
+   
+   public static final Log log = LogFactory.getLog(LayersController.class);
 
    @Autowired
    private IYaoganService _yaoganService;
@@ -30,7 +34,7 @@ public class LayersController {
    @Autowired
    private ISecurityManager _secMng;
 
-   private final boolean mock = true;
+   private final boolean mock = false;
 
    /**
     * 地图图层展示页面
@@ -87,19 +91,24 @@ public class LayersController {
          @RequestParam("time") String time) {
       List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
       if (!mock) {
-         User user = _secMng.currentUser();
-         List<Shapefile> fileList = _yaoganService.getShapefiles(user, placeId, time);
-         for (Shapefile file : fileList) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("type", file.getCategory().getType());
-            String wmsInfo = file.getWmsUrl();
-            String[] infos = wmsInfo.split("\\?");
-            map.put("layerName", infos[0]);
-            String[] bs = infos[1].split(",");
-            double[] bounds = { Double.parseDouble(bs[0]), Double.parseDouble(bs[1]),
-                  Double.parseDouble(bs[2]), Double.parseDouble(bs[3]) };
-            map.put("bounds", bounds);
-            list.add(map);
+         try {
+            User user = _secMng.currentUser();
+            List<Shapefile> fileList = _yaoganService.getShapefiles(user, placeId, time);
+            for (Shapefile file : fileList) {
+               Map<String, Object> map = new HashMap<String, Object>();
+               map.put("type", file.getCategory().getType());
+               String wmsInfo = file.getWmsUrl();
+               String[] infos = wmsInfo.split("\\?");
+               map.put("layerName", infos[0]);
+               String[] bs = infos[1].split(",");
+               double[] bounds = { Double.parseDouble(bs[0]), Double.parseDouble(bs[1]),
+                     Double.parseDouble(bs[2]), Double.parseDouble(bs[3]) };
+               map.put("bounds", bounds);
+               list.add(map);
+            } 
+         } catch(Exception e) {
+            log.error(e.getMessage(), e);
+            return null;
          }
       } else {
          double[] bounds = { 112.28644133876368, 39.41956384236653, 112.46459523013785,
@@ -145,11 +154,16 @@ public class LayersController {
          @RequestParam("time") String time,
          @RequestParam(required = false, value = "geometry") String geometry) {
       if (!mock) {
-         User user = _secMng.currentUser();
-         if (geometry == null) {
-            return _yaoganService.getEnvStats(user, placeId, time);
-         } else {
-            return _yaoganService.getEnvStats(user, placeId, time, geometry);
+         try {
+            User user = _secMng.currentUser();
+            if (geometry == null) {
+               return _yaoganService.getEnvStats(user, placeId, time);
+            } else {
+               return _yaoganService.getEnvStats(user, placeId, time, geometry);
+            }
+         } catch(Exception e) {
+            log.error(e.getMessage(), e);
+            return null;
          }
       } else {
          EnvStats envStats = new EnvStats();

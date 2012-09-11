@@ -22,7 +22,7 @@ public class GeoServiceTest {
    public void testLogin() {
       GeoService service = context.getBean(GeoService.class);
 
-      service.publishGeoFile(Shapefile.Category.FILE_LAND_TYPE, new File(
-            "E:/testfile/groundcrack2011.shp"));
+      service.publishGeoFile(Shapefile.Category.FILE_HIG_DEF, new File(
+            "E:/testfile/TM2010.tif"));
    }
 }

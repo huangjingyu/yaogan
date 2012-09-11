@@ -25,8 +25,8 @@ public class GisHttpUtil {
       ThreadSafeClientConnManager manager = new ThreadSafeClientConnManager();
       manager.setDefaultMaxPerRoute(20);
       DefaultHttpClient client = new DefaultHttpClient(manager);
-//      HttpHost proxy = new HttpHost("127.0.0.1", 8080);
-//      client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+      //HttpHost proxy = new HttpHost("127.0.0.1", 8080);
+      //client.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
       HttpClientParams.setCookiePolicy(client.getParams(),
             CookiePolicy.BROWSER_COMPATIBILITY);
       return client;

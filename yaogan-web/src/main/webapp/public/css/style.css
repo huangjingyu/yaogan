@@ -1,3 +1,4 @@
+/* 全局定义 */
 *{padding:0; margin:0; list-style:none; font-family:Verdana}
 a:link,a:visited{color:#4e4e4e;text-decoration:none;}
 a:hover,a:active{color:#000;text-decoration:none;}
@@ -6,19 +7,23 @@ img{ border:0}
 .clear {clear: both;}
 a:focus { outline:0}
 
+/* ie6 hack */
 #header_ya{ _width:expression((document.documentElement.clientWidth||document.body.clientWidth)<980?"980px":"")}
 #left{ _height:expression((document.documentElement.clientHeight||document.body.clientHeight)<700?"700px":"") }
 #right{ _height:expression((document.documentElement.clientHeight||document.body.clientHeight)<700?"700px":"")}
 #middle{ _width:expression((document.documentElement.clientWidth||document.body.clientWidth)<550?"550px":"")}
 #warp{  _width:expression((document.documentElement.clientWidth||document.body.clientWidth)<980?"980px":"")}
 
+/* 头部 */
 #header_ya{ height:77px; background:url(../img/header_bg.gif) repeat-x top; padding-left:20px; min-width:980px;}
 #logo{ width:240px; height:71px; float:left; }
 #header_right{ height:71px; margin-left:240px}
 
 
+/* 主体 */
 #warp{ background-color:#c8dfc5; padding:10px; min-width:980px }
 
+/* 左侧布局 */
 #left{ width:196px;float:left; background:#f7f7f7; border:1px solid #a6bfaa; min-height:700px; }
 .left_top { height:35px;background:url(../img/menu_top_bg.gif) repeat-x top; font-weight:bold; line-height:30px; padding-left:10px;}
 .left_user{ width:194px; height:92px; padding-top:20px; background:url(../img/left_user_bg.gif) no-repeat;}
@@ -35,8 +40,10 @@ a:focus { outline:0}
 .left_menu li a:hover{ color:#13927d}
 .left_menu li a:visited{ color:#13927d}
 
+/* 中间+右侧主体 */
 #main{ margin-left:210px; min-width:760px;}
 
+/* 右侧布局 */
 #right{width:200px;float:right; background:#fff; border-left: #a6bfaa 1px solid; border-right: #a6bfaa 1px solid; border-bottom: #a6bfaa 1px solid;min-height:700px;}
 .right_top { height:35px;background:url(../img/menu_top_bg.gif) repeat-x top; font-weight:bold; line-height:30px; padding-left:10px;border-top: #a6bfaa 1px solid}
 .message { width:180px; float:left; padding-left:10px; padding-bottom:40px;}
@@ -47,6 +54,7 @@ a:focus { outline:0}
 .message li span{ color:#1f8eec; font-weight:bold}
 
 
+/* 中间布局 */
 #middle{margin:0 214px 0 210px; min-width:550px;}
 #middle2{margin:0 0 0 210px; min-width:550px;}
 .map{height:638px;background:#fff; border-right: #a6bfaa 1px solid; border-bottom: #a6bfaa 1px solid;border-left: #a6bfaa 1px solid }
@@ -62,6 +70,7 @@ a:focus { outline:0}
 .thnr_add {float:right; padding:0 0 0 20px; background:url(../img/add.gif) no-repeat left center; height:25px; line-height:25px }
 
 
+/* 中间TAB */
 .middle_tab{ margin-bottom:10px}
 .tabs {border-bottom:1px solid #666;height:30px;}
 .tabs li {float:left}
@@ -71,6 +80,7 @@ a:focus { outline:0}
 .pane{display:none;padding:15px 10px;border:1px solid #999;border-top:0;height:100px; background-color:#fff;}
 
 
+/* 表格样式 */
 #table_one{ border-top: #929292 1px solid;border-left: #c8c8c8 1px solid;border-bottom: #c8c8c8 1px solid; background-color:#FFFFFF}
 #table_one td{ border-right: #c8c8c8 1px solid;border-top: #c8c8c8 1px solid; text-align:center; font-size:12px; padding:5px;}
 #table_one td img{ padding:0 3px}
@@ -84,6 +94,9 @@ a:focus { outline:0}
 #table_two td img{ padding:0 2px 0 5px;}
 #table_two th{ border-right: #c8c8c8 1px solid; background:url(../img/table_title_bg.gif) repeat-x top; text-align:left;font-size:12px;color:#0b5d9a;height:28px}
 #table_two tr{ height:20px}
+
+
+/*翻页*/
 
 DIV.quotes {
 	TEXT-ALIGN: center;
