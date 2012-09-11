@@ -4,9 +4,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Insert title here</title>
+<title>专题图预览</title>
 </head>
-<body>
-<img alt="加载中" src="/yaogan-web/static/themeImage/temp.jpg">
+<body><center>
+<img alt="生成失败" src="/yaogan-web/static/themeImage/temp.jpg">
+</center>
 </body>
 </html>

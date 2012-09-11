@@ -11,6 +11,6 @@
 	<br />
 	<a href="home.jsp">home</a>
 	<br />
-	<a href="shapefile/print?comment=hello&placeId=1&time=1989&category= FILE_LAND_TYPE">打印</a>
+	<a href="shapefile/print?comment=China&placeId=1&time=1989&category= FILE_LAND_TYPE">打印</a>
 </body>
 </html>
