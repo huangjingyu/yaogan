@@ -68,10 +68,10 @@
      <div id="queryType" style="margin-left:10px"> 
      <table><tr><td>
         <input type="checkbox" name="swfd" checked="checked"/>生物丰度
-        <input type="checkbox" name="zbfg" checked="checked"/>植被覆盖
+        <input type="checkbox" name="zbfg" checked="checked"/>植被覆盖<br/>
         <input type="checkbox" name="tdth" checked="checked"/>土地退回
         <input type="checkbox" name="dzhj" checked="checked"/>地质环境
-        </td><td>
+        </td></tr><tr><td>
         <a href="#"><img id="queryData" src="<%=request.getContextPath()%>/static/img/butt_search.gif" alt="查询" width="50" height="24" style="display:block; margin:0 auto;"/></a>
      </td></tr></table>
      </div>

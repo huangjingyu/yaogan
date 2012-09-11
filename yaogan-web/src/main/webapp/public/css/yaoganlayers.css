@@ -2,7 +2,7 @@
             #map {
                 clear: both;
                 position: relative;
-                width: 735px;
+                width: 670px;
                 height: 512px;
                 border: 1px solid black;
                 background: #FFFFFF;
@@ -21,7 +21,7 @@
             }
             
             #rightDiv {
-               width:370px;
+               width:160px;
                float:right;
                background:#fff; 
                border-left: #a6bfaa 1px solid; 
