@@ -120,10 +120,9 @@
                      transparent : (option && option.transparent) ? option.transparent : false
                     };
           /*选项*/
-          var options =  {
+          var options =  {singleTile: true,
         		          /*是否是基础层*/
         		          isBaseLayer : (option && option.isBaseLayer) ? option.isBaseLayer : false}; 
-
              /*name,url,param,options*/
           var layer = new OpenLayers.Layer.WMS(name, R[name].wmsUrl, param, options);
           return layer;    
@@ -278,17 +277,17 @@
          
         	/*专题图层名称*/
         	var spcLayerNames = this.spcLayerNames = [];
-        	$("#mapSelect input[type='checkbox'][checked='checked']").each(function(){
+        	$("#mapSelect input[type='checkbox']:checked").each(function(){
         		spcLayerNames[spcLayerNames.length] = $(this).val() + "Layer";
         	});
         	/*叠加各专题图层*/
         	for(var i = 0; i < spcLayerNames.length; i++) {
-        		if(! R.spcLayerNames[i].layerName) {
+        		if(! R[spcLayerNames[i]].layerName) {
         			continue;
         		}
         		this.addWmsLayer(spcLayerNames[i], {transparent : true});
                 /*如果是矿区图 则需要添加getFeature控件*/
-                if(R.KQ_LNAME == layerName) {
+                if(R.KQ_LNAME == spcLayerNames[i]) {
                    this.addGfControl();
                    /*如果是导航模式 则激活控件*/
                    if(R.layerMap.selectOp == R.selectOp.NAV) {
