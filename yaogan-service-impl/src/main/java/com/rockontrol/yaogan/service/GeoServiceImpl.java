@@ -133,15 +133,13 @@ public class GeoServiceImpl implements GeoService {
                "?wicket:interface", 0, "\""));
          /** 添加layer */
          addLayer(client, context);
-<<<<<<< HEAD
          /** 发布layer 主要是添加样式 */
          if (GeoServiceUtil.getStyle(type) != null) {
             response = publlishLayer(client, context);
-=======
-         /**发布layer 主要是添加样式*/
-         if(GeoServiceUtil.getStyle(type) != null) {
-            //response = publlishLayer(client, context);
->>>>>>> 001a221c4c84a1957dbd14360747398213f15063
+
+            /** 发布layer 主要是添加样式 */
+            // if(GeoServiceUtil.getStyle(type) != null) {
+            // //response = publlishLayer(client, context);
          }
       } finally {
          if (client != null) {
@@ -717,7 +715,7 @@ public class GeoServiceImpl implements GeoService {
       params.add(new BasicNameValuePair("save", "x"));
       params.add(new BasicNameValuePair("tabs:panel:theList:0:content:enabled", "on"));
       params.add(new BasicNameValuePair("tabs:panel:theList:0:content:advertised", "on"));
-<<<<<<< HEAD
+
       if (SF_ATTR.equals(context.fileAttr)) {
          params.add(new BasicNameValuePair(
                "tabs:panel:theList:2:content:perReqFeaturesBorder:perReqFeatureLimit",
@@ -727,11 +725,15 @@ public class GeoServiceImpl implements GeoService {
          params.add(new BasicNameValuePair(
                "tabs:panel:theList:0:content:referencingForm:srsHandling",
                "FORCE_DECLARED"));
-=======
-      if(SF_ATTR.equals(context.fileAttr)) {
-         params.add(new BasicNameValuePair("tabs:panel:theList:2:content:perReqFeaturesBorder:perReqFeatureLimit", "0"));
-         params.add(new BasicNameValuePair("tabs:panel:theList:2:content:maxDecimalsBorder:maxDecimals", "0"));
->>>>>>> 001a221c4c84a1957dbd14360747398213f15063
+
+         // if(SF_ATTR.equals(context.fileAttr)) {
+         // params.add(new
+         // BasicNameValuePair("tabs:panel:theList:2:content:perReqFeaturesBorder:perReqFeatureLimit",
+         // "0"));
+         // params.add(new
+         // BasicNameValuePair("tabs:panel:theList:2:content:maxDecimalsBorder:maxDecimals",
+         // "0"));
+
       } else {
          params.add(new BasicNameValuePair(
                "tabs:panel:theList:2:content:interpolationMethods:recorder",
