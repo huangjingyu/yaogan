@@ -18,6 +18,7 @@
                background:#fff;
                float : left;
                min-height : 700px;
+               margin-right:10px;
             }
             
             #rightDiv {
