@@ -15,14 +15,12 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
-import org.springframework.stereotype.Service;
 
 import com.rockontrol.yaogan.model.Shapefile;
 import com.rockontrol.yaogan.service.util.CallContext;
 import com.rockontrol.yaogan.service.util.GeoServiceUtil;
 import com.rockontrol.yaogan.service.util.GisHttpUtil;
 
-@Service
 public class GeoServiceImpl implements GeoService {
 
    public static final String SERVER_BASE = "http://localhost:8888/geoserver";
