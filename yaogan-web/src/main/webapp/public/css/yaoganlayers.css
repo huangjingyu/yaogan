@@ -2,9 +2,10 @@
             #map {
                 clear: both;
                 position: relative;
-                width: 698px;
+                width: 735px;
                 height: 512px;
                 border: 1px solid black;
+                background: #FFFFFF;
             }
             /*坐标信息*/
             #location {
@@ -14,12 +15,20 @@
             
             /*控制左右div水平排放*/
             #leftDiv {
+               background:#fff;
                float : left;
-               margin-right : 20px
+               min-height : 700px
             }
             
             #rightDiv {
-               padding-top : 70px;
+               width:370px;
+               float:right;
+               background:#fff; 
+               border-left: #a6bfaa 1px solid; 
+               border-right: #a6bfaa 1px solid; 
+               border-bottom: #a6bfaa 1px solid;
+               min-height:700px;
+               margin-right : 10px;
             }
             
             #kqSelect {

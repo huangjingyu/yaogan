@@ -358,6 +358,8 @@
               $("#map").empty();
               /*渲染新的地图*/
               R.layerMap.init();
+              /*查询专题数据*/
+              queryPlaceData(R.layerMap.placeId,R.layerMap.time);
     	  });
       });
       
@@ -438,6 +440,47 @@
           selectLayer.removeAllFeatures();
         }
    });  
+   /**
+    * 查询整个矿区数据
+    * */
+   var queryPlaceData = function(placeId,time) {
+	   $.getJSON(R.reqUrl.QUERYSTATS + "?placeId=" + placeId + "&time=" + time, function(result) {
+		   $("#placeData span").empty();
+		   if($("#queryType input[name='swfd']").attr("checked") == "checked") {
+			   $("#plcswfd").text(result.abio);
+		   }
+		   if($("#queryType input[name='zbfg']").attr("checked") == "checked") {
+			   $("#plczbfg").text(result.aveg);
+		   }
+		   if($("#queryType input[name='tdth']").attr("checked") == "checked") {
+			   $("#plctdth").text(result.aero);
+		   }
+		   if($("#queryType input[name='dzhj']").attr("checked") == "checked") {
+			   $("#plcdzhj").text(result.asus);
+		   }		   
+	   });	 
+   };
+   
+   /**
+    * 查询地区数据
+    */
+   var queryAreaData = function(placeId,time,geometry) {
+	   $.getJSON(R.reqUrl.QUERYSTATS + "?placeId=" + placeId + "&time=" + time + "&" + geometry, function(result) {
+		   $("#areaData span").empty();
+		   if($("#queryType input[name='swfd']").attr("checked") == "checked") {
+			   $("#areaswfd").text(result.abio);
+		   }
+		   if($("#queryType input[name='zbfg']").attr("checked") == "checked") {
+			   $("#areazbfg").text(result.aveg);
+		   }
+		   if($("#queryType input[name='tdth']").attr("checked") == "checked") {
+			   $("#areatdth").text(result.aero);
+		   }
+		   if($("#queryType input[name='dzhj']").attr("checked") == "checked") {
+			   $("#areadzhj").text(result.asus);
+		   }		   
+	   });	 
+   };
    
    /**查询结果按钮点击*/
    $("#queryData").bind("click", function() {
@@ -456,18 +499,8 @@
 	   if(features.length > 0) {
 		   geometry = "geometry=" + features[0].geometry;
 	   }
-	   $("#content").empty();
-	   $.getJSON(R.reqUrl.QUERYSTATS + "?placeId=" + placeId + "&time=" + time + "&" + geometry, function(result) {
-		   if($("#queryType input[name='swfd']").attr("checked") == "checked") {
-			   $("#content").append("生物丰度指数:" + result.abio + "<br/>");
-		   }
-		   if($("#queryType input[name='zbfg']").attr("checked") == "checked") {
-			   $("#content").append("植被覆盖指数:" + result.aveg + "<br/>");
-		   }
-		   if($("#queryType input[name='tdth']").attr("checked") == "checked") {
-			   $("#content").append("土地退化指数:" + result.aero + "<br/>");
-		   }		   
-	   });	   
+	   queryAreaData(placeId,time,geometry);
+  
    });
    
    /**页面装载完毕后对地图进行初始化*/
