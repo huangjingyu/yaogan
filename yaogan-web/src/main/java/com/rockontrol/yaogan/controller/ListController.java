@@ -1,5 +1,6 @@
 package com.rockontrol.yaogan.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +37,11 @@ public class ListController {
          @RequestParam("shootTime") String shootTime) {
       Place place = _service.getPlaceByName(placeName);
       User caller = _secMgr.currentUser();
+      List<Shapefile> list = new ArrayList<Shapefile>();
       if (place != null) {
-         _service.getShapefiles(caller, place.getId(), shootTime);
+         list = _service.getShapefiles(caller, place.getId(), shootTime);
       }
+      model.addAttribute("shapefiles", list);
       return "/admin/stats/shapefileList";
 
    }
