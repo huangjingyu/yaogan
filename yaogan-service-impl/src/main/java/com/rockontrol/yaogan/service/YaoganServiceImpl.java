@@ -424,6 +424,18 @@ public class YaoganServiceImpl implements IYaoganService {
       this.placeParamDao.save(param);
    }
 
+   @Override
+   public List<Shapefile> getShapefilesOfOrg(Long orgId) {
+
+      return this.shapefileDao.getShapefilesOfOrg(orgId);
+   }
+
+   @Override
+   public List<Shapefile> getShapefileOfOrg(Long orgId, Long placeId, String time) {
+
+      return this.shapefileDao.getShapefilesOfOrg(orgId, placeId, time);
+   }
+
    private Place checkAndCreatePlace(User caller, String placeName) {
       Place place = placeDao.getPlaceByName(placeName);
       if (place == null) {

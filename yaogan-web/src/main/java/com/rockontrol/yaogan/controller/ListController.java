@@ -27,7 +27,11 @@ public class ListController {
    @RequestMapping(value = "", method = { RequestMethod.GET, RequestMethod.POST })
    public String list(Model model) {
       User caller = _secMgr.currentUser();
-      List<Shapefile> list = _service.getShapefiles(caller);
+      List<Shapefile> list = new ArrayList();
+      if (caller.getIsAdmin())
+         list = _service.getShapefilesOfOrg(caller.getOrgId());
+      else
+         list = _service.getShapefiles(caller);
       model.addAttribute("shapefiles", list);
       return "/admin/stats/shapefileList";
    }
@@ -38,8 +42,12 @@ public class ListController {
       Place place = _service.getPlaceByName(placeName);
       User caller = _secMgr.currentUser();
       List<Shapefile> list = new ArrayList<Shapefile>();
-      if (place != null) {
-         list = _service.getShapefiles(caller, place.getId(), shootTime);
+      if (place != null && shootTime != null) {
+         if (caller.getIsAdmin()) {
+            _service.getShapefileOfOrg(caller.getOrgId(), place.getId(), shootTime);
+         } else {
+            list = _service.getShapefiles(caller, place.getId(), shootTime);
+         }
       }
       model.addAttribute("shapefiles", list);
       return "/admin/stats/shapefileList";
