@@ -182,9 +182,10 @@
 		<div class="rtlist">
 			<div class="middle_tab">
 				<ul class="tabs">
-					<li><a href="${ctx}/admin/envstats/timeCompare" class="">时间分析</a></li>
-					<li><a href="${ctx}/admin/envstats/placeCompare"
-						class="current">空间分析</a></li>
+					<li><a href="timeCompare" class="">时间分析</a>
+					</li>
+					<li><a href="placeCompare" class="current">空间分析</a>
+					</li>
 				</ul>
 				<div data-dojo-type="dojox.layout.TableContainer"
 					data-dojo-props="cols:1" id="tc1">
