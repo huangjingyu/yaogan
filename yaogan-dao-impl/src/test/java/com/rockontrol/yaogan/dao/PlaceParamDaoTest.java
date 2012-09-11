@@ -38,6 +38,10 @@ public class PlaceParamDaoTest extends BaseTest {
       Assert.assertNotNull(param);
    }
 
+   @Test
+   public void testDelete() {
+      placeParamDao.deleteParam("平朔", "2010", PlaceParam.GROUND_WATER_DESC);
+   }
    // @After
    // public void clean() {
    // placeParamDao.remove(myParam);

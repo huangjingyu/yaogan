@@ -211,34 +211,15 @@ public class YaoganServiceImpl implements IYaoganService {
                break;
 
             }
-            // if (category.equals(Shapefile.Category.FILE_LAND_TYPE)) {
-            // double abio =
-            // this.computeService.computeAbio(shapefile.getFilePath());
-            // double aveg =
-            // this.computeService.computeAveg(shapefile.getFilePath());
-            // stats.setAbio(abio);
-            // stats.setAveg(aveg);
-            // } else if (category.equals(Shapefile.Category.FILE_LAND_SOIL)) {
-            // double aero =
-            // this.computeService.computeAero(shapefile.getFilePath());
-            // stats.setAero(aero);
-            // } else if
-            // (category.equals(Shapefile.Category.FILE_LAND_FRACTURE)) {
-            // fractureFile = shapefile;
-            // } else if
-            // (category.equals(Shapefile.Category.FILE_LAND_COLLAPSE)) {
-            // collapseFile = shapefile;
-            // } else if
-            // (category.equals(Shapefile.Category.FILE_REGION_BOUNDARY)) {
-            // boundaryFile = shapefile;
-            // }
+
          }
       } catch (IOException e) {
          e.printStackTrace();
       }
 
       try {
-         if (fractureFile != null && collapseFile != null && boundaryFile != null) {
+         if (fractureFile != null && collapseFile != null && boundaryFile != null
+               && param != null) {
             double asus = computeService.computeAsus(this.combineFullPath(fractureFile),
                   combineFullPath(collapseFile), combineFullPath(boundaryFile),
                   Double.parseDouble(param.getParamValue()));
@@ -292,30 +273,6 @@ public class YaoganServiceImpl implements IYaoganService {
 
             }
 
-            // if (category.equals(Shapefile.Category.FILE_LAND_TYPE)) {
-            // double abio =
-            // this.computeService.computeAbio(shapefile.getFilePath(),
-            // geom_string);
-            // double aveg =
-            // this.computeService.computeAveg(shapefile.getFilePath(),
-            // geom_string);
-            // stats.setAbio(abio);
-            // stats.setAveg(aveg);
-            // } else if (category.equals(Shapefile.Category.FILE_LAND_SOIL)) {
-            // double aero =
-            // this.computeService.computeAero(shapefile.getFilePath(),
-            // geom_string);
-            // stats.setAero(aero);
-            // } else if
-            // (category.equals(Shapefile.Category.FILE_LAND_FRACTURE)) {
-            // fractureFile = shapefile;
-            // } else if
-            // (category.equals(Shapefile.Category.FILE_LAND_COLLAPSE)) {
-            // collapseFile = shapefile;
-            // } else if
-            // (category.equals(Shapefile.Category.FILE_REGION_BOUNDARY)) {
-            // boundaryFile = shapefile;
-            // }
          }
       } catch (IOException e) {
          e.printStackTrace();

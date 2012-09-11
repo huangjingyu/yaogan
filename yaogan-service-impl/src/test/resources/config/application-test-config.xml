@@ -20,7 +20,7 @@
     class="org.springframework.jdbc.datasource.DriverManagerDataSource">
     <property name="driverClassName" value="org.postgresql.Driver" />
     <property name="url"
-      value="jdbc:postgresql://192.168.1.71:5432/yaogan_test" />
+      value="jdbc:postgresql://192.168.1.71:5432/yaogan" />
     <property name="username" value="postgres" />
     <property name="password" value="postgres" />
   </bean>

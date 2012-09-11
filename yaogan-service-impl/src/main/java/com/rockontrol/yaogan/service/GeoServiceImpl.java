@@ -586,6 +586,7 @@ public class GeoServiceImpl implements GeoService {
       params.add(new BasicNameValuePair("tabs:panel:theList:0:content:title", context.storeName));
       if(SF_ATTR.equals(context.fileAttr)) {
       params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:nativeSRS:srs", "UNKNOWN"));
+      params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:srsHandling", "FORCE_DECLARED"));
       } else {
          params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:nativeSRS:srs", "EPSG:4326"));   
          params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:srsHandling", "REPROJECT_TO_DECLARED")); 
@@ -644,7 +645,8 @@ public class GeoServiceImpl implements GeoService {
       post.addHeader("Accept", "text/xml");
       response = GisHttpUtil.execute(styleParams, client, post);
       String content = GeoServiceUtil.getContent(response);
-      
+      HttpGet picGet = new HttpGet(this.serverBase + "/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&STRICT=false&style=kuangqu");
+      GisHttpUtil.execute(client, picGet);
       params = new ArrayList<NameValuePair>();
       params.add(new BasicNameValuePair("save", "x"));
       params.add(new BasicNameValuePair("tabs:panel:theList:0:content:enabled", "on"));
@@ -652,7 +654,6 @@ public class GeoServiceImpl implements GeoService {
       if(SF_ATTR.equals(context.fileAttr)) {
          params.add(new BasicNameValuePair("tabs:panel:theList:2:content:perReqFeaturesBorder:perReqFeatureLimit", "0"));
          params.add(new BasicNameValuePair("tabs:panel:theList:2:content:maxDecimalsBorder:maxDecimals", "0"));
-         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:srsHandling", "FORCE_DECLARED"));
       } else {
          params.add(new BasicNameValuePair("tabs:panel:theList:2:content:interpolationMethods:recorder", "nearest+neighbor,bilinear,bicubic"));
          params.add(new BasicNameValuePair("tabs:panel:theList:2:content:formatPalette:recorder", "Gtopo30,GIF,PNG,JPEG,TIFF,ImageMosaic,GEOTIFF,ArcGrid"));

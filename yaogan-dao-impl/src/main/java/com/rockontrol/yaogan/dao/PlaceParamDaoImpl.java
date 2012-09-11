@@ -35,16 +35,11 @@ public class PlaceParamDaoImpl extends BaseDaoImpl<PlaceParam> implements IPlace
    public PlaceParam getPlaceParam(String placeName, String time, String paramName) {
       Query query = getSession()
             .createQuery(
-                  "from com.rockontrol.yaogan.model.PlaceParam where placeId=:placeName and time=:time and paramName=:paramName");
+                  "select p_param from com.rockontrol.yaogan.model.PlaceParam p_param ,com.rockontrol.yaogan.model.Place p where p.name=:placeName and p.id=p_param.placeId and p_param.time=:time and p_param.paramName=:paramName");
       query.setString("placeName", placeName);
       query.setString("time", time);
       query.setString("paramName", paramName);
-      PlaceParam param = null;
-      try {
-         param = (PlaceParam) query.uniqueResult();
-      } catch (Exception e) {
-         e.printStackTrace();
-      }
+      PlaceParam param = (PlaceParam) query.uniqueResult();
       return param;
 
    }
