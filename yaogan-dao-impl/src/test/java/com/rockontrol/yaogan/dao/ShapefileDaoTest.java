@@ -17,6 +17,7 @@ public class ShapefileDaoTest extends BaseTest {
    private Shapefile sf2;
    private Shapefile sf3;
 
+   @Override
    @Before
    public void setUp() {
       super.setUp();
@@ -51,4 +52,9 @@ public class ShapefileDaoTest extends BaseTest {
       assertEquals("2010", list.get(1));
    }
 
+   @Test
+   public void testGetShapefileOfOrg() {
+      shapefileDao.getShapefilesOfOrg(org.getId());
+      shapefileDao.getShapefilesOfOrg(org.getId(), sf3.getPlaceId(), "2011");
+   }
 }
