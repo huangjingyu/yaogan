@@ -25,7 +25,7 @@ public class PrintControl {
          String webRootPath = this.getWebRootPath();
 
          File img = service.copyTemplate(webRootPath + "WEB-INF/template/template1.jpg",
-               webRootPath + "themeImage/temp.jpg");
+               webRootPath + "public/themeImage/temp.jpg");
          service.addComment(img, comment);
          service.addShapeLayer(placeId, time, category, img);
 

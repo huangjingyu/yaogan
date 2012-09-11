@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<img alt="加载中" src="/themeImage/">
+<img alt="加载中" src="/yaogan-web/static/themeImage/temp.jpg">
 </body>
 </html>

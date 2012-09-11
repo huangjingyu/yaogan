@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=utf-8"%>
-<%@ page import="com.rockontrol.aries.portals.util.Functions"%>
-<%@ page import="com.rockontrol.aries.portals.model.User"%>
+<%@ page import=" com.rockontrol.yaogan.util.Functions"%>
+<%@ page import="com.rockontrol.yaogan.model.User"%>
 <%@ include file="/common/includes.jsp"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <%

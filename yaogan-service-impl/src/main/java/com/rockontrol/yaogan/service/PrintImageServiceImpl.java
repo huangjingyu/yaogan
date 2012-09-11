@@ -46,8 +46,8 @@ public class PrintImageServiceImpl implements IPrintImageService {
    /**
     * width 插入shapefile的宽 height 插入shapefile的高 //TODO
     */
-   private double width = 656;
-   private double heigth = 875;
+   private int width = 656;
+   private int heigth = 875;
 
    @Override
    public File addShapeLayer(Long placeId, String time, String category, File img)
@@ -90,7 +90,7 @@ public class PrintImageServiceImpl implements IPrintImageService {
 
       System.out.println("file" + file);
       System.out.println("img" + img);
-      return this.mergeImg(file, img, 64, 190);// TODO
+      return this.mergeImg(img, file, 64, 190);// TODO
    }
 
    @Override
@@ -103,7 +103,7 @@ public class PrintImageServiceImpl implements IPrintImageService {
       // 设置字体
       g.setFont(new Font("宋体", Font.LAYOUT_LEFT_TO_RIGHT, 50));
       // 写入签名 TODO
-      g.drawString(comment, 404, 44);
+      g.drawString(comment, 404, 85);
       g.dispose();
       FileOutputStream out = new FileOutputStream(img);
       ImageIO.write(image, "JPEG", out);
