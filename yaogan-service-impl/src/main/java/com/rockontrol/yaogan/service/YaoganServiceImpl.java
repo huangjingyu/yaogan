@@ -57,7 +57,7 @@ public class YaoganServiceImpl implements IYaoganService {
    @Autowired
    private EcoFactorComputeService computeService;
 
-   // @Autowired
+   @Autowired
    private GeoService geoService;
 
    @Override
