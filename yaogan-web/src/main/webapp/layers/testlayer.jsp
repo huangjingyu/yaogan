@@ -45,7 +45,7 @@ vertical-align: middle;
 #map {
 clear: both;
 position: relative;
-width: 398px;
+width: 360px;
 height: 512px;
 border: 1px solid black;
 }
@@ -61,39 +61,28 @@ var untiled;
 function init(){
 format = 'image/png';
 var bounds = new OpenLayers.Bounds(
-		37428758.96201212, 3828315.2563775433,
-        37826351.11229358, 4517940.277902247
-);
+        110.220484, 34.582452,
+        114.552878, 40.741043
+     );
 var options = {
 maxExtent: bounds,
-projection: "EPSG:2413",
+projection: "EPSG:4326"
 };
 map = new OpenLayers.Map('map', options);
-// setup single tiled layer
-untiled = new OpenLayers.Layer.WMS(
-"test:psbj - Untiled", "http://www.rockloudtest.com:80/geoserver/test/wms",
-{
-LAYERS: 'test:psbj',
-STYLES: '',
-format: format
-},
-{
-isBaseLayer: true,
-}
-);
 /*参数*/
-var param =  {LAYERS : 'shanxi',
+var param =  {LAYERS : 'shanximap',
            style : '',
            format : 'image/png'
           };
 /*选项*/
-var options =  {
-           buffer: 0,
-           displayOutsideMaxExtent: true,
-           isBaseLayer: true
-       }; 
+var options =                      {
+        singleTile: true, 
+        ratio: 1, 
+        isBaseLayer: true,
+        yx : {'EPSG:4326' : true}
+     } ; 
    /*name,url,param,options*/
-var layer = new OpenLayers.Layer.WMS("tdLayer", "http://www.rockloudtest.com/geoserver/wms", param, options);
+var layer = new OpenLayers.Layer.WMS("tdLayer", "/geoserver/wms", param, options);
 map.addLayers([layer]);
 map.addControl(new OpenLayers.Control.PanZoomBar({
     position: new OpenLayers.Pixel(2, 28)
@@ -106,10 +95,6 @@ map.addControl(new OpenLayers.Control.MousePosition({element: $('location')}));
 //map.addControl(new OpenLayers.Control.Navigation());
 map.zoomToExtent(bounds);
 }
-
-function remove() {
-	map.removeLayer("tdLayer");
-}
 </script>
 </head>
 <body onload="init()">
@@ -120,6 +105,5 @@ function remove() {
 <div id="scale">
 </div>
 </div>
-<input type="button" onclick="remove()"/>
 </body>
 </html> 
