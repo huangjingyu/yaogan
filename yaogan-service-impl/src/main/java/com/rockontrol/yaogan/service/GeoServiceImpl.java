@@ -133,7 +133,7 @@ public class GeoServiceImpl implements GeoService {
          addLayer(client, context);
          /**发布layer 主要是添加样式*/
          if(GeoServiceUtil.getStyle(type) != null) {
-            response = publlishLayer(client, context);
+            //response = publlishLayer(client, context);
          }
       } finally {
          if (client != null) {
@@ -652,7 +652,6 @@ public class GeoServiceImpl implements GeoService {
       if(SF_ATTR.equals(context.fileAttr)) {
          params.add(new BasicNameValuePair("tabs:panel:theList:2:content:perReqFeaturesBorder:perReqFeatureLimit", "0"));
          params.add(new BasicNameValuePair("tabs:panel:theList:2:content:maxDecimalsBorder:maxDecimals", "0"));
-         params.add(new BasicNameValuePair("tabs:panel:theList:0:content:referencingForm:srsHandling", "FORCE_DECLARED"));
       } else {
          params.add(new BasicNameValuePair("tabs:panel:theList:2:content:interpolationMethods:recorder", "nearest+neighbor,bilinear,bicubic"));
          params.add(new BasicNameValuePair("tabs:panel:theList:2:content:formatPalette:recorder", "Gtopo30,GIF,PNG,JPEG,TIFF,ImageMosaic,GEOTIFF,ArcGrid"));
