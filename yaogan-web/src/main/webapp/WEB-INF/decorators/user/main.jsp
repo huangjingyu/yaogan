@@ -2,7 +2,7 @@
 
 <%@ page import="com.rockontrol.yaogan.util.Functions"%>
 <%@ page import="com.rockontrol.yaogan.model.User"%>
-<%@ include file="/includes.jsp"%>
+<%@ include file="/common/includes.jsp"%>
 <%@ include file="/common/tag.jsp"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <%@taglib prefix="decorator"

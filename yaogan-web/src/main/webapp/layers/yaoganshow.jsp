@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/includes.jsp"%>
+<%@ include file="/common/includes.jsp"%>
+<script type="text/javascript">
+function print(){
+	var url="<%=request.getContextPath()%>/user/print?placeId=1&time=&category=";
+	window.location.href = url;
+}
+</script>
    <!-- 左边 -->
       <div id="leftDiv">
         <div class="map_top">
@@ -60,7 +66,7 @@
        <input type="button" value="清除所选" name="rm" id="rm"/>
        <input type="button" value="清除全部" name="rmAll" id="rmAll"/>
        </div>
-      <div class="map_bottom" style=""><a href="#"><img src="<%=request.getContextPath()%>/static/img/butt_creatimg.jpg" width="132" height="39" /></a></div>       
+      <div class="map_bottom" style=""><img src="<%=request.getContextPath()%>/static/img/butt_creatimg.jpg" width="132" height="39" onclick="print()"/></div>       
     </div>
     <!-- 右边 -->
      <div id="rightDiv">

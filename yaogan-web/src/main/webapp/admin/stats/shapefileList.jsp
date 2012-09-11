@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
-<%@ include file="/includes.jsp"%>
+<%@ include file="/common/includes.jsp"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
 <head>
