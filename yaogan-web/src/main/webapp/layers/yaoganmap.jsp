@@ -19,7 +19,7 @@
                </select>
                </td>
                <td>
-                   <a href="#"  id="thematicMapLink"><img id="queryMap" src="<%=request.getContextPath()%>/static/img/butt_search.gif" alt="查询" width="50" height="24" style="display:block; margin:0 auto"/></a>
+                   <a href="#"><img id="queryMap" src="<%=request.getContextPath()%>/static/img/butt_search.gif" alt="查询" width="50" height="24" style="display:block; margin:0 auto"/></a>
                </td>
              </tr>
            </table></div>
@@ -53,18 +53,14 @@
        <input type="radio" value="nav" checked="checked" name="op"/>导航
        <input type="radio" value="box" name="op"/>区域绘制
        <input type="radio" value="pyn" name="op"/>多边形绘制
-       <input type="radio" value="select" name="op"/>区块选择
-       <input type="button" value="清除所选" name="rm" id="rm"/>
-       <input type="button" value="清除全部" name="rmAll" id="rmAll"/>
        </div>
       </div>
       
-      <div class="rmbutt"><a href="#" id="thematicMapLink"><img src="<%=request.getContextPath()%>/static/img/butt_creatimg.jpg" width="132" height="39" /></a></div>
+      <div class="rmbutt"><a href="#"  id="thematicMapLink"><img src="<%=request.getContextPath()%>/static/img/butt_creatimg.jpg" width="132" height="39" /></a></div>
     </div>
    <div id="rightd">      
    <div id="right">
     <div class="right_top">地图信息</div>
-    <div> <a href="#"><img id="queryData" src="<%=request.getContextPath()%>/static/img/butt_search.gif" alt="查询" width="50" height="24" style="display:block; margin:0 auto;"/></a></div>
     <div id="placeData" class="message">
      <h2>矿区信息</h2>
      <ul>
