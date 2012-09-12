@@ -1,5 +1,6 @@
 package com.rockontrol.yaogan.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -8,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -15,11 +17,12 @@ import javax.persistence.Transient;
 
 @SuppressWarnings("serial")
 @Entity(name = "users")
-public class User extends BaseEntity {
+public class User implements Serializable {
    public enum Role {
       ROLE_ADMIN, ROLE_USER
    }
 
+   private Long id;
    private Long orgId;
    private String userName;
    private String password;
@@ -29,6 +32,16 @@ public class User extends BaseEntity {
    private String mobile;
    private Organization organization;
    private List<UserPlace> userPlaces;
+
+   @Id
+   @Column(name = "id")
+   public Long getId() {
+      return id;
+   }
+
+   public void setId(Long id) {
+      this.id = id;
+   }
 
    @Column(name = "org_id")
    public Long getOrgId() {

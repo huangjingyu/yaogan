@@ -17,7 +17,7 @@ public class HomeController {
    @RequestMapping("/")
    public String home() {
       User user = _secMng.currentUser();
-      if (user != null && user.getIsAdmin()) {
+      if (user != null && user.getIsAdmin().booleanValue()) {
          return "redirect:" + GlobalConfig.getProperties().getString("homepage.admin");
       } else {
          return "redirect:" + GlobalConfig.getProperties().getString("homepage.user");

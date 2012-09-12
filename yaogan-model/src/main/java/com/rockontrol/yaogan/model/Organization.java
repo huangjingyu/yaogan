@@ -1,23 +1,35 @@
 package com.rockontrol.yaogan.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @SuppressWarnings("serial")
 @Entity
-public class Organization extends BaseEntity {
-
+public class Organization implements Serializable {
+   private Long id;
    private String name;
    private String contactEmail;
    private String postCode;
    private String address;
    private List<User> employees;
    private List<Place> places;
+
+   @Id
+   @Column(name = "id")
+   public Long getId() {
+      return id;
+   }
+
+   public void setId(Long id) {
+      this.id = id;
+   }
 
    @Column(length = 128)
    public String getName() {
