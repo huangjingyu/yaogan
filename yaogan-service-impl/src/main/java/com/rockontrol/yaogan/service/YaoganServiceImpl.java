@@ -334,11 +334,11 @@ public class YaoganServiceImpl implements IYaoganService {
 
    @Override
    public void saveShapefile(User caller, String placeName, Category type, File file,
-         String filePath, String time) {
+         String filePath, String origionFileName, String time) {
       String wmsUrl = geoService.publishGeoFile(type, file);
       Shapefile shapefile = new Shapefile();
       shapefile.setCategory(type);
-      shapefile.setFileName(file.getName());
+      shapefile.setFileName(origionFileName);
       shapefile.setShootTime(time);
       Place place = this.checkAndCreatePlace(caller, placeName);
       shapefile.setPlaceId(place.getId());

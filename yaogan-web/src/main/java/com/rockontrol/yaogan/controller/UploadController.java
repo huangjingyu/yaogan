@@ -1,6 +1,7 @@
 package com.rockontrol.yaogan.controller;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.UUID;
@@ -76,9 +77,23 @@ public class UploadController {
          file.mkdirs();
    }
 
-   private void unZip(File file) throws IOException {
+   /**
+    * unzip and return origion shape file name
+    * 
+    * @param file
+    * @return
+    * @throws IOException
+    */
+   private String unZipAndGetFileName(File file) throws IOException {
       CompressUtil.unZip(file, file.getParentFile().getAbsolutePath(),
             Charset.forName("gbk"));
+      String names[] = file.getParentFile().list(new FilenameFilter() {
+         @Override
+         public boolean accept(File dir, String name) {
+            return name.endsWith(".shp") || name.endsWith(".tif");
+         }
+      });
+      return names[0];
    }
 
    private void processShapefile(MultipartFile file, String type, String year,
@@ -94,10 +109,10 @@ public class UploadController {
       checkPath(landTypePath);
       File dLandTypeFile = new File(landTypePath + File.separator + region + "_" + type
             + "_" + year + ".zip");
-      File dLandTypeShpfile = new File(landTypePath + File.separator + region + "_"
-            + type + "_" + year + ".shp");
+
       file.transferTo(dLandTypeFile);
-      unZip(dLandTypeFile);
+      String shapeFileName = unZipAndGetFileName(dLandTypeFile);
+      File dLandTypeShpfile = new File(landTypePath + File.separator + shapeFileName);
       dLandTypeFile.delete();
 
       Category category = null;
@@ -121,7 +136,7 @@ public class UploadController {
             + shapeFileHome.length() + 1, fullPath.length());
       renameAllFiles(dLandTypeShpfile.getParentFile().getAbsolutePath(), uuidName);
       yaoganService.saveShapefile(_secMng.currentUser(), region, category, new File(
-            fullPath), filePath, year);
+            fullPath), filePath, shapeFileName, year);
 
    }
 
@@ -149,10 +164,9 @@ public class UploadController {
       checkPath(landTypePath);
       File dLandTypeFile = new File(landTypePath + File.separator + region + "_" + type
             + "_" + year + ".zip");
-      File dLandTypeShpfile = new File(landTypePath + File.separator + region + "_"
-            + type + "_" + year + ".tif");
       file.transferTo(dLandTypeFile);
-      unZip(dLandTypeFile);
+      String tifFileName = unZipAndGetFileName(dLandTypeFile);
+      File dLandTypeShpfile = new File(landTypePath + File.separator + tifFileName);
       dLandTypeFile.delete();
       String uuidName = UUID.randomUUID().toString();
       String fullPath = dLandTypeShpfile.getParentFile().getAbsolutePath()
@@ -161,6 +175,7 @@ public class UploadController {
       String filePath = fullPath.substring(fullPath.indexOf(shapeFileHome)
             + shapeFileHome.length() + 1, fullPath.length());
       yaoganService.saveShapefile(_secMng.currentUser(), region,
-            Shapefile.Category.FILE_HIG_DEF, new File(fullPath), filePath, year);
+            Shapefile.Category.FILE_HIG_DEF, new File(fullPath), filePath, tifFileName,
+            year);
    }
 }
