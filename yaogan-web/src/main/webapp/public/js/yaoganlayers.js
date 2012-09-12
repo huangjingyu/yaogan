@@ -302,8 +302,9 @@
         	  this[name] = layer;
            this.addLayer(layer);
         };
-        /**添加元素添加事件*/
-        this.addFeatureAddEvent = function() {
+        /**元素选择事件*/
+        this.addFeatureEvent = function() {
+        	/*元素添加事件*/
         	this[R.SELECT_LNAME].events.register("featureadded", this, function(event) {
         		var layer = event.object;
         		var feature = event.feature;
@@ -321,6 +322,15 @@
         			R.queryAreaData(placeId, time, geometry, feature);
         		}
         	});
+        	/*元素移除事件*/
+        	this[R.SELECT_LNAME].events.register("featureremoved", this, function(event) {
+        		if(event.feature.popup) {
+        		  R.layerMap.map.removePopup(R.popup);
+       		      R.popup.destroy();
+       		      event.feature.popup == null;
+        		}
+        	});
+        	
         };
         };
         R.layerMap = new R.Layers();
@@ -357,8 +367,9 @@
      		   if(R.popup) {
      		      R.layerMap.map.removePopup(R.popup);
      		      R.popup.destroy();
+     		      feature.popup = null;
      		   }
-     		   R.popup = new OpenLayers.Popup.FramedCloud("chicken", feature.geometry.getBounds().getCenterLonLat(),
+     		   feature.popup=R.popup = new OpenLayers.Popup.FramedCloud("chicken", feature.geometry.getBounds().getCenterLonLat(),
      				 null, $("#areaData ul").html(), null, true, null); 
      		   R.layerMap.map.addPopup(R.popup);
      	   });	
@@ -396,8 +407,8 @@
         	
          /*添加选择图层*/
          this.addVectorLayer(R.SELECT_LNAME);   
-         /*添加选择事件*/
-         this.addFeatureAddEvent();
+         /*元素选择事件*/
+         this.addFeatureEvent();
          /*添加控件*/
          this.addControls();
          
