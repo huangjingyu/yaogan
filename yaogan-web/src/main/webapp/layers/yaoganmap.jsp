@@ -19,7 +19,7 @@
                </select>
                </td>
                <td>
-                   <a href="#"><img id="queryMap" src="<%=request.getContextPath()%>/static/img/butt_search.gif" alt="查询" width="50" height="24" style="display:block; margin:0 auto"/></a>
+                   <a href="#"  id="thematicMapLink"><img id="queryMap" src="<%=request.getContextPath()%>/static/img/butt_search.gif" alt="查询" width="50" height="24" style="display:block; margin:0 auto"/></a>
                </td>
              </tr>
            </table></div>
