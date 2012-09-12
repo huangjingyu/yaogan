@@ -1,7 +1,9 @@
 package com.rockontrol.yaogan.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,8 @@ import com.rockontrol.yaogan.model.Shapefile;
 import com.rockontrol.yaogan.model.User;
 import com.rockontrol.yaogan.service.ISecurityManager;
 import com.rockontrol.yaogan.service.IYaoganService;
+import com.rockontrol.yaogan.vo.ShapefileGroupVo;
+import com.rockontrol.yaogan.vo.ShapefileVo;
 
 @Controller
 @RequestMapping("admin/place")
@@ -32,7 +36,9 @@ public class ListController {
          list = _service.getShapefilesOfOrg(caller.getOrgId());
       else
          list = _service.getShapefiles(caller);
-      model.addAttribute("shapefiles", list);
+      // model.addAttribute("shapefiles", list);
+      List<ShapefileGroupVo> groupVoList = groupShapefiles(list);
+      model.addAttribute("shapefiles", groupVoList);
       return "/admin/stats/shapefileList";
    }
 
@@ -50,7 +56,9 @@ public class ListController {
             list = _service.getShapefiles(caller, place.getId(), shootTime);
          }
       }
-      model.addAttribute("shapefiles", list);
+      // model.addAttribute("shapefiles", list);
+      List<ShapefileGroupVo> groupVoList = groupShapefiles(list);
+      model.addAttribute("shapefiles", groupVoList);
       return "/admin/stats/shapefileList";
 
    }
@@ -61,5 +69,32 @@ public class ListController {
 
    public void setYaoganService(IYaoganService service) {
       this._service = service;
+   }
+
+   private List<ShapefileGroupVo> groupShapefiles(List<Shapefile> list) {
+      Map<String, ShapefileGroupVo> groupVoMap = new HashMap<String, ShapefileGroupVo>();
+      for (Shapefile shpfile : list) {
+         String placeName = shpfile.getPlace().getName();
+         ShapefileGroupVo vo = groupVoMap.get(placeName);
+         if (vo == null) {
+            vo = new ShapefileGroupVo();
+            vo.setPlaceName(placeName);
+            groupVoMap.put(placeName, vo);
+         }
+         ShapefileVo shpvo = toShapefileVo(shpfile);
+         vo.addShapefileVo(shpvo);
+
+      }
+      return new ArrayList(groupVoMap.values());
+   }
+
+   private ShapefileVo toShapefileVo(Shapefile shpfile) {
+      ShapefileVo vo = new ShapefileVo();
+      vo.setFileName(shpfile.getFileName());
+      vo.setPlace(shpfile.getPlace().getName());
+      vo.setShootTime(shpfile.getShootTime());
+      vo.setUploadTime(shpfile.getUploadTime());
+      vo.setTypeString(shpfile.getTypeString());
+      return vo;
    }
 }
