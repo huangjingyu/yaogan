@@ -227,6 +227,6 @@ public interface IYaoganService {
     * @param time
     */
    public void saveShapefile(User caller, String placeName, Category type, File file,
-         String filePath, String time);
+         String filePath, String origionFileName, String time);
 
 }
