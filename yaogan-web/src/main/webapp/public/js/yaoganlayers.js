@@ -364,11 +364,6 @@
      		   $("#areaData #areazbfg").text(result.aveg);
      		   $("#areaData #areatdth").text(result.aero);
      		   $("#areaData #areadzhj").text(result.asus);
-     		   if(R.popup) {
-     		      R.layerMap.map.removePopup(R.popup);
-     		      R.popup.destroy();
-     		      feature.popup = null;
-     		   }
      		   feature.popup=R.popup = new OpenLayers.Popup.FramedCloud("chicken", feature.geometry.getBounds().getCenterLonLat(),
      				 null, $("#areaData ul").html(), null, true, null); 
      		   R.layerMap.map.addPopup(R.popup);
