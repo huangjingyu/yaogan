@@ -11,6 +11,8 @@
     	var dlfLayerName = test ? "yaogan:groundcrack2011" : null;
         /**全局命名空间R*/
         var R = window.R = {
+        		/*顺序号 唯一标示的递增值*/
+        		seq : 0,
         	    /*选择要素的图层的名字*/
         	   SELECT_LNAME : "selectLayer",
                /*二维图层的名字*/
@@ -32,33 +34,50 @@
                 /*矿区layer配置*/
                 kqLayer : {
                   wmsUrl : layerWmsUrl,
-                  layerName : kqLayerName
+                  layerName : kqLayerName,
+                  idx : 5,
+                  stamp : 0
                 },
                 /*土地利用配置*/
                  tdlyLayer : {
                    wmsUrl : layerWmsUrl,
-                   layerName : tdlyLayerName
+                   layerName : tdlyLayerName,
+                   idx : 5,
+                   stamp : 0
                 },
                 /*地裂缝配置*/
                 dlfLayer : {
                   wmsUrl : layerWmsUrl,
-                  layerName : dlfLayerName
+                  layerName : dlfLayerName,
+                  idx : 7,
+                  stamp : 0
                },                
                 /*地表塌陷配置*/
                  dbtxLayer : {
                    wmsUrl : layerWmsUrl,
-                   layerName : dbtxLayerName
+                   layerName : dbtxLayerName,
+                   idx : 7,
+                   stamp : 0
                 },
                 /*土壤侵蚀配置*/
                  trqsLayer : {
                    wmsUrl : layerWmsUrl,
-                   layerName :  trqsLayerName
+                   layerName :  trqsLayerName,
+                   idx : 5,
+                   stamp : 0
                 },
                 /*高清遥感配置*/
                 gqygLayer : {
                   wmsUrl : layerWmsUrl,
-                  layerName :  gqygLayerName
-               },                
+                  layerName :  gqygLayerName,
+                  idx : 3,
+                  stamp : 0
+               }, 
+               /*选择图层*/
+               selectLayer : {
+            	   idx : 9,
+                   stamp : 0
+               },
                 /*边界值 目前为一个省的边界值*/
                 BOUNDS : new OpenLayers.Bounds(
                 		110.220484, 34.582452,
@@ -92,7 +111,10 @@
                 	QUERYMAP : "./layers/queryMap",
                 	/*查询指数信息*/
                 	QUERYSTATS : "./layers/queryEnvStats"
-                }                
+                },
+                getSeq : function() {
+                	return this.seq++;
+                }
         };
         
         /**Layers为地图层的大对象*/
@@ -239,7 +261,7 @@
         this.addWmsLayer = function(name, option) {
            var layer = this.createWmsLayer(name, option);
            this[name] = layer;
-           map.addLayers([layer]);
+            this.addLayer(layer);
         };
         /**删除wms图层*/
         this.removeWmsLayer=function(name) {
@@ -249,11 +271,37 @@
               this[name] = null;
            }
         };
-        /**将选择图层置于顶层*/
-        this.resetLayerIdx=function() {
-        	var num = map.getNumLayers();
-        	map.setLayerIndex(this[R.SELECT_LNAME],num - 1);
-        };
+        
+        /**增加一个layer*/
+        this.addLayer=function(layer) {
+        	/*先将此layer添加到map中*/
+        	map.addLayers([layer]);
+        	/*如果是baseLayer 则直接返回 不用调整顺序*/
+        	if(layer.isBaseLayer) {
+        		return;
+        	}
+        	/*进行顺序调整 调整方法为：从layers的最顶层开始 逐个非baseLayer比较 以确定位置 比较时先比较idx优先级 再比较stamp idx大 stamp大的在顶层*/
+        	var pos = map.layers.length - 1;
+        	for(var i = map.layers.length - 2; i >= 0; i--) {
+        		var current = map.layers[i];
+        		if(current.isBaseLayer) {
+        			continue;
+        		}
+        		if(R[current.name].idx < R [layer.name].idx) {
+        			break;
+        		}
+        		if(R[current.name].idx > R [layer.name].idx) {
+        			pos = i;
+        		} else {
+        			if(R[current.name].stamp < R [layer.name].stamp) {
+        				break;
+        			} else {
+        				pos = i;
+        			}
+        		}
+        	}
+        	map.setLayerIndex(layer,pos);
+        }
         /**添加vector图层*/
         this.addVectorLayer=function(name, option) {
            var ot = {};
@@ -262,7 +310,7 @@
            }
            var layer = this.createVectorLayer(name, ot);
         	  this[name] = layer;
-           map.addLayers([layer]);
+           this.addLayer(layer);
         };
         };
         R.layerMap = new R.Layers();
@@ -316,18 +364,23 @@
 	  /**地区下拉选择*/
       $("#placeSelect").bind("change", function() {
     	   var val = ($(this).val());
-    	   /**如果选择*/
-    	   if(val == "") {
-    		   return;
-    	   }
-    	  $.getJSON(R.reqUrl.GETTIME + "?placeId=" + val, function(result) {
-    		  $("#timeSelect").empty();
-    		  $("#timeSelect").append("<option value =''>--选择--</option>");
-    		  for(var i = 0; i < result.length; i++) {
-    			  $("#timeSelect").append("<option value ='" + result[i] + "'>" + result[i] + "</option>");
-    		  }
-    	  });
+    	   timeSelect(val);
       });
+      
+      /**根据地区选择时间*/
+      var timeSelect = function(val) {
+   	   /**如果选择*/
+   	   if(val == "") {
+   		   return;
+   	   }
+   	  $.getJSON(R.reqUrl.GETTIME + "?placeId=" + val, function(result) {
+   		  $("#timeSelect").empty();
+   		  $("#timeSelect").append("<option value =''>--选择--</option>");
+   		  for(var i = 0; i < result.length; i++) {
+   			  $("#timeSelect").append("<option value ='" + result[i] + "'>" + result[i] + "</option>");
+   		  }
+   	  }); 
+      }
       
       /**点击查询地图按钮*/
       $("#queryMap").bind("click", function() {
@@ -395,12 +448,12 @@
      $("#mapSelect input[type='checkbox']").bind("click", function() {
     	 var layerName = $(this).val() + "Layer";
     	 if(! R[layerName].layerName) {
-    		 alert("该图尚不存在");
     		 return;
     	 }
     	 var checked = $(this).attr("checked") == "checked";
     	 /*如果选中了 则添加图层 否则删除图层*/
     	 if(checked) {
+        	 R[layerName].stamp = R.getSeq();
     		 R.layerMap.addWmsLayer(layerName, {transparent : true});
     		 /*如果是矿区图 则需要添加getFeature控件*/
           if(R.KQ_LNAME == layerName) {
@@ -410,7 +463,6 @@
         		    R.layerMap.gfControl.activate();
         	    }
           }
-    		 R.layerMap.resetLayerIdx();
     	 } else {
     		 /*如果是矿区图 则先把gf控件移除*/
     		 if(R.KQ_LNAME == layerName) {
@@ -453,18 +505,10 @@
 		   if(result == null) {
 			   return;
 		   }
-		   if($("#queryType input[name='swfd']").attr("checked") == "checked") {
-			   $("#plcswfd").text(result.abio);
-		   }
-		   if($("#queryType input[name='zbfg']").attr("checked") == "checked") {
-			   $("#plczbfg").text(result.aveg);
-		   }
-		   if($("#queryType input[name='tdth']").attr("checked") == "checked") {
-			   $("#plctdth").text(result.aero);
-		   }
-		   if($("#queryType input[name='dzhj']").attr("checked") == "checked") {
-			   $("#plcdzhj").text(result.asus);
-		   }		   
+		  $("#plcswfd").text(result.abio);
+		  $("#plczbfg").text(result.aveg);
+		  $("#plctdth").text(result.aero);
+		  $("#plcdzhj").text(result.asus);	   
 	   });	 
    };
    
@@ -478,18 +522,10 @@
 			   return;
 		   }
 		   $("#areaData span").empty();
-		   if($("#queryType input[name='swfd']").attr("checked") == "checked") {
-			   $("#areaswfd").text(result.abio);
-		   }
-		   if($("#queryType input[name='zbfg']").attr("checked") == "checked") {
-			   $("#areazbfg").text(result.aveg);
-		   }
-		   if($("#queryType input[name='tdth']").attr("checked") == "checked") {
-			   $("#areatdth").text(result.aero);
-		   }
-		   if($("#queryType input[name='dzhj']").attr("checked") == "checked") {
-			   $("#areadzhj").text(result.asus);
-		   }		   
+		   $("#areaswfd").text(result.abio);
+		   $("#areazbfg").text(result.aveg);
+		   $("#areatdth").text(result.aero);
+		   $("#areadzhj").text(result.asus);
 	   });	 
    };
    
@@ -518,4 +554,6 @@
    
    /**页面装载完毕后对地图进行初始化*/
    R.layerMap.init();
+   /**根据地区查询时间 firefox默认会记录下拉选择*/
+   timeSelect($("#placeSelect").val());
     });
