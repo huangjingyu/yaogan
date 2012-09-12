@@ -6,40 +6,26 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
+@SuppressWarnings("serial")
 @Entity(name = "place")
 @NamedQueries({
       @NamedQuery(name = "Place.getByName", query = "from com.rockontrol.yaogan.model.Place"
             + " where name = :placeName"),
       @NamedQuery(name = "Place.getByOrgId", query = "from com.rockontrol.yaogan.model.Place"
             + " where orgId = :orgId") })
-public class Place {
-   private Long id;
+public class Place extends BaseEntity {
    private String name;
    private Long orgId;
    private Organization organization;
    private List<PlaceParam> params;
    private List<UserPlace> userPlaces;
    private List<Shapefile> shapeFiles;
-
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   @Column(name = "id")
-   public Long getId() {
-      return id;
-   }
-
-   public void setId(Long id) {
-      this.id = id;
-   }
 
    @Column(name = "name", length = 256, unique = true, nullable = false)
    public String getName() {
