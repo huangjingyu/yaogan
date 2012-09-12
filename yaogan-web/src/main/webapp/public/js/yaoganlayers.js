@@ -318,7 +318,7 @@
         		var time = R.layerMap.time;
         		if(placeId && time) {
         			var geometry = "geometry=" + feature.geometry;
-        			R.queryAreaData(placeId, time, geometry);
+        			R.queryAreaData(placeId, time, geometry, feature);
         		}
         	});
         };
@@ -343,17 +343,24 @@
         /**
          * 查询地区数据
          */
-        R.queryAreaData = function(placeId,time,geometry) {
+        R.queryAreaData = function(placeId,time,geometry,feature) {
      	   $.getJSON(R.reqUrl.QUERYSTATS + "?placeId=" + placeId + "&time=" + time + "&" + geometry, function(result) {
      		   if(result == null) {
      			   alert("未查询到相关指数");
      			   return;
      		   }
      		   $("#areaData span").empty();
-     		   $("#areaswfd").text(result.abio);
-     		   $("#areazbfg").text(result.aveg);
-     		   $("#areatdth").text(result.aero);
-     		   $("#areadzhj").text(result.asus);
+     		   $("#areaData #areaswfd").text(result.abio);
+     		   $("#areaData #areazbfg").text(result.aveg);
+     		   $("#areaData #areatdth").text(result.aero);
+     		   $("#areaData #areadzhj").text(result.asus);
+     		   if(R.popup) {
+     		      R.layerMap.map.removePopup(R.popup);
+     		      R.popup.destroy();
+     		   }
+     		   R.popup = new OpenLayers.Popup.FramedCloud("chicken", feature.geometry.getBounds().getCenterLonLat(),
+     				 null, $("#areaData ul").html(), null, true, null); 
+     		   R.layerMap.map.addPopup(R.popup);
      	   });	
         };
         

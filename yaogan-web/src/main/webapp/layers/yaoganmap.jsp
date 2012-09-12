@@ -25,7 +25,7 @@
            </table></div>
            
          <div class="rmapnr">      
-         <div>
+         <div style="margin-left:10px">
          <ul id="mapSelect">
             <li style="margin-right:30px">
                <input type="radio" value="td" name="baseType" checked="checked"/>二维图
@@ -46,10 +46,10 @@
          <!-- 地理位置信息 -->
          <div id="location">位置</div>
          <!-- 比例尺信息 -->
-         <div id="scale">Scale</div> 
+         <div id="scale" style="margin-left:10px">Scale</div> 
        </div>
        <!-- 区域选择的类型 -->
-       <div id="selectOp">
+       <div id="selectOp" style="margin-left:10px">
        <input type="radio" value="nav" checked="checked" name="op"/>导航
        <input type="radio" value="box" name="op"/>区域绘制
        <input type="radio" value="pyn" name="op"/>多边形绘制
@@ -62,7 +62,7 @@
    <div id="right">
     <div class="right_top">地图信息</div>
     <div id="placeData" class="message">
-     <h2>矿区信息</h2>
+     <h2>整个地区</h2>
      <ul>
       <li><img src="<%=request.getContextPath()%>/static/img/message_icon_1.gif" />植被覆盖指数：<span id="plczbfg"></span></li>
       <li><img src="<%=request.getContextPath()%>/static/img/message_icon_2.gif" />生物丰度指数：<span id="plcswfd"></span></li>
@@ -71,7 +71,7 @@
      </ul>    
     </div>
     <div id="areaData" class="message">
-     <h2>矿区所选区域信息</h2>
+     <h2>所选地区</h2>
      <ul>
       <li><img src="<%=request.getContextPath()%>/static/img/message_icon_1.gif" />植被覆盖指数：<span id="areazbfg"></span></li>
       <li><img src="<%=request.getContextPath()%>/static/img/message_icon_2.gif" />生物丰度指数：<span id="areaswfd"></span></li>
