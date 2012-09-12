@@ -109,7 +109,8 @@ public class EcoFactorCaculator {
                   + RATE_ABIO_WET * wetland_area + RATE_ABIO_FARM * farm_land_area
                   + RATE_ABIO_CONS * construcion_area + RATE_ABIO_NOT_USED
                   * not_used_area) / total_area;
-      return result;
+      int intResult = (int) (result * 10000);
+      return intResult / 10000.0;
    }
 
    private static double computeAbio(LandTypeInfo areaInfo) {
@@ -119,12 +120,9 @@ public class EcoFactorCaculator {
       double wetland_area = areaInfo.getWetArea();
       double construcion_area = areaInfo.getConstructionArea();
       double not_used_area = areaInfo.getNotUsedArea();
-      double total_area = areaInfo.getTotalArea();
-      double result = FactorCaculateConstant.ABIO
-            * (RATE_ABIO_FOREST * forest_area + RATE_ABIO_LAWN * lawn_area
-                  + RATE_ABIO_WET * wetland_area + RATE_ABIO_FARM * farm_land_area
-                  + RATE_ABIO_CONS * construcion_area + RATE_ABIO_NOT_USED
-                  * not_used_area) / total_area;
+      double result = computeAbio(forest_area, lawn_area, wetland_area, farm_land_area,
+            construcion_area, not_used_area);
+
       return result;
    }
 
@@ -150,7 +148,8 @@ public class EcoFactorCaculator {
             * (RATE_AVEG_FOREST * forest_area + RATE_AVEG_LAWN * lawn_area
                   + RATE_AVEG_FARM * farm_land_area + RATE_AVEG_CONS * construction_area + RATE_AVEG_NOT_USED
                   * not_used_area) / total_area;
-      return result;
+      int intResult = (int) (result * 10000);
+      return intResult / 10000.0;
    }
 
    private static double computeAveg(LandTypeInfo areaInfo) {
@@ -159,11 +158,9 @@ public class EcoFactorCaculator {
       double farm_land_area = areaInfo.getFarmArea();
       double construction_area = areaInfo.getConstructionArea();
       double not_used_area = areaInfo.getNotUsedArea();
-      double total_area = areaInfo.getTotalArea();
-      double result = FactorCaculateConstant.AVEG
-            * (RATE_AVEG_FOREST * forest_area + RATE_AVEG_LAWN * lawn_area
-                  + RATE_AVEG_FARM * farm_land_area + RATE_AVEG_CONS * construction_area + RATE_AVEG_NOT_USED
-                  * not_used_area) / total_area;
+      double result = computeAveg(forest_area, lawn_area, farm_land_area,
+            construction_area, not_used_area);
+
       return result;
    }
 
@@ -194,18 +191,15 @@ public class EcoFactorCaculator {
             - FactorCaculateConstant.AERO
             * (RATE_AERO_SLIGHT * slight_area + RATE_AERO_PART * part_area + RATE_AERO_SERIOUS
                   * serious_area) / total_area;
-      return result;
+      int intResult = (int) (result * 10000);
+      return intResult / 10000.0;
    }
 
    private static double computeAero(LandDeterioratedInfo landInfo) {
       double slight_area = landInfo.getSlightArea();
       double part_area = landInfo.getPartArea();
       double serious_area = landInfo.getSeriousArea();
-      double total_area = landInfo.getTotalArea();
-      double result = 100
-            - FactorCaculateConstant.AERO
-            * (RATE_AERO_SLIGHT * slight_area + RATE_AERO_PART * part_area + RATE_AERO_SERIOUS
-                  * serious_area) / total_area;
+      double result = computeAero(slight_area, part_area, serious_area);
       return result;
    }
 
@@ -315,7 +309,8 @@ public class EcoFactorCaculator {
             + RATE_ASUC
             * (100 - FactorCaculateConstant.ASUC * fracture_length / total_area)
             + RATE_UWC * (100 - FactorCaculateConstant.AUWC * water_descrement);
-      return result;
+      int intResult = (int) (result * 10000);
+      return intResult / 10000.0;
    }
 
    public static double computeAsus(SimpleFeatureSource fractureSource,
