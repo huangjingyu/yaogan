@@ -25,4 +25,23 @@ public interface FactorCaculateConstant {
    public static final String LAND_DETERIORATED_PART = "中度侵蚀";
    public static final String LAND_DETERIORATED_SERIOUS = "重度侵蚀";
 
+   // 二级地类
+   public static final String LAND_YOULINGDI = "有林地";
+   public static final String LAND_GUANMULINDI = "灌木林地";
+   public static final String LAND_QITALINDI = "疏林地和其它林地";
+   public static final String LAND_GAOFUGAICAODI = "高覆盖草地";
+   public static final String LAND_ZHONGFUGAICAODI = "中覆盖草地";
+   public static final String LAND_DIFUGAICAODI = "地覆盖草地";
+   public static final String LAND_HELIU = "河流";
+   public static final String LAND_HUPO = "湖泊(库)";
+   public static final String LAND_SHUIJIAODI = "水浇地";
+   public static final String LAND_HANDI = "旱地";
+   public static final String LAND_CHENGZHENYONGDI = "城镇建设用地";
+   public static final String LAND_NONCUNYONGDI = "农村居民点";
+   public static final String LAND_QITAJIANSHEYONGDI = "其他建设用地";
+   public static final String LAND_SHANDI = "沙地";
+   public static final String LAND_YANJIANDI = "盐碱地";
+   public static final String LAND_LUODI = "裸土地";
+   public static final String LAND_LUOYANSHILI = "裸岩石砾";
+
 }

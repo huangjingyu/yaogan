@@ -6,13 +6,17 @@ import org.yaogan.gis.util.FactorCaculateConstant;
 
 public class LandTypeInfo {
    // private String _areaName;
-   private final double _farmArea;
-   private final double _lawnArea;
-   private final double _constructionArea;
-   private final double _wetLandArea;
-   private final double _notUsedArea;
-   private final double _forestArea;
-   private final double _totalArea;
+   protected double _farmArea;
+   protected double _lawnArea;
+   protected double _constructionArea;
+   protected double _wetLandArea;
+   protected double _notUsedArea;
+   protected double _forestArea;
+   protected double _totalArea;
+
+   public LandTypeInfo() {
+
+   }
 
    public LandTypeInfo(Map<String, Double> landInfoMap) {
       _forestArea = landInfoMap.get(FactorCaculateConstant.LAND_TYPE_FORST) == null ? 0
