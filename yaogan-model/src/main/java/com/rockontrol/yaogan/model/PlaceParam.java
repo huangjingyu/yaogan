@@ -3,29 +3,19 @@ package com.rockontrol.yaogan.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+@SuppressWarnings("serial")
 @Entity(name = "place_param")
-public class PlaceParam {
+public class PlaceParam extends BaseEntity {
    // 地下水位下降量
    public static final String GROUND_WATER_DESC = "ground_water_desc";
-   private Long id;
    private Long placeId;
    private String paramName;
    private String paramValue;
    private String time;// year
    private Place place;
-
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   @Column(name = "id")
-   public Long getId() {
-      return id;
-   }
 
    @Column(name = "place_id")
    public Long getPlaceId() {
@@ -52,10 +42,6 @@ public class PlaceParam {
 
    public void setParamValue(String paramValue) {
       this.paramValue = paramValue;
-   }
-
-   public void setId(Long id) {
-      this.id = id;
    }
 
    @Column(name = "time", length = 4, updatable = false, nullable = false)

@@ -7,9 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -18,6 +15,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+@SuppressWarnings("serial")
 @Entity(name = "shapefiles")
 @NamedQueries({
       @NamedQuery(name = "Shapefile.getAvailableTimesOfPlace", query = "select distinct shootTime from com.rockontrol.yaogan.model.Shapefile"
@@ -41,7 +39,7 @@ import javax.persistence.Transient;
             + " com.rockontrol.yaogan.model.Place p, com.rockontrol.yaogan.model.UserPlace up"
             + " where up.placeId = sf.placeId and p.id = up.placeId"
             + " and sf.shootTime = :time and up.userId = :userId") })
-public class Shapefile {
+public class Shapefile extends BaseEntity {
 
    public enum Category {
       FILE_REGION_BOUNDARY("kq", "边界"), FILE_LAND_TYPE("tdly", "土地利用"), FILE_LAND_COLLAPSE(
@@ -72,7 +70,6 @@ public class Shapefile {
       }
    }
 
-   private Long _id;
    private Long _placeId;
    private String _fileName;
    private String _filePath;
@@ -81,17 +78,6 @@ public class Shapefile {
    private Category _category;
    private Place place;
    private Date _uploadTime;
-
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   @Column(name = "id")
-   public Long getId() {
-      return _id;
-   }
-
-   public void setId(Long id) {
-      this._id = id;
-   }
 
    @Column(name = "place_id")
    public Long getPlaceId() {
@@ -145,22 +131,6 @@ public class Shapefile {
 
    public void setCategory(Category category) {
       this._category = category;
-   }
-
-   public void setCategory(String category) {
-      if (Category.FILE_LAND_COLLAPSE.equals(category)) {
-         this._category = Category.FILE_LAND_COLLAPSE;
-      } else if (Category.FILE_LAND_FRACTURE.equals(category)) {
-         this._category = Category.FILE_LAND_FRACTURE;
-      } else if (Category.FILE_LAND_SOIL.equals(category)) {
-         this._category = Category.FILE_LAND_SOIL;
-      } else if (Category.FILE_LAND_TYPE.equals(category)) {
-         this._category = Category.FILE_LAND_TYPE;
-      } else if (Category.FILE_REGION_BOUNDARY.equals(category)) {
-         this._category = Category.FILE_REGION_BOUNDARY;
-      } else {
-         this._category = Category.FILE_HIG_DEF;
-      }
    }
 
    @ManyToOne(fetch = FetchType.LAZY)
