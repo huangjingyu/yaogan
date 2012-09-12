@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/includes.jsp"%>
+<%@ include file="/common/includes.jsp"%>
    <!-- 左边 -->
+   <table><tr><td>
       <div id="leftDiv">
         <div class="map_top">
            <form id="form2" name="form2" method="post" action="">
@@ -62,6 +63,7 @@
        </div>
       <div class="map_bottom" style=""><a href="#"><img src="<%=request.getContextPath()%>/static/img/butt_creatimg.jpg" width="132" height="39" /></a></div>       
     </div>
+    </td><td>
     <!-- 右边 -->
      <div id="rightDiv">
      <div class="right_top">指数查询</div>
@@ -94,3 +96,4 @@
      </ul>    
     </div>
      </div>
+     </td></tr></table>

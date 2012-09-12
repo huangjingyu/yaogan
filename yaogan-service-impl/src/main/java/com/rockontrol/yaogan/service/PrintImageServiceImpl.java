@@ -46,12 +46,37 @@ public class PrintImageServiceImpl implements IPrintImageService {
    /**
     * width 插入shapefile的宽 height 插入shapefile的高 //TODO
     */
-   private double width = 656;
-   private double heigth = 875;
+   private int width = 656;
+   private int heigth = 875;
 
    @Override
-   public File addShapeLayer(Long placeId, String time, String category, File img)
+   public File addShapeLayer(File template, File image) throws Exception {
+
+      return this.mergeImg(template, image, 64, 190);// TODO
+   }
+
+   @Override
+   public File addComment(File template, String comment) throws Exception {
+      BufferedImage image = ImageIO.read(new FileInputStream(template));
+      // 得到图形上下文
+      Graphics2D g = image.createGraphics();
+      // 设置画笔颜色
+      g.setColor(Color.BLACK);
+      // 设置字体
+      g.setFont(new Font("宋体", Font.LAYOUT_LEFT_TO_RIGHT, 50));
+      // 写入签名 TODO
+      g.drawString(comment, 404, 85);
+      g.dispose();
+      FileOutputStream out = new FileOutputStream(template);
+      ImageIO.write(image, "JPEG", out);
+      out.close();
+      return template;
+   }
+
+   @Override
+   public File getMap(Long placeId, String time, String category, String tempPath)
          throws Exception {
+      // TODO
       StringBuilder url = new StringBuilder(
             "http://localhost:8080/geoserver/china/wms?service=WMS&version=1.1.0&request=GetMap");
       // String place = placeDao.get(placeId).getName();
@@ -69,9 +94,8 @@ public class PrintImageServiceImpl implements IPrintImageService {
       url.append("&srs=EPSG:4326");
       url.append("&format=image%2Fjpeg");
 
-      File file = File.createTempFile("temp", ".jpg");
+      File file = new File(tempPath);
       HttpClient client = new DefaultHttpClient();
-      System.out.println(url.toString());
       HttpGet get = new HttpGet(url.toString());
       HttpResponse response = client.execute(get);
       HttpEntity entity = response.getEntity();
@@ -88,27 +112,7 @@ public class PrintImageServiceImpl implements IPrintImageService {
          client.getConnectionManager().shutdown();
       }
 
-      System.out.println("file" + file);
-      System.out.println("img" + img);
-      return this.mergeImg(file, img, 64, 190);// TODO
-   }
-
-   @Override
-   public File addComment(File img, String comment) throws Exception {
-      BufferedImage image = ImageIO.read(new FileInputStream(img));
-      // 得到图形上下文
-      Graphics2D g = image.createGraphics();
-      // 设置画笔颜色
-      g.setColor(Color.BLACK);
-      // 设置字体
-      g.setFont(new Font("宋体", Font.LAYOUT_LEFT_TO_RIGHT, 50));
-      // 写入签名 TODO
-      g.drawString(comment, 404, 44);
-      g.dispose();
-      FileOutputStream out = new FileOutputStream(img);
-      ImageIO.write(image, "JPEG", out);
-      out.close();
-      return img;
+      return file;
    }
 
    /**
@@ -124,6 +128,7 @@ public class PrintImageServiceImpl implements IPrintImageService {
    private File mergeImg(File img1, File img2, int x, int y) throws Exception {
       BufferedImage image = ImageIO.read(new FileInputStream(img1));
       Graphics2D g = image.createGraphics();// 得到图形上下文
+      System.out.println("img2==" + img2);
       BufferedImage image2 = ImageIO.read(new FileInputStream(img2));
       g.drawImage(image2, x, y, image2.getWidth(), image2.getHeight(), null);
       g.dispose();
@@ -142,7 +147,6 @@ public class PrintImageServiceImpl implements IPrintImageService {
             .getFeatureSource(typeName);
       FeatureCollection<SimpleFeatureType, SimpleFeature> result = featureSource
             .getFeatures();
-      ;
       FeatureIterator<SimpleFeature> itertor = result.features();
       while (itertor.hasNext()) {
          SimpleFeature feature = itertor.next();
@@ -182,8 +186,6 @@ public class PrintImageServiceImpl implements IPrintImageService {
 
    @Override
    public File copyTemplate(String templatePath, String imagePath) throws Exception {
-      System.out.println("templatePath==" + templatePath);
-      System.out.println("imagePath==" + imagePath);
       int read = 0;
       File template = new File(templatePath);
       File image = new File(imagePath);
@@ -199,4 +201,5 @@ public class PrintImageServiceImpl implements IPrintImageService {
       }
       return image;
    }
+
 }

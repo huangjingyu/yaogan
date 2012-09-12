@@ -57,7 +57,7 @@ public class YaoganServiceImpl implements IYaoganService {
    @Autowired
    private EcoFactorComputeService computeService;
 
-   // @Autowired
+   @Autowired
    private GeoService geoService;
 
    @Override
@@ -422,6 +422,18 @@ public class YaoganServiceImpl implements IYaoganService {
       param.setPlaceId(place.getId());
       param.setTime(time);
       this.placeParamDao.save(param);
+   }
+
+   @Override
+   public List<Shapefile> getShapefilesOfOrg(Long orgId) {
+
+      return this.shapefileDao.getShapefilesOfOrg(orgId);
+   }
+
+   @Override
+   public List<Shapefile> getShapefileOfOrg(Long orgId, Long placeId, String time) {
+
+      return this.shapefileDao.getShapefilesOfOrg(orgId, placeId, time);
    }
 
    private Place checkAndCreatePlace(User caller, String placeName) {
