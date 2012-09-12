@@ -1,9 +1,11 @@
 package com.rockontrol.yaogan.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,14 +35,13 @@ public class YaoganUserDetailsService implements UserDetailsService {
       boolean acountNonExpired = true;
       boolean credentialsNonExpired = true;
       boolean accountNonLock = true;
-      /*
-       * if (user.getUserState() != null) { enabled = UserState.DISABLED !=
-       * user.getUserState(); accountNonLock = UserState.LOCKED !=
-       * user.getUserState(); }
-       */
+
+      List<GrantedAuthority> authorites = new ArrayList<GrantedAuthority>();
+      authorites.add(new SimpleGrantedAuthority(user.getRole().name()));
+
       IYaoganUserDetails yaoganUserDetails = new YaoganUserDetailsImpl(user.getId(),
             orgId, user.getUserName(), user.getPassword(), enabled, acountNonExpired,
-            credentialsNonExpired, accountNonLock, new ArrayList<GrantedAuthority>());
+            credentialsNonExpired, accountNonLock, authorites);
       return yaoganUserDetails;
 
    }

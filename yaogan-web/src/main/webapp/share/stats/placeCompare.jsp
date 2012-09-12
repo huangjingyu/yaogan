@@ -206,7 +206,7 @@
 							data-dojo-args="evt">placeCompare();</script>
 					</button>
 				</div>
-				<div id="chartNode" style="width: 700px; height: 480px;"></div>
+				<div id="chartNode" style="width: 700px; height: 480px; margin-top: 10px;"></div>
 			</div>
 		</div>
 	</div>

@@ -32,7 +32,7 @@
 				url : apiUrl,
 				handleAs : "json",
 				load : function(jsonData) {
-					document.location.reload(true);
+					document.location.replace(document.location.href);
 				},
 				error : function() {
 					alert("bad");
@@ -58,7 +58,7 @@
 				url : apiUrl,
 				handleAs : "json",
 				load : function(jsonData) {
-					document.location.reload(true);
+					document.location.replace(document.location.href);
 				},
 				error : function() {
 					alert("bad");

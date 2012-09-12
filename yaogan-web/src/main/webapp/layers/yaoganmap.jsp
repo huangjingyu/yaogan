@@ -1,14 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/includes.jsp"%>
-   <!-- 左边 -->
-   <table><tr><td>
-      <div id="leftDiv">
-        <div class="map_top">
-           <form id="form2" name="form2" method="post" action="">
-           <table  border="0" cellpadding="0" cellspacing="0">
+      <div class="rmaplist">
+         <div class="map_top">           
+         <table>
              <tr>
                <td width="72" style=" font-weight:bold">地图展示</td>
-               <td>
+               <td width="130">
                                         地区:<select id="placeSelect">
                   <option value ="">--选择--</option>
                   <c:forEach items="${places}" var="place">
@@ -16,7 +13,7 @@
                   </c:forEach>
                </select>
                </td>
-               <td>
+               <td  width="120">
                                             日期:<select id="timeSelect">
                   <option value ="">--选择--</option>
                </select>
@@ -25,11 +22,10 @@
                    <a href="#"><img id="queryMap" src="<%=request.getContextPath()%>/static/img/butt_search.gif" alt="查询" width="50" height="24" style="display:block; margin:0 auto"/></a>
                </td>
              </tr>
-           </table>
-           </form>
-         </div>
-      <!-- 地图选择 -->
-      <div>
+           </table></div>
+           
+         <div class="rmapnr">      
+         <div style="margin-left:10px">
          <ul id="mapSelect">
             <li style="margin-right:30px">
                <input type="radio" value="td" name="baseType" checked="checked"/>二维图
@@ -50,35 +46,23 @@
          <!-- 地理位置信息 -->
          <div id="location">位置</div>
          <!-- 比例尺信息 -->
-         <div id="scale">Scale</div> 
+         <div id="scale" style="margin-left:10px">Scale</div> 
        </div>
        <!-- 区域选择的类型 -->
-       <div id="selectOp">
+       <div id="selectOp" style="margin-left:10px">
        <input type="radio" value="nav" checked="checked" name="op"/>导航
        <input type="radio" value="box" name="op"/>区域绘制
        <input type="radio" value="pyn" name="op"/>多边形绘制
-       <input type="radio" value="select" name="op"/>区块选择
-       <input type="button" value="清除所选" name="rm" id="rm"/>
-       <input type="button" value="清除全部" name="rmAll" id="rmAll"/>
        </div>
-      <div class="map_bottom" style=""><a href="#"><img src="<%=request.getContextPath()%>/static/img/butt_creatimg.jpg" width="132" height="39" /></a></div>       
+      </div>
+      
+      <div class="rmbutt"><a href="#"  id="thematicMapLink"><img src="<%=request.getContextPath()%>/static/img/butt_creatimg.jpg" width="132" height="39" /></a></div>
     </div>
-    </td><td>
-    <!-- 右边 -->
-     <div id="rightDiv">
-     <div class="right_top">指数查询</div>
-     <div id="queryType" style="margin-left:10px"> 
-     <table><tr><td>
-        <input type="checkbox" name="swfd" checked="checked"/>生物丰度
-        <input type="checkbox" name="zbfg" checked="checked"/>植被覆盖<br/>
-        <input type="checkbox" name="tdth" checked="checked"/>土地退回
-        <input type="checkbox" name="dzhj" checked="checked"/>地质环境
-        </td></tr><tr><td>
-        <a href="#"><img id="queryData" src="<%=request.getContextPath()%>/static/img/butt_search.gif" alt="查询" width="50" height="24" style="display:block; margin:0 auto;"/></a>
-     </td></tr></table>
-     </div>
+   <div id="rightd">      
+   <div id="right">
+    <div class="right_top">地图信息</div>
     <div id="placeData" class="message">
-     <h2>矿区指数</h2>
+     <h2>整个地区</h2>
      <ul>
       <li><img src="<%=request.getContextPath()%>/static/img/message_icon_1.gif" />植被覆盖指数：<span id="plczbfg"></span></li>
       <li><img src="<%=request.getContextPath()%>/static/img/message_icon_2.gif" />生物丰度指数：<span id="plcswfd"></span></li>
@@ -87,7 +71,7 @@
      </ul>    
     </div>
     <div id="areaData" class="message">
-     <h2>矿区所选区域指数</h2>
+     <h2>所选地区</h2>
      <ul>
       <li><img src="<%=request.getContextPath()%>/static/img/message_icon_1.gif" />植被覆盖指数：<span id="areazbfg"></span></li>
       <li><img src="<%=request.getContextPath()%>/static/img/message_icon_2.gif" />生物丰度指数：<span id="areaswfd"></span></li>
@@ -95,5 +79,5 @@
       <li><img src="<%=request.getContextPath()%>/static/img/message_icon_4.gif" />土地退化指数：<span id="areatdth"></span></li>
      </ul>    
     </div>
-     </div>
-     </td></tr></table>
+   </div>
+   </div>

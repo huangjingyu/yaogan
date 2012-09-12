@@ -18,6 +18,11 @@ public class AuthController {
       return "redirect:/";
    }
 
+   @RequestMapping(value = "/auth/denied")
+   public String denied() {
+      return "/denied";
+   }
+
    @RequestMapping(value = "/doLogout")
    public void logout(HttpServletRequest request, HttpServletResponse response) {
       String casLogout = (String) GlobalConfig.getProperties().getProperty(

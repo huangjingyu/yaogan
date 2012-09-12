@@ -18,7 +18,12 @@ public interface IShapefileDao extends IBaseDao<Shapefile> {
 
    public List<Shapefile> getShapefiles(Long placeId, String time);
 
+   public List<Shapefile> getShapefilesOfOrg(Long orgId);
+
+   public List<Shapefile> getShapefilesOfOrg(Long orgId, Long placeId, String time);
+
    public Shapefile getShapefile(Long placeId, String time, String category);
 
    public List<Shapefile> getAvailableFilesOfUser(Long userId);
+
 }

@@ -71,6 +71,7 @@ public class ShapefileDaoImpl extends BaseDaoImpl<Shapefile> implements IShapefi
       return (Shapefile) query.uniqueResult();
    }
 
+   @Override
    public List<Shapefile> getAvailableFilesOfUser(Long userId) {
       String hql = "select file from com.rockontrol.yaogan.model.Shapefile as file,"
             + "com.rockontrol.yaogan.model.Place p,com.rockontrol.yaogan.model.UserPlace up "
@@ -79,5 +80,27 @@ public class ShapefileDaoImpl extends BaseDaoImpl<Shapefile> implements IShapefi
       query.setLong("userId", userId);
       List<Shapefile> list = query.list();
       return list;
+   }
+
+   @Override
+   public List<Shapefile> getShapefilesOfOrg(Long orgId) {
+      String hql = "select file from com.rockontrol.yaogan.model.Shapefile file "
+            + ",com.rockontrol.yaogan.model.Place p where p.orgId=:orgId and file.placeId=p.id";
+      Query query = getSession().createQuery(hql);
+      query.setLong("orgId", orgId);
+      return query.list();
+   }
+
+   @Override
+   public List<Shapefile> getShapefilesOfOrg(Long orgId, Long placeId, String time) {
+      String hql = "select file from com.rockontrol.yaogan.model.Shapefile file "
+            + ",com.rockontrol.yaogan.model.Place p where file.placeId=:placeId and file.placeId=p.id and p.orgId=:orgId "
+            + " and file.shootTime=:time";
+
+      Query query = getSession().createQuery(hql);
+      query.setLong("orgId", orgId);
+      query.setString("time", time);
+      query.setLong("placeId", placeId);
+      return query.list();
    }
 }
