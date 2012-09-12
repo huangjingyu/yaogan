@@ -28,6 +28,7 @@ import com.rockontrol.yaogan.model.Shapefile.Category;
 import com.rockontrol.yaogan.model.User;
 import com.rockontrol.yaogan.model.UserPlace;
 import com.rockontrol.yaogan.vo.EnvStats;
+import com.rockontrol.yaogan.vo.Page;
 
 @Service
 public class YaoganServiceImpl implements IYaoganService {
@@ -467,6 +468,18 @@ public class YaoganServiceImpl implements IYaoganService {
          repath = repath.substring(1);
       String path = shapeFileHome + File.separator + repath;
       return path;
+   }
+
+   @Override
+   public Page<Shapefile> filterShapefiles(Long placeId, String time, int pageNum,
+         int pageSize) {
+      Page<Shapefile> page = new Page<Shapefile>(pageNum, pageSize);
+      long count = shapefileDao.getCount(placeId, time);
+      page.setTotalItemNum(count);
+      List<Shapefile> list = shapefileDao.filter(placeId, time,
+            page.getStartItemIndex(), pageSize);
+      page.setItems(list);
+      return page;
    }
 
 }

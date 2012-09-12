@@ -68,43 +68,83 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
    }
 
    @Override
-   public List<T> findByPage(String hql, int startIndex, int maxCount, Object[] params) {
+   public List findByPage(String hql, int startIndex, int maxCount, Object[] params) {
+      return findByPage(getSession().createQuery(hql), startIndex, maxCount, params);
+   }
+
+   @Override
+   public List findByHQL(String hql, Object[] params) {
       Query query = this.getSession().createQuery(hql);
       if (params != null && params.length > 0) {
          for (int index = 0; index < params.length; index++) {
             query.setParameter(index, params[index]);
          }
       }
+      return query.list();
+   }
 
+   @Override
+   public List findByPage(String hql, int startIndex, int maxCount,
+         Map<String, Object> map) {
+      return findByPage(getSession().createQuery(hql), startIndex, maxCount, map);
+   }
+
+   @Override
+   public List findByPage(Query query, int startIndex, int maxCount, Object[] params) {
+      _setParams(query, params);
       query.setFirstResult(startIndex);
       query.setMaxResults(maxCount);
       return query.list();
    }
 
    @Override
-   public List<T> findByHQL(String hql, Object[] params) {
-      Query query = this.getSession().createQuery(hql);
+   public List findByPage(Query query, int startIndex, int maxCount,
+         Map<String, Object> map) {
+      _setParams(query, map);
+      query.setFirstResult(startIndex);
+      query.setMaxResults(maxCount);
+      return query.list();
+   }
+
+   @Override
+   public long getCount(String hql, Object[] params) {
+      return getCount(getSession().createQuery("select count(*) from (" + hql + ") t"),
+            params);
+   }
+
+   @Override
+   public long getCount(String hql, Map<String, Object> map) {
+      return getCount(getSession().createQuery("select count(*) from (" + hql + ") t"),
+            map);
+   }
+
+   @Override
+   public long getCount(Query query, Object[] params) {
+      _setParams(query, params);
+      return ((Long) query.uniqueResult()).longValue();
+   }
+
+   @Override
+   public long getCount(Query query, Map<String, Object> map) {
+      _setParams(query, map);
+      return ((Long) query.uniqueResult()).longValue();
+   }
+
+   private void _setParams(Query query, Object[] params) {
       if (params != null && params.length > 0) {
          for (int index = 0; index < params.length; index++) {
             query.setParameter(index, params[index]);
          }
       }
-      return query.list();
    }
 
-   @Override
-   public List<T> findByPage(String hql, int startIndex, int maxCount,
-         Map<String, Object> map) {
-      Query query = this.getSession().createQuery(hql);
+   private void _setParams(Query query, Map<String, Object> map) {
       if (map != null && map.size() > 0) {
          Set<Map.Entry<String, Object>> set = map.entrySet();
          for (Entry<String, Object> entry : set) {
             query.setParameter(entry.getKey(), entry.getValue());
          }
       }
-      query.setFirstResult(startIndex);
-      query.setMaxResults(maxCount);
-      return query.list();
    }
 
 }

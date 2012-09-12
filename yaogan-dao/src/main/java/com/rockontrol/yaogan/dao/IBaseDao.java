@@ -3,6 +3,8 @@ package com.rockontrol.yaogan.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Query;
+
 public interface IBaseDao<T> {
    public T get(Long id);
 
@@ -24,7 +26,7 @@ public interface IBaseDao<T> {
     * @param hql
     *           hql语句
     * @param startIndex
-    *           起始序号
+    *           起始序号 0
     * @param maxCount
     *           最大条数
     * @param params
@@ -32,18 +34,23 @@ public interface IBaseDao<T> {
     * 
     * @return
     */
-   public List<T> findByPage(String hql, int startIndex, int maxCount, Object[] params);
+   public List findByPage(String hql, int startIndex, int maxCount, Object[] params);
+
+   public long getCount(String hql, Object[] params);
 
    /**
     * 
     * @param hql
     * @param startIndex
+    *           numbered from 0
     * @param maxCount
     * @param map
     * @return
     */
-   public List<T> findByPage(String hql, int startIndex, int maxCount,
+   public List findByPage(String hql, int startIndex, int maxCount,
          Map<String, Object> map);
+
+   public long getCount(String hql, Map<String, Object> map);
 
    /**
     * 
@@ -51,5 +58,32 @@ public interface IBaseDao<T> {
     * @param params
     * @return
     */
-   public List<T> findByHQL(String hql, Object[] params);
+   public List findByHQL(String hql, Object[] params);
+
+   /**
+    * 
+    * @param query
+    * @param startIndex
+    *           numbered from 0
+    * @param maxCount
+    * @param params
+    * @return
+    */
+   public List findByPage(Query query, int startIndex, int maxCount, Object[] params);
+
+   public long getCount(Query query, Object[] params);
+
+   /**
+    * 
+    * @param query
+    * @param startIndex
+    *           numbered from 0
+    * @param maxCount
+    * @param map
+    * @return
+    */
+   public List findByPage(Query query, int startIndex, int maxCount,
+         Map<String, Object> map);
+
+   public long getCount(Query query, Map<String, Object> map);
 }

@@ -26,4 +26,8 @@ public interface IShapefileDao extends IBaseDao<Shapefile> {
 
    public List<Shapefile> getAvailableFilesOfUser(Long userId);
 
+   public List<Shapefile> filter(Long placeId, String time, int startIndex, int maxCount);
+
+   public long getCount(Long placeId, String time);
+
 }

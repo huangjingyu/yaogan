@@ -9,6 +9,7 @@ import com.rockontrol.yaogan.model.Shapefile;
 import com.rockontrol.yaogan.model.Shapefile.Category;
 import com.rockontrol.yaogan.model.User;
 import com.rockontrol.yaogan.vo.EnvStats;
+import com.rockontrol.yaogan.vo.Page;
 
 public interface IYaoganService {
 
@@ -228,5 +229,8 @@ public interface IYaoganService {
     */
    public void saveShapefile(User caller, String placeName, Category type, File file,
          String filePath, String origionFileName, String time);
+
+   public Page<Shapefile> filterShapefiles(Long placeId, String time, int pageNum,
+         int pageSize);
 
 }

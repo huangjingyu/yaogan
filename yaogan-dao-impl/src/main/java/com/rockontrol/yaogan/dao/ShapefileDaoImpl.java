@@ -103,4 +103,46 @@ public class ShapefileDaoImpl extends BaseDaoImpl<Shapefile> implements IShapefi
       query.setLong("placeId", placeId);
       return query.list();
    }
+
+   private static final String FILTER_HQL_TEMPLATE = "select sf from com.rockontrol.yaogan.model.Shapefile"
+         + " where 1 = 1";
+
+   @Override
+   public List<Shapefile> filter(Long placeId, String time, int startIndex, int maxCount) {
+      String hql = _genFilterHql(placeId, time);
+      Object[] params = _genParams(placeId, time);
+      return findByPage(hql, startIndex, maxCount, params);
+   }
+
+   @Override
+   public long getCount(Long placeId, String time) {
+      String hql = _genFilterHql(placeId, time);
+      Object[] params = _genParams(placeId, time);
+      return getCount(hql, params);
+   }
+
+   private String _genFilterHql(Long placeId, String time) {
+      StringBuilder sb = new StringBuilder();
+      sb.append(FILTER_HQL_TEMPLATE);
+      if (placeId != null) {
+         sb.append(" and placeId = :placeId");
+      }
+      if (time != null) {
+         sb.append(" and time = :time");
+      }
+      return sb.toString();
+   }
+
+   private Object[] _genParams(Long placeId, String time) {
+      if (placeId != null && time != null) {
+         return new Object[] { placeId, time };
+      }
+      if (placeId != null) {
+         return new Object[] { placeId };
+      }
+      if (time != null) {
+         return new Object[] { time };
+      }
+      return null;
+   }
 }
