@@ -552,6 +552,12 @@
   
    });
    
+   $("#thematicMapLink").bind("click", function(){
+	   var placeId = $("#placeSelect").val();
+ 	   var time = $("#timeSelect").val();
+ 	   document.location.href = "./print?placeId=" + placeId + "&time=" + time + "&category=FILE_LAND_TYPE";
+   });
+   
    /**页面装载完毕后对地图进行初始化*/
    R.layerMap.init();
    /**根据地区查询时间 firefox默认会记录下拉选择*/

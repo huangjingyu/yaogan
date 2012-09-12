@@ -59,7 +59,7 @@
        </div>
       </div>
       
-      <div class="rmbutt"><a href="#"><img src="<%=request.getContextPath()%>/static/img/butt_creatimg.jpg" width="132" height="39" /></a></div>
+      <div class="rmbutt"><a href="#" id="thematicMapLink"><img src="<%=request.getContextPath()%>/static/img/butt_creatimg.jpg" width="132" height="39" /></a></div>
     </div>
    <div id="rightd">      
    <div id="right">

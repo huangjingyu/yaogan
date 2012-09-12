@@ -23,7 +23,7 @@
       logout-url="/auth/logout" />
     <session-management invalid-session-url="/auth/login" />
 
-    <intercept-url pattern="/user/**" access="hasAnyRole('ROLE_USER')" />
+    <intercept-url pattern="/user/**" access="hasAnyRole('ROLE_USER','ROLE_ADMIN')" />
     <intercept-url pattern="/admin/**" access="hasAnyRole('ROLE_ADMIN')" />
 
     <intercept-url pattern="/**" access="isAuthenticated()" />
