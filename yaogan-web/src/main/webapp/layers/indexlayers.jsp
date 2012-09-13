@@ -8,7 +8,7 @@
         <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/static/css/yaoganlayers.css"/>
         <script src='<%=request.getContextPath()%>/static/js/jquery-1.7.1.js'></script>  
         <!--openlayers脚本地址 开发时可以用lib目录 发布时需要使用压缩版 -->     
-        <script src='<%=request.getContextPath()%>/static/js/openlayers/lib/OpenLayers.js'></script>
+        <script src='<%=request.getContextPath()%>/static/js/openlayers/OpenLayers.js'></script>
         <script src='<%=request.getContextPath()%>/static/js/openlayers/lib/OpenLayers/Lang/zh-CN.js'></script>
 
         <!-- 遥感layers的控制脚本 -->

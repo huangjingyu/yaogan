@@ -192,11 +192,11 @@
             		}
             		);
             map.addControl(this.selectControl);
-           // layerSwitcher = new OpenLayers.Control.LayerSwitcher();
-           // layerSwitcher.ascending = false;
-           // layerSwitcher.useLegendGraphics = true;
+            //layerSwitcher = new OpenLayers.Control.LayerSwitcher();
+            //layerSwitcher.ascending = false;
+            //layerSwitcher.useLegendGraphics = true;
             
-           // map.addControl(layerSwitcher); 
+            //map.addControl(layerSwitcher); 
             var panel = new OpenLayers.Control.Panel({ defaultControl: this.navControl });   
             panel.addControls([this.navControl, this.boxControl, this.pynControl]);
             map.addControl(panel); 
