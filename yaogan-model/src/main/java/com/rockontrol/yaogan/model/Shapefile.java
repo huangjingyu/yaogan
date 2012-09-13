@@ -88,7 +88,7 @@ public class Shapefile extends BaseEntity {
       this._placeId = placeId;
    }
 
-   @Column(length = 512, unique = true, nullable = false)
+   @Column(length = 512, nullable = false)
    public String getFileName() {
       return _fileName;
    }
