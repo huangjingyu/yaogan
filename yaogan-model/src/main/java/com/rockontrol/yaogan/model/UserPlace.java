@@ -5,9 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @SuppressWarnings("serial")
-@Entity(name = "user_place")
+@Entity
+@Table(name = "user_place")
 public class UserPlace extends BaseEntity {
    private Long userId;
    private Long placeId;

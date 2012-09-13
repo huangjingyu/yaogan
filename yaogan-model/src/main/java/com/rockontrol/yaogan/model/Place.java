@@ -11,14 +11,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @SuppressWarnings("serial")
-@Entity(name = "place")
+@Entity
+@Table(name = "place")
 @NamedQueries({
-      @NamedQuery(name = "Place.getByName", query = "from com.rockontrol.yaogan.model.Place"
-            + " where name = :placeName"),
-      @NamedQuery(name = "Place.getByOrgId", query = "from com.rockontrol.yaogan.model.Place"
-            + " where orgId = :orgId") })
+      @NamedQuery(name = "Place.getByName", query = "from Place where name = :placeName"),
+      @NamedQuery(name = "Place.getByOrgId", query = "from Place where orgId = :orgId") })
 public class Place extends BaseEntity {
    private String name;
    private Long orgId;

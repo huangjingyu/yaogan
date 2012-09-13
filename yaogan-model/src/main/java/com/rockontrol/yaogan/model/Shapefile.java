@@ -11,32 +11,34 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 @SuppressWarnings("serial")
-@Entity(name = "shapefiles")
+@Entity
+@Table(name = "shapefiles")
 @NamedQueries({
-      @NamedQuery(name = "Shapefile.getAvailableTimesOfPlace", query = "select distinct shootTime from com.rockontrol.yaogan.model.Shapefile"
+      @NamedQuery(name = "Shapefile.getAvailableTimesOfPlace", query = "select distinct shootTime from Shapefile"
             + " where placeId = :placeId"),
-      @NamedQuery(name = "Shapefile.getAvailableTimesOfOrg", query = "select distinct sf.shootTime from com.rockontrol.yaogan.model.Shapefile sf,"
-            + " com.rockontrol.yaogan.model.Place p where sf.placeId = p.id"
+      @NamedQuery(name = "Shapefile.getAvailableTimesOfOrg", query = "select distinct sf.shootTime from Shapefile sf,"
+            + " Place p where sf.placeId = p.id"
             + " and p.orgId = :orgId order by sf.shootTime desc"),
-      @NamedQuery(name = "Shapefile.getAvailableTimesOfUser", query = "select distinct sf.shootTime from com.rockontrol.yaogan.model.Shapefile sf,"
-            + " com.rockontrol.yaogan.model.UserPlace up where sf.placeId = up.placeId"
+      @NamedQuery(name = "Shapefile.getAvailableTimesOfUser", query = "select distinct sf.shootTime from Shapefile sf,"
+            + " UserPlace up where sf.placeId = up.placeId"
             + " and up.userId = :userId order by sf.shootTime desc"),
-      @NamedQuery(name = "Shapefile.getShapefilesByPlaceAndTime", query = "from com.rockontrol.yaogan.model.Shapefile"
+      @NamedQuery(name = "Shapefile.getShapefilesByPlaceAndTime", query = "from Shapefile"
             + " where placeId = :placeId and shootTime = :time"),
-      @NamedQuery(name = "Shapefile.getShapefileByPTC", query = "from com.rockontrol.yaogan.model.Shapefile "
+      @NamedQuery(name = "Shapefile.getShapefileByPTC", query = "from Shapefile "
             + "where placeId = :placeId and shootTime = :time and category = :category"),
-      @NamedQuery(name = "Shapefile.getAvailableFilesOfUser", query = "from com.rockontrol.yaogan.model.Shapefile"
+      @NamedQuery(name = "Shapefile.getAvailableFilesOfUser", query = "from Shapefile"
             + " where placeId = :placeId and shootTime = :time"),
-      @NamedQuery(name = "Shapefile.getAvailablePlacesOfOrg", query = "select distinct p from com.rockontrol.yaogan.model.Shapefile sf,"
-            + " com.rockontrol.yaogan.model.Place p where p.id = sf.placeId"
+      @NamedQuery(name = "Shapefile.getAvailablePlacesOfOrg", query = "select distinct p from Shapefile sf,"
+            + " Place p where p.id = sf.placeId"
             + " and sf.shootTime = :time and p.orgId = :orgId"),
-      @NamedQuery(name = "Shapefile.getAvailablePlacesOfUser", query = "select distinct p from com.rockontrol.yaogan.model.Shapefile sf,"
-            + " com.rockontrol.yaogan.model.Place p, com.rockontrol.yaogan.model.UserPlace up"
+      @NamedQuery(name = "Shapefile.getAvailablePlacesOfUser", query = "select distinct p from Shapefile sf,"
+            + " Place p, UserPlace up"
             + " where up.placeId = sf.placeId and p.id = up.placeId"
             + " and sf.shootTime = :time and up.userId = :userId") })
 public class Shapefile extends BaseEntity {
