@@ -25,7 +25,7 @@ import com.rockontrol.yaogan.vo.EnvStats;
 @Controller
 @RequestMapping(value = { "/admin", "/user" })
 public class LayersController {
-   
+
    public static final Log log = LogFactory.getLog(LayersController.class);
 
    @Autowired
@@ -34,8 +34,6 @@ public class LayersController {
    @Autowired
    private ISecurityManager _secMng;
 
-   private final boolean mock = false;
-
    /**
     * 地图图层展示页面
     * 
@@ -43,45 +41,13 @@ public class LayersController {
     */
    @RequestMapping("/layers")
    public String layers(Model model) {
-      if (!mock) {
-         User user = _secMng.currentUser();
-         List<Place> placeList = _yaoganService.getPlacesVisibleToUser(user,
-               user.getId());
-         model.addAttribute("places", placeList);
-      } else {
-         Place place = new Place();
-         place.setId(1L);
-         place.setName("平朔");
-         List<Place> placeList = Arrays.asList(place);
-         model.addAttribute("places", placeList);
-      }
+      User user = _secMng.currentUser();
+      List<Place> placeList = _yaoganService.getPlacesVisibleToUser(user, user.getId());
+      model.addAttribute("places", placeList);
 
-      return "/layers/indexlayers3";
+      return "/layers/indexlayers";
    }
 
-   /**
-    * 地图图层展示页面
-    * 
-    * @return
-    */
-   @RequestMapping("/layers2")
-   public String layers2(Model model) {
-      if (!mock) {
-         User user = _secMng.currentUser();
-         List<Place> placeList = _yaoganService.getPlacesVisibleToUser(user,
-               user.getId());
-         model.addAttribute("places", placeList);
-      } else {
-         Place place = new Place();
-         place.setId(1L);
-         place.setName("平朔");
-         List<Place> placeList = Arrays.asList(place);
-         model.addAttribute("places", placeList);
-      }
-
-      return "/layers/indexlayers4";
-   }
-   
    /**
     * 根据地区查询地图的时间
     * 
@@ -91,14 +57,9 @@ public class LayersController {
    @RequestMapping(value = "/layers/getAvailableTime")
    @ResponseBody
    public List<String> getAvailableTime(@RequestParam("placeId") Long placeId) {
-      if (!mock) {
-         User user = _secMng.currentUser();
-         List<String> timeList = _yaoganService.getAvailableTimeOptions(user, placeId);
-         return timeList;
-      } else {
-         List<String> timeList = Arrays.asList("2011", "2012");
-         return timeList;
-      }
+      User user = _secMng.currentUser();
+      List<String> timeList = _yaoganService.getAvailableTimeOptions(user, placeId);
+      return timeList;
    }
 
    /**
@@ -113,60 +74,24 @@ public class LayersController {
    public List<Map<String, Object>> queryMap(@RequestParam("placeId") Long placeId,
          @RequestParam("time") String time) {
       List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-      if (!mock) {
-         try {
-            User user = _secMng.currentUser();
-            List<Shapefile> fileList = _yaoganService.getShapefiles(user, placeId, time);
-            for (Shapefile file : fileList) {
-               Map<String, Object> map = new HashMap<String, Object>();
-               map.put("type", file.getCategory().getType());
-               String wmsInfo = file.getWmsUrl();
-               String[] infos = wmsInfo.split("\\?");
-               map.put("layerName", infos[0]);
-               String[] bs = infos[1].split(",");
-               double[] bounds = { Double.parseDouble(bs[0]), Double.parseDouble(bs[1]),
-                     Double.parseDouble(bs[2]), Double.parseDouble(bs[3]) };
-               map.put("bounds", bounds);
-               list.add(map);
-            } 
-         } catch(Exception e) {
-            log.error(e.getMessage(), e);
-            return null;
+      try {
+         User user = _secMng.currentUser();
+         List<Shapefile> fileList = _yaoganService.getShapefiles(user, placeId, time);
+         for (Shapefile file : fileList) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("type", file.getCategory().getType());
+            String wmsInfo = file.getWmsUrl();
+            String[] infos = wmsInfo.split("\\?");
+            map.put("layerName", infos[0]);
+            String[] bs = infos[1].split(",");
+            double[] bounds = { Double.parseDouble(bs[0]), Double.parseDouble(bs[1]),
+                  Double.parseDouble(bs[2]), Double.parseDouble(bs[3]) };
+            map.put("bounds", bounds);
+            list.add(map);
          }
-      } else {
-         double[] bounds = { 112.28644133876368, 39.41956384236653, 112.46459523013785,
-               39.592808951996105 };
-         Map<String, Object> map;
-         map = new HashMap<String, Object>();
-         map.put("type", "kq");
-         map.put("layerName", "yaogan:pingshuo_KQ");
-         map.put("bounds", bounds);
-         list.add(map);
-         map = new HashMap<String, Object>();
-         map.put("type", "tdly");
-         map.put("layerName", "yaogan:tdly2011");
-         map.put("bounds", bounds);
-         list.add(map);
-         map = new HashMap<String, Object>();
-         map.put("type", "dbtx");
-         map.put("layerName", "yaogan:dbtx2011");
-         map.put("bounds", bounds);
-         list.add(map);
-         map = new HashMap<String, Object>();
-         map.put("type", "trqs");
-         map.put("layerName", "yaogan:trqs2011");
-         map.put("bounds", bounds);
-         list.add(map);
-         map = new HashMap<String, Object>();
-         map.put("type", "gqyg");
-         map.put("layerName", "yaogan:TH01_2011");
-         map.put("bounds", bounds);
-         list.add(map);
-         map = new HashMap<String, Object>();
-         map.put("type", "dlf");
-         map.put("layerName", "yaogan:5f46a3e1c9fe43fb8756943d08d7966a");
-         map.put("bounds", bounds);
-         list.add(map);
+      } catch (Exception e) {
+         log.error(e.getMessage(), e);
+         return null;
       }
       return list;
    }
@@ -176,25 +101,16 @@ public class LayersController {
    public EnvStats querySwfd(@RequestParam("placeId") Long placeId,
          @RequestParam("time") String time,
          @RequestParam(required = false, value = "geometry") String geometry) {
-      if (!mock) {
-         try {
-            User user = _secMng.currentUser();
-            if (geometry == null) {
-               return _yaoganService.getEnvStats(user, placeId, time);
-            } else {
-               return _yaoganService.getEnvStats(user, placeId, time, geometry);
-            }
-         } catch(Exception e) {
-            log.error(e.getMessage(), e);
-            return null;
+      try {
+         User user = _secMng.currentUser();
+         if (geometry == null) {
+            return _yaoganService.getEnvStats(user, placeId, time);
+         } else {
+            return _yaoganService.getEnvStats(user, placeId, time, geometry);
          }
-      } else {
-         EnvStats envStats = new EnvStats();
-         envStats.setAbio(1);
-         envStats.setAero(2);
-         envStats.setAsus(3);
-         envStats.setAveg(4);
-         return envStats;
+      } catch (Exception e) {
+         log.error(e.getMessage(), e);
+         return null;
       }
    }
 

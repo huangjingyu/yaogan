@@ -2,13 +2,12 @@
     (function(){
     	var layerGroupWmsUrl = "/geoserver/wms";
     	var layerWmsUrl = "/geoserver/yaogan/wms";
-    	var test = false;
-    	var kqLayerName = test ? "yaogan:pingshuo_KQ" : null;
-    	var tdlyLayerName = test ? "yaogan:tdly2011" : null;
-    	var dbtxLayerName = test ? "yaogan:dbtx2011" : null;
-    	var trqsLayerName = test ? "yaogan:trqs2011" : null;
-    	var gqygLayerName = test ? "yaogan:TH01_2011" : null;
-    	var dlfLayerName = test ? "yaogan:groundcrack2011" : null;
+    	var kqLayerName = null;
+    	var tdlyLayerName = null;
+    	var dbtxLayerName = null;
+    	var trqsLayerName = null;
+    	var gqygLayerName = null;
+    	var dlfLayerName = null;
         /**全局命名空间R*/
         var R = window.R = {
         		/*顺序号 唯一标示的递增值*/
