@@ -18,7 +18,8 @@
 	<div id="middle2">
 		<div class="rtlist">
 			<div class="map_top">
-				<form  id="query_files" action="${ctx}/admin/place/fileList" method="post">
+				<form id="query_files" action="${ctx}/admin/place/fileList"
+					method="post">
 					<table cellspacing="0" cellpadding="0" border="0">
 						<tbody>
 							<tr>
@@ -27,9 +28,8 @@
 								<td width="65">拍摄年份:</td>
 								<td width="90"><input type="text" size="20"
 									name="shootTime"></input></td>
-								<td width="79"><img
-										width="50" height="24" alt="查询"
-										src="${ctx}/static/img/butt_search.gif" onclick="query()"></td>
+								<td width="79"><img width="50" height="24" alt="查询"
+									src="${ctx}/static/img/butt_search.gif" onclick="query()"></td>
 							</tr>
 						</tbody>
 					</table>
@@ -49,14 +49,23 @@
 							<th width="15%">文件名</th>
 							<th width="15%">上传时间</th>
 						</tr>
-						<c:forEach items="${shapefiles}" var="file">
-							<tr>
-								<td>${file.place.name}</td>
-								<td>${file.shootTime}</td>
-								<td>${file.typeString}</td>
-								<td>${file.fileName}</td>
-								<td>${file.uploadTime}</td>
-							</tr>
+						<c:forEach items="${shapefiles}" var="group">
+							<c:forEach items="${group.shootTimeGroupList}" var="stvo"
+								varStatus="gsta">
+								<c:forEach items="${stvo.fileList}" var="vo" varStatus="tsta">
+									<tr>
+										<c:if test="${gsta.index eq 0 and tsta.index eq 0}">
+											<td rowspan="${group.count}">${group.placeName}</td>
+										</c:if>
+										<c:if test="${tsta.index eq 0}">
+											<td rowspan="${stvo.count}">${vo.shootTime}</td>
+										</c:if>
+										<td>${ vo.typeString}</td>
+										<td>${ vo.fileName}</td>
+										<td>${ vo.uploadTime}</td>
+									</tr>
+								</c:forEach>
+							</c:forEach>
 						</c:forEach>
 					</tbody>
 				</table>

@@ -10,6 +10,7 @@ import org.geotools.data.simple.SimpleFeatureSource;
 import org.opengis.feature.simple.SimpleFeature;
 import org.yaogan.gis.vo.LandDeterioratedInfo;
 import org.yaogan.gis.vo.LandTypeInfo;
+import org.yaogan.gis.vo.Level2LandTypeVo;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -25,6 +26,25 @@ public class EcoFactorCaculator {
    private static final double RATE_ABIO_FARM = 0.11;
    private static final double RATE_ABIO_CONS = 0.04;
    private static final double RATE_ABIO_NOT_USED = 0.01;
+
+   // 暂未使用
+   // private static final double RATE_ABIO_YOULINDI = 0.6;
+   // private static final double RATE_ABIO_GUANMULINDI = 0.25;
+   // private static final double RATE_ABIO_QITALINDI = 0.15;
+   // private static final double RATE_ABIO_GAOFUGAICAODI = 0.6;
+   // private static final double RATE_ABIO_ZHONGFUGAICAODI = 0.3;
+   // private static final double RATE_ABIO_DIFUGAOCAODI = 0.1;
+   // private static final double RATE_ABIO_HELIU = 0.6;
+   // private static final double RATE_ABIO_HUPO = 0.4;
+   // private static final double RATE_ABIO_SHUIJIAODI = 0.6;
+   // private static final double RATE_ABIO_HANDI = 0.4;
+   // private static final double RATE_ABIO_CHENGZHENYONGDI = 0.2;
+   // private static final double RATE_ABIO_NONGCUNYONGDI = 0.5;
+   // private static final double RATE_ABIO_QITAYONGDI = 0.3;
+   // private static final double RATE_ABIO_SHADI = 0.2;
+   // private static final double RATE_ABIO_YANJIANDI = 0.3;
+   // private static final double RATE_ABIO_LUODI = 0.3;
+   // private static final double RATE_ABIO_LUOYANSHILI = 0.2;
    // end
 
    // 植被覆盖指数参数begin
@@ -33,6 +53,22 @@ public class EcoFactorCaculator {
    private static final double RATE_AVEG_FARM = 0.19;
    private static final double RATE_AVEG_CONS = 0.07;
    private static final double RATE_AVEG_NOT_USED = 0.02;
+   // 暂未使用
+   // private static final double RATE_AVEG_YOULINDI = 0.6;
+   // private static final double RATE_AVEG_GUANMULINDI = 0.25;
+   // private static final double RATE_AVEG_QITALINDI = 0.15;
+   // private static final double RATE_AVEG_GAOFUGAICAODI = 0.6;
+   // private static final double RATE_AVEG_ZHONGFUGAICAODI = 0.3;
+   // private static final double RATE_AVEG_DIFUGAOCAODI = 0.1;
+   // private static final double RATE_AVEG_SHUIJIAODI = 0.7;
+   // private static final double RATE_AVEG_HANDI = 0.3;
+   // private static final double RATE_AVEG_CHENGZHENYONGDI = 0.2;
+   // private static final double RATE_AVEG_NONGCUNYONGDI = 0.5;
+   // private static final double RATE_AVEG_QITAYONGDI = 0.3;
+   // private static final double RATE_AVEG_SHADI = 0.2;
+   // private static final double RATE_AVEG_YANJIANDI = 0.3;
+   // private static final double RATE_AVEG_LUODI = 0.3;
+   // private static final double RATE_AVEG_LUOYANSHILI = 0.2;
    // end
 
    // 土地退化指数参数begin
@@ -73,7 +109,8 @@ public class EcoFactorCaculator {
                   + RATE_ABIO_WET * wetland_area + RATE_ABIO_FARM * farm_land_area
                   + RATE_ABIO_CONS * construcion_area + RATE_ABIO_NOT_USED
                   * not_used_area) / total_area;
-      return result;
+      int intResult = (int) (result * 10000);
+      return intResult / 10000.0;
    }
 
    private static double computeAbio(LandTypeInfo areaInfo) {
@@ -83,12 +120,9 @@ public class EcoFactorCaculator {
       double wetland_area = areaInfo.getWetArea();
       double construcion_area = areaInfo.getConstructionArea();
       double not_used_area = areaInfo.getNotUsedArea();
-      double total_area = areaInfo.getTotalArea();
-      double result = FactorCaculateConstant.ABIO
-            * (RATE_ABIO_FOREST * forest_area + RATE_ABIO_LAWN * lawn_area
-                  + RATE_ABIO_WET * wetland_area + RATE_ABIO_FARM * farm_land_area
-                  + RATE_ABIO_CONS * construcion_area + RATE_ABIO_NOT_USED
-                  * not_used_area) / total_area;
+      double result = computeAbio(forest_area, lawn_area, wetland_area, farm_land_area,
+            construcion_area, not_used_area);
+
       return result;
    }
 
@@ -114,7 +148,8 @@ public class EcoFactorCaculator {
             * (RATE_AVEG_FOREST * forest_area + RATE_AVEG_LAWN * lawn_area
                   + RATE_AVEG_FARM * farm_land_area + RATE_AVEG_CONS * construction_area + RATE_AVEG_NOT_USED
                   * not_used_area) / total_area;
-      return result;
+      int intResult = (int) (result * 10000);
+      return intResult / 10000.0;
    }
 
    private static double computeAveg(LandTypeInfo areaInfo) {
@@ -123,12 +158,20 @@ public class EcoFactorCaculator {
       double farm_land_area = areaInfo.getFarmArea();
       double construction_area = areaInfo.getConstructionArea();
       double not_used_area = areaInfo.getNotUsedArea();
-      double total_area = areaInfo.getTotalArea();
-      double result = FactorCaculateConstant.AVEG
-            * (RATE_AVEG_FOREST * forest_area + RATE_AVEG_LAWN * lawn_area
-                  + RATE_AVEG_FARM * farm_land_area + RATE_AVEG_CONS * construction_area + RATE_AVEG_NOT_USED
-                  * not_used_area) / total_area;
+      double result = computeAveg(forest_area, lawn_area, farm_land_area,
+            construction_area, not_used_area);
+
       return result;
+   }
+
+   private static double computeAbio(Level2LandTypeVo vo) {
+      return computeAbio(vo.getForestArea(), vo.getLawnArea(), vo.getWetArea(),
+            vo.getFarmArea(), vo.getConstructionArea(), vo.getNotUsedArea());
+   }
+
+   public static double computeAveg(Level2LandTypeVo vo) {
+      return computeAveg(vo.getForestArea(), vo.getLawnArea(), vo.getFarmArea(),
+            vo.getConstructionArea(), vo.getNotUsedArea());
    }
 
    /**
@@ -148,18 +191,15 @@ public class EcoFactorCaculator {
             - FactorCaculateConstant.AERO
             * (RATE_AERO_SLIGHT * slight_area + RATE_AERO_PART * part_area + RATE_AERO_SERIOUS
                   * serious_area) / total_area;
-      return result;
+      int intResult = (int) (result * 10000);
+      return intResult / 10000.0;
    }
 
    private static double computeAero(LandDeterioratedInfo landInfo) {
       double slight_area = landInfo.getSlightArea();
       double part_area = landInfo.getPartArea();
       double serious_area = landInfo.getSeriousArea();
-      double total_area = landInfo.getTotalArea();
-      double result = 100
-            - FactorCaculateConstant.AERO
-            * (RATE_AERO_SLIGHT * slight_area + RATE_AERO_PART * part_area + RATE_AERO_SERIOUS
-                  * serious_area) / total_area;
+      double result = computeAero(slight_area, part_area, serious_area);
       return result;
    }
 
@@ -269,7 +309,8 @@ public class EcoFactorCaculator {
             + RATE_ASUC
             * (100 - FactorCaculateConstant.ASUC * fracture_length / total_area)
             + RATE_UWC * (100 - FactorCaculateConstant.AUWC * water_descrement);
-      return result;
+      int intResult = (int) (result * 10000);
+      return intResult / 10000.0;
    }
 
    public static double computeAsus(SimpleFeatureSource fractureSource,
@@ -379,6 +420,9 @@ public class EcoFactorCaculator {
    private static LandTypeInfo getLandTypeInfo(SimpleFeatureCollection collection)
          throws IOException {
 
+      if (isLevel2LandType(collection))
+         return getLevel2LandTypeVo(collection);
+
       SimpleFeatureIterator iterator = collection.features();
       Map<String, Double> areaMap = new HashMap<String, Double>();
       while (iterator.hasNext()) {
@@ -398,6 +442,41 @@ public class EcoFactorCaculator {
       }
       LandTypeInfo typeInfo = new LandTypeInfo(areaMap);
       return typeInfo;
+   }
+
+   private static boolean isLevel2LandType(SimpleFeatureCollection collection) {
+      SimpleFeatureIterator iterator = collection.features();
+      Object value1 = null;
+      Object value2 = null;
+      if (iterator.hasNext()) {
+         SimpleFeature feature = iterator.next();
+         value1 = feature.getAttribute("一级地类");
+         value2 = feature.getAttribute("QDLMC");
+      }
+      if (value1 == null && value2 != null)
+         return true;
+      throw new RuntimeException("未知的土地利用文件类型!");
+   }
+
+   private static Level2LandTypeVo getLevel2LandTypeVo(SimpleFeatureCollection collection) {
+      SimpleFeatureIterator iterator = collection.features();
+      Map<String, Double> areaMap = new HashMap<String, Double>();
+      while (iterator.hasNext()) {
+         SimpleFeature feature = iterator.next();
+         Object value = feature.getAttribute("QDLMC");// 二级地类key
+         if (value != null) {
+            Double area = (Double) feature.getAttribute("MJ");// 面积key
+            Double totalarea = areaMap.get(value);
+            if (totalarea == null)
+               areaMap.put((String) value, area);
+            else {
+               totalarea += area;
+               areaMap.put((String) value, area);
+            }
+         }
+      }
+      Level2LandTypeVo vo = new Level2LandTypeVo(areaMap);
+      return vo;
    }
 
    private static LandDeterioratedInfo getDeterioratedInfo(

@@ -35,7 +35,7 @@
                 kqLayer : {
                   wmsUrl : layerWmsUrl,
                   layerName : kqLayerName,
-                  idx : 5,
+                  idx : 7,
                   stamp : 0
                 },
                 /*土地利用配置*/
