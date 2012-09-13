@@ -59,4 +59,45 @@
             }
             #mapSelect li{
                float : left
-            }            
+            } 
+            
+         .olControlPanel div {
+            display:block;
+            width: 24px;
+            height: 24px;
+            margin: 5px;
+            background-color:white;
+         }
+         /*导航控制*/
+         .olControlPanel .olControlNavigationItemActive {
+            width: 24px;
+            height: 22px;
+            background-image: url("../js/openlayers/theme/default/img/move_feature_on.png");
+         }
+         .olControlPanel .olControlNavigationItemInactive {
+            width: 24px;
+            height: 22px;
+            background-image: url("../js/openlayers/theme/default/img/move_feature_off.png");
+         } 
+         /*区域控制*/
+          .olControlPanel .boxItemActive {
+            width: 24px;
+            height: 22px;
+            background-image: url("../img/ol-box-on.png");
+         }
+         .olControlPanel .boxItemInactive {
+            width: 24px;
+            height: 22px;
+            background-image: url("../img/ol-box-off.png");
+         }
+         /*多边形控制*/
+          .olControlPanel .pynItemActive {
+            width: 24px;
+            height: 22px;
+            background-image: url("../js/openlayers/theme/default/img/draw_polygon_on.png");
+         }
+         .olControlPanel .pynItemInactive {
+            width: 24px;
+            height: 22px;
+            background-image: url("../js/openlayers/theme/default/img/draw_polygon_off.png");
+         }                        
