@@ -48,12 +48,6 @@
          <!-- 比例尺信息 -->
          <div id="scale" style="margin-left:10px">Scale</div> 
        </div>
-       <!-- 区域选择的类型 -->
-       <div id="selectOp" style="margin-left:10px">
-       <input type="radio" value="nav" checked="checked" name="op"/>导航
-       <input type="radio" value="box" name="op"/>区域绘制
-       <input type="radio" value="pyn" name="op"/>多边形绘制
-       </div>
       </div>
       
       <div class="rmbutt"><a href="#"  id="thematicMapLink"><img src="<%=request.getContextPath()%>/static/img/butt_creatimg.jpg" width="132" height="39" /></a></div>

@@ -85,12 +85,6 @@
                   ),
                   /*坐标系*/
                 SRS : "EPSG:4326",
-                /*区域模式常量*/
-                selectOp : {
-                	NAV : "nav",
-                	BOX : "box",
-                	PYN : "pyn"
-                },
                 /*矢量图层样式*/
                 vectorStyle : {
                 	SELECT : "select"
@@ -155,27 +149,34 @@
         	}
         };
         /**添加控件*/
+        /**添加控件*/
         this.addControls = function() {
             /*添加左边的竖状工具栏 两个参数值为坐标值*/
             map.addControl(new OpenLayers.Control.PanZoomBar({
-                position: new OpenLayers.Pixel(2, 28)
+                position: new OpenLayers.Pixel(2, 42)
             }));
             /*添加比例尺*/
             map.addControl(new OpenLayers.Control.Scale($("#scale")[0]));
             /*添加坐标值*/
             map.addControl(new OpenLayers.Control.MousePosition({element: $("#location")[0]}));
             /*添加鼠标操作的的导航*/
-            this.navControl = new OpenLayers.Control.Navigation();
-            map.addControl(this.navControl);
+            this.navControl = new OpenLayers.Control.Navigation({title : "导航模式(导航并可以选择矿区图上某一个矿查询指数)"});
+            this.navControl.events.register("activate", this, function(){
+            	if(_self.gfControl) {
+            		_self.removeGfControl();
+            		_self.addGfControl();
+            		_self.gfControl.activate();
+            	}
+            });
             /*区域选择*/
             this.boxControl = new OpenLayers.Control.DrawFeature(this[R.SELECT_LNAME],
                                             OpenLayers.Handler.RegularPolygon,
-                                            {handlerOptions: {sides: 4, irregular: true}});
-            map.addControl(this.boxControl);
+                                            {handlerOptions: {sides: 4, irregular: true},
+                                            	displayClass : "box",
+                                            	title : "区域绘制(可以画一个四方形并查询指数)"});
             /*多边形选择*/
             this.pynControl = new OpenLayers.Control.DrawFeature(this[R.SELECT_LNAME],
-                    OpenLayers.Handler.Polygon);
-            map.addControl(this.pynControl);
+                    OpenLayers.Handler.Polygon, {displayClass : "pyn",title : "多边形绘制(可以画一个多边形并查询指数)"});
             /*选择元素控件*/
             this.selectControl = new OpenLayers.Control.SelectFeature(
             		this[R.SELECT_LNAME],
@@ -188,45 +189,21 @@
             		}
             		);
             map.addControl(this.selectControl);
+           // layerSwitcher = new OpenLayers.Control.LayerSwitcher();
+           // layerSwitcher.ascending = false;
+           // layerSwitcher.useLegendGraphics = true;
+            
+           // map.addControl(layerSwitcher); 
+            var panel = new OpenLayers.Control.Panel({ defaultControl: this.navControl });   
+            panel.addControls([this.navControl, this.boxControl, this.pynControl]);
+            map.addControl(panel); 
             /*多边形选择*/
-        };
-        /**根据选择的类型 调整组件的可用性*/
-        this.adjustControls = function() {
-            var boxCtl = this.boxControl;
-            var pynCtl = this.pynControl;
-            var gfCtl = this.gfControl;
-            var selectCtl = this.selectControl;
-            var selectOp = this.selectOp;
-            /*导航*/
-            if(selectOp == R.selectOp.NAV) {
-               boxCtl.deactivate();
-               pynCtl.deactivate();
-               selectCtl.deactivate();
-               if(gfCtl) {
-                  gfCtl.activate();
-               }
-            /*区域选择*/
-            } else if(selectOp == R.selectOp.BOX) {
-               boxCtl.activate();
-               pynCtl.deactivate();
-               selectCtl.deactivate();
-               if(gfCtl) {
-                  gfCtl.deactivate();
-               }
-            /*多边形选择*/
-            } else if(selectOp == R.selectOp.PYN) {
-               boxCtl.deactivate();
-               pynCtl.activate();
-               selectCtl.deactivate();
-               if(gfCtl) {
-                gfCtl.deactivate();
-               }
-               /*图形选择*/
-            }
-        	
         };
         /**添加获取特征值的控件 定为矿山的特征值*/
         this.addGfControl = function() {
+        	if(! this[R.KQ_LNAME]) {
+        		return;
+        	}
             this.gfControl = new OpenLayers.Control.GetFeature({
                 protocol: OpenLayers.Protocol.WFS.fromWMSLayer(this[R.KQ_LNAME]),
                 box: false,
@@ -274,7 +251,7 @@
         	var pos = map.layers.length - 1;
         	for(var i = map.layers.length - 2; i >= 0; i--) {
         		var current = map.layers[i];
-        		if(current.isBaseLayer) {
+        		if(current.isBaseLayer || (! R[current.name])) {
         			continue;
         		}
         		if(R[current.name].idx < R [layer.name].idx) {
@@ -393,10 +370,7 @@
                 /*如果是矿区图 则需要添加getFeature控件*/
                 if(R.KQ_LNAME == spcLayerNames[i]) {
                    this.addGfControl();
-                   /*如果是导航模式 则激活控件*/
-                   if(R.layerMap.selectOp == R.selectOp.NAV) {
-                      this.gfControl.activate();
-                   }
+                   this.gfControl.activate();
                 }
         	}
         	
@@ -406,11 +380,7 @@
          this.addFeatureEvent();
          /*添加控件*/
          this.addControls();
-         
-         /*当前选择的操作类型*/
-         this.selectOp = $("#selectOp input:checked").val();
-         /*调整控件可用性*/
-         this.adjustControls();
+
          var bounds = R[R.KQ_LNAME].bounds ? R[R.KQ_LNAME].bounds : R.BOUNDS;
          /*将地图调整为边界大小*/
          this.map.zoomToExtent(bounds);
@@ -516,10 +486,7 @@
     		 /*如果是矿区图 则需要添加getFeature控件*/
           if(R.KQ_LNAME == layerName) {
         	    R.layerMap.addGfControl();
-        	    /*如果是导航模式 则激活控件*/
-        	    if(R.layerMap.selectOp == R.selectOp.NAV) {
-        		    R.layerMap.gfControl.activate();
-        	    }
+        		R.layerMap.gfControl.activate();
           }
     	 } else {
     		 /*如果是矿区图 则先把gf控件移除*/
@@ -529,15 +496,7 @@
     		 R.layerMap.removeWmsLayer(layerName);
     	 }
      });
- 	/**
- 	*操作类型的选择
- 	*/
-   $("#selectOp input[type='radio']").bind("click", function() {
- 	  var value = $(this).val();
- 	  /*存放入对象中 以便添加矿区层时使用*/
-     R.layerMap.selectOp = value;
- 	  R.layerMap.adjustControls();
-   });
+
 
    $("#thematicMapLink").bind("click", function(){
 	   var placeId = $("#placeSelect").val();

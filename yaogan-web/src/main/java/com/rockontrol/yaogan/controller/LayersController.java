@@ -60,6 +60,29 @@ public class LayersController {
    }
 
    /**
+    * 地图图层展示页面
+    * 
+    * @return
+    */
+   @RequestMapping("/layers2")
+   public String layers2(Model model) {
+      if (!mock) {
+         User user = _secMng.currentUser();
+         List<Place> placeList = _yaoganService.getPlacesVisibleToUser(user,
+               user.getId());
+         model.addAttribute("places", placeList);
+      } else {
+         Place place = new Place();
+         place.setId(1L);
+         place.setName("平朔");
+         List<Place> placeList = Arrays.asList(place);
+         model.addAttribute("places", placeList);
+      }
+
+      return "/layers/indexlayers4";
+   }
+   
+   /**
     * 根据地区查询地图的时间
     * 
     * @param placeId
