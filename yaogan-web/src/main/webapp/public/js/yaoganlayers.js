@@ -21,14 +21,16 @@
                 /*二维layer配置*/
                 tdLayer : {
                   wmsUrl : layerGroupWmsUrl,
-                  layerName : "shanximap"
+                  layerName : "shanximap",
+                  showName : "二维地图"
                 },
                 /*遥感层名字*/
                 YG_LNAME : "ygLayer",
                 /*遥感layer配置*/
                 ygLayer : {
-                	wmsUrl : layerWmsUrl,
-                layerName : "yaogan:shanxisheng"
+                   wmsUrl : layerWmsUrl,
+                   layerName : "yaogan:shanxisheng",
+                   showName : "遥感地图"
                 },
                 /*矿区layer名字*/
                 KQ_LNAME : "kqLayer",
@@ -37,42 +39,48 @@
                   wmsUrl : layerWmsUrl,
                   layerName : kqLayerName,
                   idx : 7,
-                  stamp : 0
+                  stamp : 0,
+                  showName : "矿区"
                 },
                 /*土地利用配置*/
                  tdlyLayer : {
                    wmsUrl : layerWmsUrl,
                    layerName : tdlyLayerName,
                    idx : 5,
-                   stamp : 0
+                   stamp : 0,
+                   showName : "土地利用"
                 },
                 /*地裂缝配置*/
                 dlfLayer : {
                   wmsUrl : layerWmsUrl,
                   layerName : dlfLayerName,
                   idx : 7,
-                  stamp : 0
+                  stamp : 0,
+                  showName : "地裂缝"
                },                
                 /*地表塌陷配置*/
                  dbtxLayer : {
                    wmsUrl : layerWmsUrl,
                    layerName : dbtxLayerName,
                    idx : 7,
-                   stamp : 0
+                   stamp : 0,
+                   showName : "地塌陷"
                 },
                 /*土壤侵蚀配置*/
                  trqsLayer : {
                    wmsUrl : layerWmsUrl,
                    layerName :  trqsLayerName,
                    idx : 5,
-                   stamp : 0
+                   stamp : 0,
+                   showName : "土壤侵蚀"
                 },
                 /*高清遥感配置*/
                 gqygLayer : {
                   wmsUrl : layerWmsUrl,
                   layerName :  gqygLayerName,
                   idx : 3,
-                  stamp : 0
+                  stamp : 0,
+                  showName : "高清遥感"
                }, 
                /*选择图层*/
                selectLayer : {
@@ -138,16 +146,16 @@
         		          /*是否是基础层*/
         		          isBaseLayer : (option && option.isBaseLayer) ? option.isBaseLayer : false}; 
              /*name,url,param,options*/
-          var layer = new OpenLayers.Layer.WMS(name, R[name].wmsUrl, param, options);
+          var layer = new OpenLayers.Layer.WMS(R[name].showName, R[name].wmsUrl, param, options);
+          layer.ygName = name;
           return layer;    
         };
         /**创建vector图层*/
         this.createVectorLayer = function(name, options) {
-        	if(! options) {
-        	   return new OpenLayers.Layer.Vector(name);
-        	} else {
-        		return new OpenLayers.Layer.Vector(name, options);
-        	}
+           options.displayInLayerSwitcher = false;
+           var layer = new OpenLayers.Layer.Vector(name, options);
+           layer.ygName = name;
+           return layer;
         };
         /**添加控件*/
         /**添加控件*/
@@ -192,9 +200,9 @@
             		}
             		);
             map.addControl(this.selectControl);
-            //layerSwitcher = new OpenLayers.Control.LayerSwitcher();
-            //layerSwitcher.ascending = false;
-            //layerSwitcher.useLegendGraphics = true;
+            layerSwitcher = new OpenLayers.Control.LayerSwitcher();
+            layerSwitcher.ascending = false;
+            layerSwitcher.useLegendGraphics = true;
             
             //map.addControl(layerSwitcher); 
             var panel = new OpenLayers.Control.Panel({ defaultControl: this.navControl });   
@@ -225,6 +233,7 @@
         };
         /**移除获取特征值的控件*/
         this.removeGfControl = function() {
+        	this.gfControl.deactivate();
         	map.removeControl(this.gfControl);
         };
         /**添加wms图层*/
@@ -254,16 +263,16 @@
         	var pos = map.layers.length - 1;
         	for(var i = map.layers.length - 2; i >= 0; i--) {
         		var current = map.layers[i];
-        		if(current.isBaseLayer || (! R[current.name])) {
+        		if(current.isBaseLayer || (! current.ygName) || (! R[current.ygName])) {
         			continue;
         		}
-        		if(R[current.name].idx < R [layer.name].idx) {
+        		if(R[current.ygName].idx < R [layer.ygName].idx) {
         			break;
         		}
-        		if(R[current.name].idx > R [layer.name].idx) {
+        		if(R[current.ygName].idx > R [layer.ygName].idx) {
         			pos = i;
         		} else {
-        			if(R[current.name].stamp < R [layer.name].stamp) {
+        			if(R[current.ygName].stamp < R [layer.ygName].stamp) {
         				break;
         			} else {
         				pos = i;
@@ -299,6 +308,8 @@
         		var time = R.layerMap.time;
         		if(placeId && time) {
         			var geometry = "geometry=" + feature.geometry;
+        			/*顺序号 用于控制延迟*/
+        			R.popupSeq = feature.popupSeq = R.getSeq();
         			R.queryAreaData(placeId, time, geometry, feature);
         		}
         	});
@@ -335,6 +346,10 @@
          */
         R.queryAreaData = function(placeId,time,geometry,feature) {
      	   $.getJSON(R.reqUrl.QUERYSTATS + "?placeId=" + placeId + "&time=" + time + "&" + geometry, function(result) {
+     		   /*如果顺序号过了 则说明点击了新的 当前的丢弃*/
+     		   if(feature.popupSeq != R.popupSeq) {
+     			   return;
+     		   }
      		   if(result == null) {
      			   alert("未查询到相关指数");
      			   return;
@@ -357,8 +372,9 @@
         	/*基础图层名称*/
          this.baseLayerName = $("#mapSelect input[type='radio']:checked").val() + "Layer";
         	/*添加基础图层*/
-         this.addWmsLayer(this.baseLayerName, {isBaseLayer : true});
-         
+         this.addWmsLayer(R.TD_LNAME, {isBaseLayer : true});
+         this.addWmsLayer(R.YG_LNAME, {isBaseLayer : true});
+         this.map.setBaseLayer(this[this.baseLayerName]);
         	/*专题图层名称*/
         	var spcLayerNames = this.spcLayerNames = [];
         	$("#mapSelect input[type='checkbox']:checked").each(function(){
@@ -454,25 +470,7 @@
       /**底层图片的切换*/
       $("#mapSelect input[type='radio']").bind("click", function() {
      	 var layerName = $(this).val() + "Layer";
-     	 /*如果此图层已存在 则直接返回*/
-     	 if(R.layerMap[layerName]) {
-     		 return;
-     	 }
-    	 if(! R[layerName].layerName) {
-    		 alert("该类型专题图尚不存在");
-    		 return;
-    	 }
-    	 var addLayer = layerName;
-    	 var rmLayer;
-    	 /*如果选择的是二维图 则删除遥感图层 添加二维图层*/
-    	 if(R.TD_LNAME == layerName) {
-    		 rmLayer = R.YG_LNAME;
-         /*否则删除二维图层 添加遥感图层*/
-    	 } else {
-    		 rmLayer = R.TD_LNAME;
-    	 }
-    	 R.layerMap.addWmsLayer(addLayer, {isBaseLayer : true});
-    	 R.layerMap.removeWmsLayer(rmLayer);
+     	 R.layerMap.map.setBaseLayer(layerName);
       });
       
       /**专题层的选择*/

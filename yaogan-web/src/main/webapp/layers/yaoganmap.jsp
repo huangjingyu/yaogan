@@ -37,7 +37,7 @@
                <input type="checkbox" value="dbtx"/>地表塌陷
                <input type="checkbox" value="dlf"/>地裂缝
                <input type="checkbox" value="trqs"/>土壤侵蚀
-               <input type="checkbox" value="gqyg"/>高清遥感图
+               <input type="checkbox" value="gqyg"/>高清遥感
             </li>
          </ul> 
       </div>
