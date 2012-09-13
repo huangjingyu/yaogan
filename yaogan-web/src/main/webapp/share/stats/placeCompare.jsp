@@ -182,31 +182,39 @@
 		<div class="rtlist">
 			<div class="middle_tab">
 				<ul class="tabs">
-					<li><a href="timeCompare" class="">时间分析</a>
-					</li>
-					<li><a href="placeCompare" class="current">空间分析</a>
-					</li>
+					<li><a href="timeCompare" class="">时间分析</a></li>
+					<li><a href="placeCompare" class="current">空间分析</a></li>
 				</ul>
-				<div data-dojo-type="dojox.layout.TableContainer"
-					data-dojo-props="cols:1" id="tc1">
-					<select id="time" name="time" data-dojo-type="dijit.form.Select"
-						title="请选择时间:" onchange="showAvaPlaces(this.value)">
-						<option value="">请选择</option>
-						<c:forEach var="time" items="${times}">
-							<option value="${time}">${time}</option>
-						</c:forEach>
-					</select>
-					<div id="placesDiv" data-dojo-type="dijit.layout.ContentPane"
-						title="请选择矿区:"></div>
+				<div class="pane" style="display: block; height: 800px;">
+					<form id="form1" name="form1" method="post" action="">
+						<table width="700px" border="0" cellspacing="0" cellpadding="0"
+							id="table_two">
+							<tbody>
+								<tr>
+									<td>请选择时间:</td>
+									<td><select id="time" name="time"
+										data-dojo-type="dijit.form.Select" title="请选择时间:"
+										onchange="showAvaPlaces(this.value)">
+											<option value="">请选择</option>
+											<c:forEach var="time" items="${times}">
+												<option value="${time}">${time}</option>
+											</c:forEach>
+									</select></td>
+									<td width="14%" rowspan="2"><a href="#"
+										onclick="placeCompare()"><img
+											src="${ctx}/static/img/butt_fx.gif" width="50" height="24"></a></td>
+								</tr>
+								<tr>
+									<td width="16%">请选择矿区:</td>
+									<td><div id="placesDiv"
+											data-dojo-type="dijit.layout.ContentPane" title="请选择矿区:"></div></td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+					<div class="pane_pic" id="chartNode"
+						style="width: 800px; height: 600px;"></div>
 				</div>
-				<div>
-					<button data-dojo-type="dijit.form.Button" type="button">
-						分析
-						<script type="dojo/on" data-dojo-event="click"
-							data-dojo-args="evt">placeCompare();</script>
-					</button>
-				</div>
-				<div id="chartNode" style="width: 700px; height: 480px; margin-top: 10px;"></div>
 			</div>
 		</div>
 	</div>
