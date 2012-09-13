@@ -8,6 +8,8 @@
     	var trqsLayerName = null;
     	var gqygLayerName = null;
     	var dlfLayerName = null;
+    	
+    	//OpenLayers.Lang.setCode("");
         /**全局命名空间R*/
         var R = window.R = {
         		/*顺序号 唯一标示的递增值*/
@@ -155,9 +157,11 @@
                 position: new OpenLayers.Pixel(2, 42)
             }));
             /*添加比例尺*/
-            map.addControl(new OpenLayers.Control.Scale($("#scale")[0]));
+            map.addControl(new OpenLayers.Control.Scale());
+            /*添加比例尺*/
+            map.addControl(new OpenLayers.Control.ScaleLine());
             /*添加坐标值*/
-            map.addControl(new OpenLayers.Control.MousePosition({element: $("#location")[0]}));
+            map.addControl(new OpenLayers.Control.MousePosition());
             /*添加鼠标操作的的导航*/
             this.navControl = new OpenLayers.Control.Navigation({title : "导航模式(导航并可以选择矿区图上某一个矿查询指数)"});
             this.navControl.events.register("activate", this, function(){

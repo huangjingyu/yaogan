@@ -42,12 +42,6 @@
          </ul> 
       </div>
       <div id="map"></div>
-               <div id="wrapper">
-         <!-- 地理位置信息 -->
-         <div id="location">位置</div>
-         <!-- 比例尺信息 -->
-         <div id="scale" style="margin-left:10px">Scale</div> 
-       </div>
       </div>
       
       <div class="rmbutt"><a href="#"  id="thematicMapLink"><img src="<%=request.getContextPath()%>/static/img/butt_creatimg.jpg" width="132" height="39" /></a></div>
