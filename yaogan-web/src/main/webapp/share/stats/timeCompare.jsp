@@ -10,6 +10,9 @@
 </style>
 <script type="text/javascript">
 	function timeCompare() {
+		var colorArr = [ "#d14b4c", "#784ca5", "#2a6fae", "#72b238", "#d4d42f",
+				"#ffa520", "#a4784b" ];
+		var colorNum = colorArr.length;
 		dojo.empty("chartNode");
 		var placeId = dijit.byId("placeId").attr("value");
 		var timeArr = [];
@@ -56,7 +59,7 @@
 									+ axisLabels[ind].text + "为"
 									+ envStats[key];
 							seriesObj.data.push(dataObj);
-							//dataObj.color = colorArr[i % 3];
+							dataObj.color = colorArr[i % colorNum];
 						});
 						seriesArr.push(seriesObj);
 					});
