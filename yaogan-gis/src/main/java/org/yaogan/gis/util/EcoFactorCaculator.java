@@ -109,7 +109,7 @@ public class EcoFactorCaculator {
                   + RATE_ABIO_WET * wetland_area + RATE_ABIO_FARM * farm_land_area
                   + RATE_ABIO_CONS * construcion_area + RATE_ABIO_NOT_USED
                   * not_used_area) / total_area;
-      int intResult = (int) (result * 10000);
+      int intResult = (int) (result * 100 * 10000);
       return intResult / 10000.0;
    }
 
@@ -148,7 +148,7 @@ public class EcoFactorCaculator {
             * (RATE_AVEG_FOREST * forest_area + RATE_AVEG_LAWN * lawn_area
                   + RATE_AVEG_FARM * farm_land_area + RATE_AVEG_CONS * construction_area + RATE_AVEG_NOT_USED
                   * not_used_area) / total_area;
-      int intResult = (int) (result * 10000);
+      int intResult = (int) (result * 100 * 10000);
       return intResult / 10000.0;
    }
 
