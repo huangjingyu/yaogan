@@ -83,12 +83,12 @@
           .olControlPanel .boxItemActive {
             width: 24px;
             height: 22px;
-            background-image: url("../js/openlayers/theme/default/img/draw_line_on.png");
+            background-image: url("../img/ol-box-on.png");
          }
          .olControlPanel .boxItemInactive {
             width: 24px;
             height: 22px;
-            background-image: url("../js/openlayers/theme/default/img/draw_line_off.png");
+            background-image: url("../img/ol-box-off.png");
          }
          /*¶à±ßÐÎ¿ØÖÆ*/
           .olControlPanel .pynItemActive {
