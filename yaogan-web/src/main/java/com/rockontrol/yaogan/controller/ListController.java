@@ -39,13 +39,18 @@ public class ListController {
       // model.addAttribute("shapefiles", list);
       List<ShapefileGroupVo> groupVoList = groupShapefiles(list);
       model.addAttribute("shapefiles", groupVoList);
+      model.addAttribute("places",
+            _service.getPlacesVisibleToUser(caller, caller.getId()));
       return "/admin/stats/shapefileList";
    }
 
    @RequestMapping("/fileList")
-   public String list(Model model, @RequestParam("place") String placeName,
+   public String list(Model model, @RequestParam("placeId") Long placeId,
          @RequestParam("shootTime") String shootTime) {
-      Place place = _service.getPlaceByName(placeName);
+      if (placeId == null) {
+         return "redirect:/admin/place";
+      }
+      Place place = _service.getPlaceById(placeId);
       User caller = _secMgr.currentUser();
       List<Shapefile> list = new ArrayList<Shapefile>();
       if (place != null && shootTime != null) {
@@ -59,6 +64,11 @@ public class ListController {
       // model.addAttribute("shapefiles", list);
       List<ShapefileGroupVo> groupVoList = groupShapefiles(list);
       model.addAttribute("shapefiles", groupVoList);
+      model.addAttribute("places",
+            _service.getPlacesVisibleToUser(caller, caller.getId()));
+      model.addAttribute("curPlaceId", placeId);
+      model.addAttribute("curShootTime", shootTime);
+      model.addAttribute("shootTimes", _service.getAvailableTimeOptions(caller, placeId));
       return "/admin/stats/shapefileList";
 
    }
