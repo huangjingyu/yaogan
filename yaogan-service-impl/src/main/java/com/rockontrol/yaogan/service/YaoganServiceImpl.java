@@ -27,8 +27,10 @@ import com.rockontrol.yaogan.model.Shapefile;
 import com.rockontrol.yaogan.model.Shapefile.Category;
 import com.rockontrol.yaogan.model.User;
 import com.rockontrol.yaogan.model.UserPlace;
+import com.rockontrol.yaogan.service.util.ShapefileUtil;
 import com.rockontrol.yaogan.vo.EnvStats;
 import com.rockontrol.yaogan.vo.Page;
+import com.rockontrol.yaogan.vo.ShapefileGroupVo;
 
 @Service
 public class YaoganServiceImpl implements IYaoganService {
@@ -471,15 +473,56 @@ public class YaoganServiceImpl implements IYaoganService {
    }
 
    @Override
-   public Page<Shapefile> filterShapefiles(Long placeId, String time, int pageNum,
+   public Page filterShapefiles(User caller, Long placeId, String time, int pageNum,
          int pageSize) {
-      Page<Shapefile> page = new Page<Shapefile>(pageNum, pageSize);
-      long count = shapefileDao.getCount(placeId, time);
+      Page page = new Page(pageNum, pageSize);
+      List<Shapefile> list = new ArrayList<Shapefile>();
+      long count = 0;
+      if (caller.getIsAdmin()) {
+         list = shapefileDao.filterShapefilesOfOrgByPage(caller.getOrgId(), placeId,
+               time, page.getStartItemIndex(), pageSize);
+         count = shapefileDao.filterCountOfOrg(caller.getOrgId(), placeId, time);
+      } else {
+         list = shapefileDao.filterShapefilesOfUserByPage(caller.getId(), placeId, time,
+               page.getStartItemIndex(), pageSize);
+         count = shapefileDao.filterCountOfUser(caller.getId(), placeId, time);
+      }
+      List<ShapefileGroupVo> groupList = ShapefileUtil.groupShapefiles(list);
       page.setTotalItemNum(count);
-      List<Shapefile> list = shapefileDao.filter(placeId, time,
-            page.getStartItemIndex(), pageSize);
-      page.setItems(list);
+      page.setItems(groupList);
       return page;
+   }
+
+   @Override
+   public Page getShapefilesOfUserByPage(User caller, int pageNum, int pageSize) {
+      Page page = new Page(pageNum, pageSize);
+      List<Shapefile> list = new ArrayList<Shapefile>();
+      long count = 0;
+      if (caller.getIsAdmin()) {
+         list = shapefileDao.getShapefilesOfOrgByPage(caller.getOrgId(),
+               page.getStartItemIndex(), pageSize);
+         count = shapefileDao.getShapefileCountOfOrg(caller.getOrgId());
+      } else {
+         list = shapefileDao.getShapefilesOfUserByPage(caller.getId(),
+               page.getStartItemIndex(), pageSize);
+         count = shapefileDao.getShapefileCountOfUser(caller);
+      }
+      List<ShapefileGroupVo> groupList = ShapefileUtil.groupShapefiles(list);
+      page.setTotalItemNum(count);
+      page.setItems(groupList);
+      return page;
+   }
+
+   @Override
+   public long getShapefilesCountOfUser(User caller) {
+      long count = 0;
+      if (caller.getIsAdmin()) {
+         count = this.shapefileDao.getShapefileCountOfOrg(caller.getOrgId());
+      } else {
+         count = this.shapefileDao.getShapefileCountOfUser(caller);
+      }
+
+      return count;
    }
 
 }

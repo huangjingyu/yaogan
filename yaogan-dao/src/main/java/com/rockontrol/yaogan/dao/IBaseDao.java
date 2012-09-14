@@ -86,4 +86,5 @@ public interface IBaseDao<T> {
          Map<String, Object> map);
 
    public long getCount(Query query, Map<String, Object> map);
+
 }

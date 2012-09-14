@@ -230,7 +230,11 @@ public interface IYaoganService {
    public void saveShapefile(User caller, String placeName, Category type, File file,
          String filePath, String origionFileName, String time);
 
-   public Page<Shapefile> filterShapefiles(Long placeId, String time, int pageNum,
+   public Page filterShapefiles(User caller, Long placeId, String time, int pageNum,
          int pageSize);
+
+   public Page getShapefilesOfUserByPage(User caller, int pageNum, int pageSize);
+
+   public long getShapefilesCountOfUser(User caller);
 
 }

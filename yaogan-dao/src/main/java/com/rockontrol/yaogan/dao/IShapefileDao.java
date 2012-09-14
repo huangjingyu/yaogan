@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.rockontrol.yaogan.model.Place;
 import com.rockontrol.yaogan.model.Shapefile;
+import com.rockontrol.yaogan.model.User;
 
 public interface IShapefileDao extends IBaseDao<Shapefile> {
    public List<String> getAvailableTimesOfPlace(Long placeId);
@@ -30,4 +31,21 @@ public interface IShapefileDao extends IBaseDao<Shapefile> {
 
    public long getCount(Long placeId, String time);
 
+   public long getShapefileCountOfOrg(Long orgId);
+
+   public long getShapefileCountOfUser(User caller);
+
+   List<Shapefile> getShapefilesOfUserByPage(Long userId, int startIndex, int maxCount);
+
+   List<Shapefile> getShapefilesOfOrgByPage(Long orgId, int startIndex, int maxCount);
+
+   List<Shapefile> filterShapefilesOfOrgByPage(Long orgId, Long placeId, String time,
+         int startIndex, int maxCount);
+
+   List<Shapefile> filterShapefilesOfUserByPage(Long userId, Long placeId, String time,
+         int startIndex, int maxCount);
+
+   long filterCountOfOrg(Long orgId, Long placeId, String time);
+
+   long filterCountOfUser(Long userId, Long placeId, String time);
 }

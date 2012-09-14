@@ -1,6 +1,14 @@
+<%@page import="com.rockontrol.yaogan.vo.Page"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <%@ include file="/common/includes.jsp"%>
+<%@page import="org.springframework.web.util.WebUtils"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.Collection"%>
+<%@page import="java.util.Iterator"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="org.apache.commons.lang.StringUtils"%>
+<%@ taglib uri="http://jsptags.com/tags/navigation/pager" prefix="pg"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
 <head>
@@ -49,7 +57,7 @@
 							<th width="15%">文件名</th>
 							<th width="15%">上传时间</th>
 						</tr>
-						<c:forEach items="${shapefiles}" var="group">
+						<c:forEach items="${page.items}" var="group">
 							<c:forEach items="${group.shootTimeGroupList}" var="stvo"
 								varStatus="gsta">
 								<c:forEach items="${stvo.fileList}" var="vo" varStatus="tsta">
@@ -69,7 +77,43 @@
 						</c:forEach>
 					</tbody>
 				</table>
+
+				<!-- 分页开始 -->
+				<c:if test="${page!=null}">
+					<pg:pager url="${actionUrl}" items="${page.totalItemNum}" index="center"
+						maxPageItems="${page.pageSize}" maxIndexPages="10" isOffset="true"
+						export="offset,currentPageNumber=pageNumber" scope="request">
+						<pg:param name="pageSize" value="11"/>
+						<pg:index>
+							<pg:prev export="pageUrl">&nbsp;<a href="<%=pageUrl%>">
+									[Prev]</a>
+							</pg:prev>
+							<pg:pages>
+								<%
+									   if (pageNumber.intValue() < 10) {
+									%>&nbsp;<%
+									   }
+									                  if (pageNumber == currentPageNumber) {
+									%><b><%=pageNumber%></b>
+								<%
+									   } else {
+									%><a href="<%=pageUrl%>"><%=pageNumber%></a>
+								<%
+									   }
+									%>
+							</pg:pages>
+							<pg:next export="pageUrl">&nbsp;<a href="<%=pageUrl%>">[Next]</a>
+							</pg:next>
+							<br>
+							</font>
+						</pg:index>
+					</pg:pager>
+				</c:if>
+				<!-- 分页结束 -->
+
 			</div>
+
+
 		</div>
 	</div>
 </body>

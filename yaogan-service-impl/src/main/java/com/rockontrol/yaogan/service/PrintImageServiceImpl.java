@@ -78,22 +78,16 @@ public class PrintImageServiceImpl implements IPrintImageService {
          throws Exception {
       // TODO
       StringBuilder url = new StringBuilder(
-            "http://localhost:8080/geoserver/china/wms?service=WMS&version=1.1.0&request=GetMap");
-      // String place = placeDao.get(placeId).getName();
-      url.append("&layers=china:").append("province");
-      // url.append("&layers=yaogan:").append(place);
+            "http://localhost:8080/geoserver/yaogan/wms?service=WMS&version=1.1.0&request=GetMap");
+      String wmsUrl = shapefileDao.getShapefile(placeId, time, category).getWmsUrl();
+      url.append("&layers=").append(wmsUrl.substring(0, wmsUrl.indexOf('?')));
       url.append("&styles=");
-      // double[] bbox = this.getbBox(placeId, time, category);
-      double[] bbox = { 73.44696044921875, 6.318641185760498, 135.08583068847656,
-            53.557926177978516 };
-      url.append("&bbox=").append(bbox[0] + ",").append(bbox[1] + ",")
-            .append(bbox[2] + ",").append(bbox[3]);
+      url.append("&bbox=").append(wmsUrl.substring(wmsUrl.indexOf('?') + 1));
       url.append("&width=").append(width);
       url.append("&height=").append(heigth);
       // url.append("&srs=WGS84");
       url.append("&srs=EPSG:4326");
       url.append("&format=image%2Fjpeg");
-
       File file = new File(tempPath);
       HttpClient client = new DefaultHttpClient();
       HttpGet get = new HttpGet(url.toString());
@@ -128,7 +122,6 @@ public class PrintImageServiceImpl implements IPrintImageService {
    private File mergeImg(File img1, File img2, int x, int y) throws Exception {
       BufferedImage image = ImageIO.read(new FileInputStream(img1));
       Graphics2D g = image.createGraphics();// 得到图形上下文
-      System.out.println("img2==" + img2);
       BufferedImage image2 = ImageIO.read(new FileInputStream(img2));
       g.drawImage(image2, x, y, image2.getWidth(), image2.getHeight(), null);
       g.dispose();
