@@ -14,6 +14,6 @@
    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
    <bean class="com.rockontrol.yaogan.service.GeoServiceImpl">
       <property name="serverBase" value="${geoserver.baseUrl}"></property>
-      <property name="workDir" value="${geoserver.workDir}"></property>
+      <property name="password" value="${geoserver.password}"></property>
    </bean>
 </beans>

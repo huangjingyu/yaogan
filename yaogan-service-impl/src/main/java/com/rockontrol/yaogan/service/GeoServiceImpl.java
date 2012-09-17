@@ -17,20 +17,11 @@ public class GeoServiceImpl implements GeoService {
 
    public static final String SERVER_BASE = "http://localhost:8888/geoserver";
 
-   /**
-    * shapeFile工作目录
-    */
-   public static final String WORK_DIR = "D:/pf/apache-tomcat-7.0.29/webapps/geoserver/data/yaogandata/";
-
 
    /**
     * geoserver启动的地址
     */
    private String serverBase = SERVER_BASE;
-   /**
-    * geoserver的工作目录
-    */
-   private String workDir = WORK_DIR;
    
    private String userName = "admin";
    
@@ -60,14 +51,6 @@ public class GeoServiceImpl implements GeoService {
 
    public void setServerBase(String serverBase) {
       this.serverBase = serverBase;
-   }
-
-   public String getWorkDir() {
-      return workDir;
-   }
-
-   public void setWorkDir(String workDir) {
-      this.workDir = workDir;
    }
 
    

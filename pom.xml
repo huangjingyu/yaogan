@@ -140,7 +140,7 @@
     <homepage.user>/user/layers</homepage.user>
 
     <geoserver.baseUrl>http://localhost:8080/geoserver</geoserver.baseUrl>
-    <geoserver.workDir>C:/tomcat7/webapps/geoserver/data/yaogandata/</geoserver.workDir>
+    <geoserver.password>geoserver</geoserver.password>
   </properties>
 
   <profiles>
