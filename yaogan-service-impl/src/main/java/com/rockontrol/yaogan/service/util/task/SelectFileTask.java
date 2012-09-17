@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -20,6 +22,7 @@ import com.rockontrol.yaogan.service.util.GisHttpUtil;
 
 public class SelectFileTask implements GeoClientTask{
 
+   public static final Log log = LogFactory.getLog(SelectFileTask.class);
    @Override
    public <T> T doTask(GeoServerClient geoClient, Object... objects) {
       CallContext context = geoClient.getContext();
@@ -54,16 +57,20 @@ public class SelectFileTask implements GeoClientTask{
       context.put(GeoServerClient.SELECT_ROOT_KEY, rootValue);
       Stack<String> stack = new Stack<String>();
       File f = file;
+      log.info("filePath:" + f.getAbsolutePath());
       while(f != null) {
          stack.push(f.getName());
+         log.info("fileName:" + f.getName());
          f = f.getParentFile();
       }
       stack.pop();
       while(! stack.isEmpty()) {
          String name = stack.pop();
          html = GeoServiceUtil.getContent(response);
+         log.info("html:" + html);
          int start = GeoServiceUtil.reverseSearch(html, name, '?');
          int end = html.indexOf("\'", start);
+         log.info(start + " " + end);
          String href = html.substring(start, end);
          HttpGet get = new HttpGet(geoClient.getWebLocation(href));
          response = GisHttpUtil.execute(client, get);
