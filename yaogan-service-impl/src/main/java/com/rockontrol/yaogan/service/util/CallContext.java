@@ -1,5 +1,6 @@
 package com.rockontrol.yaogan.service.util;
 
+import java.io.File;
 import java.util.HashMap;
 
 import com.rockontrol.yaogan.model.Shapefile;
@@ -39,6 +40,10 @@ public class CallContext extends HashMap<String, Object> {
     * 新文件名称
     */
    public String newFileName;
+   /**
+    * 文件
+    */
+   public File file;
    
    public Shapefile.Category category;
 

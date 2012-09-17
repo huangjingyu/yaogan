@@ -1,20 +1,11 @@
 package com.rockontrol.yaogan.service;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.message.BasicNameValuePair;
 
 import com.rockontrol.yaogan.model.Shapefile;
 import com.rockontrol.yaogan.service.util.CallContext;
@@ -86,22 +77,23 @@ public class GeoServiceImpl implements GeoService {
       HttpClient client = null;
       CallContext context = new CallContext();
       context.category = type;
+      context.file = geoFile;
       if(! geoFile.exists()) {
          throw new RuntimeException("文件:" + geoFile.getAbsolutePath() + "不存在");
       }
       try {
          String fileName = geoFile.getName();
          context.fileName = fileName;
-         context.storeName = GeoServiceUtil.getUUID();
+         context.storeName = fileName;
          log.info(fileName + ":" + context.storeName);
          /**根据文件后缀判断文件属性*/
          if(fileName.endsWith(".shp")) {
             context.fileAttr = GeoServiceUtil.SF_ATTR;
-            GeoServiceUtil.copyShapeFile(geoFile, context.storeName, workDir);
+            //GeoServiceUtil.copyShapeFile(geoFile, context.storeName, workDir);
             context.newFileName = context.storeName + ".shp";
          } else {
             context.fileAttr = GeoServiceUtil.HD_ATTR;
-            GeoServiceUtil.copyHdFile(geoFile, context.storeName, workDir);
+            //GeoServiceUtil.copyHdFile(geoFile, context.storeName, workDir);
             context.newFileName = context.storeName + ".tif";
          }
         

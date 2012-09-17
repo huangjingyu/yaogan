@@ -15,7 +15,7 @@
         <script src='<%=request.getContextPath()%>/static/js/yaoganlayers.js'></script>
    </head>
    <body>
-      <div id="middle2">
+      <div id="middle2" style="min-width:910px">
          <%@include file="yaoganshow.jsp" %>
       </div>
    </body>
