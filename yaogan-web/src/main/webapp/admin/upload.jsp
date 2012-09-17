@@ -27,7 +27,7 @@
 						<tr>
 							<td width="17%"><label>地区名称：</label></td>
 							<td width="83%"><select data-dojo-type="dijit.form.ComboBox"
-								id="region" name="region" value="">
+								style="width: 230px;" id="region" name="region" value="">
 									<c:forEach var="place" items="${places}">
 										<option>${place.name}</option>
 									</c:forEach>
