@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.rockontrol.yaogan.model.Place;
 import com.rockontrol.yaogan.model.Shapefile;
+import com.rockontrol.yaogan.model.User;
 
 @Repository("shapefileDao")
 public class ShapefileDaoImpl extends BaseDaoImpl<Shapefile> implements IShapefileDao {
@@ -92,11 +93,20 @@ public class ShapefileDaoImpl extends BaseDaoImpl<Shapefile> implements IShapefi
    }
 
    @Override
+   public long getShapefileCountOfOrg(Long orgId) {
+      String hql = "select count(file) from com.rockontrol.yaogan.model.Shapefile file "
+            + ",com.rockontrol.yaogan.model.Place p where p.orgId=:orgId and file.placeId=p.id";
+      Query query = getSession().createQuery(hql);
+      query.setLong("orgId", orgId);
+      Long count = (Long) query.uniqueResult();
+      return count;
+   }
+
+   @Override
    public List<Shapefile> getShapefilesOfOrg(Long orgId, Long placeId, String time) {
       String hql = "select file from com.rockontrol.yaogan.model.Shapefile file "
             + ",com.rockontrol.yaogan.model.Place p where file.placeId=:placeId and file.placeId=p.id and p.orgId=:orgId "
             + " and file.shootTime=:time order by file.placeId,file.shootTime desc";
-
       Query query = getSession().createQuery(hql);
       query.setLong("orgId", orgId);
       query.setString("time", time);
@@ -145,4 +155,99 @@ public class ShapefileDaoImpl extends BaseDaoImpl<Shapefile> implements IShapefi
       }
       return null;
    }
+
+   @Override
+   public long getShapefileCountOfUser(User caller) {
+      String hql = "select count(file) from com.rockontrol.yaogan.model.Shapefile as file,"
+            + "com.rockontrol.yaogan.model.Place p,com.rockontrol.yaogan.model.UserPlace up "
+            + "  where file.placeId=up.placeId and p.id=file.placeId and up.userId=:userId";
+      Query query = getSession().createQuery(hql);
+      query.setLong("userId", caller.getId());
+      long count = (Long) query.uniqueResult();
+      return count;
+   }
+
+   @Override
+   public List<Shapefile> getShapefilesOfOrgByPage(Long orgId, int startIndex,
+         int maxCount) {
+      String hql = "select file from com.rockontrol.yaogan.model.Shapefile file "
+            + ",com.rockontrol.yaogan.model.Place p where p.orgId=:orgId and file.placeId=p.id";
+      Query query = getSession().createQuery(hql);
+      query.setLong("orgId", orgId);
+      query.setFirstResult(startIndex);
+      query.setMaxResults(maxCount);
+      return query.list();
+   }
+
+   @Override
+   public List<Shapefile> getShapefilesOfUserByPage(Long userId, int startIndex,
+         int maxCount) {
+      String hql = "select file from com.rockontrol.yaogan.model.Shapefile as file,"
+            + "com.rockontrol.yaogan.model.Place p,com.rockontrol.yaogan.model.UserPlace up "
+            + "  where file.placeId=up.placeId and p.id=file.placeId and up.userId=:userId";
+      Query query = getSession().createQuery(hql);
+      query.setLong("userId", userId);
+      query.setFirstResult(startIndex);
+      query.setMaxResults(maxCount);
+      return query.list();
+   }
+
+   @Override
+   public List<Shapefile> filterShapefilesOfOrgByPage(Long orgId, Long placeId,
+         String time, int startIndex, int maxCount) {
+      String hql = "select file from com.rockontrol.yaogan.model.Shapefile file "
+            + ",com.rockontrol.yaogan.model.Place p where file.placeId=:placeId and file.placeId=p.id and p.orgId=:orgId "
+            + " and file.shootTime=:time order by file.placeId,file.shootTime desc";
+      Query query = getSession().createQuery(hql);
+      query.setLong("orgId", orgId);
+      query.setString("time", time);
+      query.setLong("placeId", placeId);
+      query.setFirstResult(startIndex);
+      query.setMaxResults(maxCount);
+      return query.list();
+   }
+
+   @Override
+   public List<Shapefile> filterShapefilesOfUserByPage(Long userId, Long placeId,
+         String time, int startIndex, int maxCount) {
+      String hql = "select file from com.rockontrol.yaogan.model.Shapefile as file,"
+            + "com.rockontrol.yaogan.model.Place p,com.rockontrol.yaogan.model.UserPlace up "
+            + "  where file.placeId=:placeId and file.placeId=up.placeId and p.id=file.placeId and up.userId=:userId and file.shootTime=:time "
+            + "order by file.placeId,file.shootTime desc";
+      Query query = getSession().createQuery(hql);
+      query.setLong("userId", userId);
+      query.setString("time", time);
+      query.setLong("placeId", placeId);
+      query.setFirstResult(startIndex);
+      query.setMaxResults(maxCount);
+      return query.list();
+   }
+
+   @Override
+   public long filterCountOfOrg(Long orgId, Long placeId, String time) {
+      String hql = "select count(file) from com.rockontrol.yaogan.model.Shapefile file "
+            + ",com.rockontrol.yaogan.model.Place p where file.placeId=:placeId and file.placeId=p.id and p.orgId=:orgId "
+            + " and file.shootTime=:time order by file.placeId,file.shootTime desc";
+      Query query = getSession().createQuery(hql);
+      query.setLong("orgId", orgId);
+      query.setString("time", time);
+      query.setLong("placeId", placeId);
+      long count = (Long) query.uniqueResult();
+      return count;
+   }
+
+   @Override
+   public long filterCountOfUser(Long userId, Long placeId, String time) {
+      String hql = "select count(file) from com.rockontrol.yaogan.model.Shapefile as file,"
+            + "com.rockontrol.yaogan.model.Place p,com.rockontrol.yaogan.model.UserPlace up "
+            + "  where file.placeId=:placeId and file.placeId=up.placeId and p.id=file.placeId and up.userId=:userId and file.shootTime=:time "
+            + "order by file.placeId,file.shootTime desc";
+      Query query = getSession().createQuery(hql);
+      query.setLong("userId", userId);
+      query.setString("time", time);
+      query.setLong("placeId", placeId);
+      long count = (Long) query.uniqueResult();
+      return count;
+   }
+
 }

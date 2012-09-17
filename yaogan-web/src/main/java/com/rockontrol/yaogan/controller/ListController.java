@@ -17,6 +17,7 @@ import com.rockontrol.yaogan.model.Shapefile;
 import com.rockontrol.yaogan.model.User;
 import com.rockontrol.yaogan.service.ISecurityManager;
 import com.rockontrol.yaogan.service.IYaoganService;
+import com.rockontrol.yaogan.vo.Page;
 import com.rockontrol.yaogan.vo.ShapefileGroupVo;
 import com.rockontrol.yaogan.vo.ShapefileVo;
 
@@ -29,16 +30,15 @@ public class ListController {
    private ISecurityManager _secMgr;
 
    @RequestMapping(value = "", method = { RequestMethod.GET, RequestMethod.POST })
-   public String list(Model model) {
+   public String list(Model model,
+         @RequestParam(value = "pager.offset", defaultValue = "0") int offset,
+         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
       User caller = _secMgr.currentUser();
-      List<Shapefile> list = new ArrayList();
-      if (caller.getIsAdmin())
-         list = _service.getShapefilesOfOrg(caller.getOrgId());
-      else
-         list = _service.getShapefiles(caller);
-      // model.addAttribute("shapefiles", list);
-      List<ShapefileGroupVo> groupVoList = groupShapefiles(list);
-      model.addAttribute("shapefiles", groupVoList);
+      int pageNum = offset / pageSize + 1;
+      Page<ShapefileGroupVo> page = _service.getShapefilesOfUserByPage(caller, pageNum,
+            pageSize);
+      model.addAttribute("page", page);
+      model.addAttribute("actionUrl", "./place");
       model.addAttribute("places",
             _service.getPlacesVisibleToUser(caller, caller.getId()));
       return "/admin/stats/shapefileList";
@@ -46,26 +46,20 @@ public class ListController {
 
    @RequestMapping("/fileList")
    public String list(Model model, @RequestParam("placeId") Long placeId,
-         @RequestParam("shootTime") String shootTime) {
+         @RequestParam("shootTime") String shootTime,
+         @RequestParam(value = "pager.offset", defaultValue = "0") int offset,
+         @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
       if (placeId == null) {
          return "redirect:/admin/place";
       }
       Place place = _service.getPlaceById(placeId);
       User caller = _secMgr.currentUser();
-      List<Shapefile> list = new ArrayList<Shapefile>();
-      if (place != null && shootTime != null) {
-         if (caller.getIsAdmin()) {
-            list = _service.getShapefileOfOrg(caller.getOrgId(), place.getId(),
-                  shootTime);
-         } else {
-            list = _service.getShapefiles(caller, place.getId(), shootTime);
-         }
-      }
-      // model.addAttribute("shapefiles", list);
-      List<ShapefileGroupVo> groupVoList = groupShapefiles(list);
-      model.addAttribute("shapefiles", groupVoList);
-      model.addAttribute("places",
-            _service.getPlacesVisibleToUser(caller, caller.getId()));
+      int pageNum = offset / pageSize + 1;
+      Page<ShapefileGroupVo> page = _service.filterShapefiles(caller, place.getId(),
+            shootTime, pageNum, pageSize);
+      model.addAttribute("page", page);
+      model.addAttribute("actionUrl", "./place");
+
       model.addAttribute("curPlaceId", placeId);
       model.addAttribute("curShootTime", shootTime);
       model.addAttribute("shootTimes", _service.getAvailableTimeOptions(caller, placeId));

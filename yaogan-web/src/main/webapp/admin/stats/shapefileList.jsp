@@ -1,5 +1,13 @@
+<%@page import="com.rockontrol.yaogan.vo.Page"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
+<%@page import="org.springframework.web.util.WebUtils"%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.Collection"%>
+<%@page import="java.util.Iterator"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="org.apache.commons.lang.StringUtils"%>
+<%@ taglib uri="http://jsptags.com/tags/navigation/pager" prefix="pg"%>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -61,8 +69,7 @@
 											<option value="${place.id}"
 												<c:if test="${place.id eq curPlaceId}">selected="selected"</c:if>>${place.name}</option>
 										</c:forEach>
-								</select>
-								</td>
+								</select></td>
 								<td width="65">拍摄年份:</td>
 								<td width="90"><select id="shootTime" name="shootTime"
 									data-dojo-type="dijit.form.Select">
@@ -71,8 +78,7 @@
 											<option value="${shootTime}"
 												<c:if test="${shootTime eq curShootTime}">selected="selected"</c:if>>${shootTime}</option>
 										</c:forEach>
-								</select>
-								</td>
+								</select></td>
 								<td width="79"><img width="50" height="24" alt="查询"
 									src="${ctx}/static/img/butt_search.gif" onclick="query()">
 								</td>
@@ -95,7 +101,7 @@
 							<th width="15%">文件名</th>
 							<th width="15%">上传时间</th>
 						</tr>
-						<c:forEach items="${shapefiles}" var="group">
+						<c:forEach items="${page.items}" var="group">
 							<c:forEach items="${group.shootTimeGroupList}" var="stvo"
 								varStatus="gsta">
 								<c:forEach items="${stvo.fileList}" var="vo" varStatus="tsta">
@@ -115,6 +121,38 @@
 						</c:forEach>
 					</tbody>
 				</table>
+
+				<c:if test="${page!=null}">
+					<pg:pager url="${actionUrl}" items="${page.totalItemNum}"
+						index="center" maxPageItems="${page.pageSize}" maxIndexPages="10"
+						isOffset="true" export="offset,currentPageNumber=pageNumber"
+						scope="request">
+						<pg:param name="pageSize" value="11" />
+						<pg:index>
+							<pg:prev export="pageUrl">&nbsp;<a href="<%=pageUrl%>">
+									[Prev]</a>
+							</pg:prev>
+							<pg:pages>
+								<%
+								   if (pageNumber.intValue() < 10) {
+								%>&nbsp;<%
+								   }
+								               if (pageNumber == currentPageNumber) {
+								%><b><%=pageNumber%></b>
+								<%
+								   } else {
+								%><a href="<%=pageUrl%>"><%=pageNumber%></a>
+								<%
+								   }
+								%>
+							</pg:pages>
+							<pg:next export="pageUrl">&nbsp;<a href="<%=pageUrl%>">[Next]</a>
+							</pg:next>
+							<br>
+							</font>
+						</pg:index>
+					</pg:pager>
+				</c:if>
 			</div>
 		</div>
 	</div>
