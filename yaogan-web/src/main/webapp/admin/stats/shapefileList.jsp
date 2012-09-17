@@ -60,7 +60,7 @@
 					<table cellspacing="0" cellpadding="0" border="0">
 						<tbody>
 							<tr>
-								<td width="65">请选择地区:</td>
+								<td width="85">请选择地区:</td>
 								<td width="155"><select id="placeId" name="placeId"
 									data-dojo-type="dijit.form.Select"
 									onchange="showAvaTimes(this.value)">

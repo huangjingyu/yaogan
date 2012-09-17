@@ -61,7 +61,6 @@
 					document.location.replace(document.location.href);
 				},
 				error : function() {
-					alert("bad");
 				}
 			});
 		});
@@ -92,6 +91,8 @@
 		还没有分配任何矿区给此用户
 		</c:if>
 		</div>
+		<br />
+		<br />
 		<br />
 		<div id="toSharePlacesDiv" data-dojo-type="dijit.TitlePane"
 			data-dojo-props="title: '待分配权限矿区'">
