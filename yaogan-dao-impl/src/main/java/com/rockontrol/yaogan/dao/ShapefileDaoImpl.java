@@ -172,8 +172,9 @@ public class ShapefileDaoImpl extends BaseDaoImpl<Shapefile> implements IShapefi
    @Override
    public List<Shapefile> getShapefilesOfOrgByPage(Long orgId, int startIndex,
          int maxCount) {
-      String hql = "select file from com.rockontrol.yaogan.model.Shapefile file "
-            + ",com.rockontrol.yaogan.model.Place p where p.orgId=:orgId and file.placeId=p.id";
+      String hql = "select file from com.rockontrol.yaogan.model.Shapefile file,"
+            + "com.rockontrol.yaogan.model.Place p where p.orgId=:orgId and file.placeId=p.id"
+            + " order by file.placeId,file.shootTime desc";
       Query query = getSession().createQuery(hql);
       query.setLong("orgId", orgId);
       query.setFirstResult(startIndex);
@@ -186,7 +187,8 @@ public class ShapefileDaoImpl extends BaseDaoImpl<Shapefile> implements IShapefi
          int maxCount) {
       String hql = "select file from com.rockontrol.yaogan.model.Shapefile as file,"
             + "com.rockontrol.yaogan.model.Place p,com.rockontrol.yaogan.model.UserPlace up "
-            + "  where file.placeId=up.placeId and p.id=file.placeId and up.userId=:userId";
+            + " where file.placeId=up.placeId and p.id=file.placeId and up.userId=:userId"
+            + " order by file.placeId,file.shootTime desc";
       Query query = getSession().createQuery(hql);
       query.setLong("userId", userId);
       query.setFirstResult(startIndex);

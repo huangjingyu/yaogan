@@ -1,9 +1,12 @@
 package com.rockontrol.yaogan.vo;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ShapefileGroupVo {
+   private Long placeId;
    private String placeName;
    private List<ShapefileShootTimeGroupVo> shootTimeGroupList;
 
@@ -11,6 +14,14 @@ public class ShapefileGroupVo {
 
    public ShapefileGroupVo() {
       shootTimeGroupList = new ArrayList<ShapefileShootTimeGroupVo>();
+   }
+
+   public Long getPlaceId() {
+      return placeId;
+   }
+
+   public void setPlaceId(Long placeId) {
+      this.placeId = placeId;
    }
 
    public String getPlaceName() {
@@ -22,6 +33,12 @@ public class ShapefileGroupVo {
    }
 
    public List<ShapefileShootTimeGroupVo> getShootTimeGroupList() {
+      Collections.sort(shootTimeGroupList, new Comparator<ShapefileShootTimeGroupVo>() {
+         @Override
+         public int compare(ShapefileShootTimeGroupVo o1, ShapefileShootTimeGroupVo o2) {
+            return 0 - o1.getShootTime().compareTo(o2.getShootTime());
+         }
+      });
       return shootTimeGroupList;
    }
 
@@ -50,7 +67,6 @@ public class ShapefileGroupVo {
       group.addShapefileVo(vo);
       group.setShootTime(shootTime);
       shootTimeGroupList.add(group);
-
    }
 
 }
