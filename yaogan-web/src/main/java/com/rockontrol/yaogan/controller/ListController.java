@@ -39,21 +39,30 @@ public class ListController {
             pageSize);
       model.addAttribute("page", page);
       model.addAttribute("actionUrl", "./place");
+      model.addAttribute("places",
+            _service.getPlacesVisibleToUser(caller, caller.getId()));
       return "/admin/stats/shapefileList";
    }
 
    @RequestMapping("/fileList")
-   public String list(Model model, @RequestParam("place") String placeName,
+   public String list(Model model, @RequestParam("placeId") Long placeId,
          @RequestParam("shootTime") String shootTime,
          @RequestParam(value = "pager.offset", defaultValue = "0") int offset,
          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
-      Place place = _service.getPlaceByName(placeName);
+      if (placeId == null) {
+         return "redirect:/admin/place";
+      }
+      Place place = _service.getPlaceById(placeId);
       User caller = _secMgr.currentUser();
       int pageNum = offset / pageSize + 1;
       Page<ShapefileGroupVo> page = _service.filterShapefiles(caller, place.getId(),
             shootTime, pageNum, pageSize);
       model.addAttribute("page", page);
       model.addAttribute("actionUrl", "./place");
+
+      model.addAttribute("curPlaceId", placeId);
+      model.addAttribute("curShootTime", shootTime);
+      model.addAttribute("shootTimes", _service.getAvailableTimeOptions(caller, placeId));
       return "/admin/stats/shapefileList";
 
    }

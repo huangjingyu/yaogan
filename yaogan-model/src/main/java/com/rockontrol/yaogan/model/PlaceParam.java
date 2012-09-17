@@ -5,9 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @SuppressWarnings("serial")
-@Entity(name = "place_param")
+@Entity
+@Table(name = "place_param")
 public class PlaceParam extends BaseEntity {
    // 地下水位下降量
    public static final String GROUND_WATER_DESC = "ground_water_desc";

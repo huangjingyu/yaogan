@@ -22,6 +22,7 @@ public class BaseDaoTest extends BaseTest {
    public void prepareData() {
       for (int i = 0; i < 100; i++) {
          User user = new User();
+         user.setId(i + 500L);
          user.setEmail(i + "@rockontrol.com");
          user.setPassword("123456");
          user.setUserName("user_" + i);

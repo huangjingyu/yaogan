@@ -1,5 +1,5 @@
 /* 变成2列地图位置 */
-.rmaplist{height:700px;background:#fff; border-right: #a6bfaa 1px solid; border-bottom: #a6bfaa 1px solid;border-left: #a6bfaa 1px solid ; width:552px; float:left;}
+.rmaplist{height:700px;background:#fff; border-right: #a6bfaa 1px solid; border-bottom: #a6bfaa 1px solid;border-left: #a6bfaa 1px solid ; width:722px; float:left;}
 .rmapnr{ height:560px;}
 .rmbutt{ height:50px; padding:20px 0 0 10px;}
 /* 右侧布局 */
@@ -22,6 +22,13 @@
                 height: 512px;
                 border: 1px solid black;
                 background: #FFFFFF;
+            }
+            #layer {
+
+               padding-left:560px
+            }
+            #layer li {
+               padding-top : 5px
             }
             /*坐标信息*/
             #location {
@@ -57,10 +64,11 @@
             #mapSelect {
                list-style-type : none
             }
+            /*
             #mapSelect li{
                float : left
             } 
-            
+            */
          .olControlPanel div {
             display:block;
             width: 24px;

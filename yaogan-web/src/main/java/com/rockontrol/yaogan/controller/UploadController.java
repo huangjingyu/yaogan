@@ -4,18 +4,22 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.yaogan.gis.mgr.DataFileType;
 
+import com.rockontrol.yaogan.model.Place;
 import com.rockontrol.yaogan.model.PlaceParam;
 import com.rockontrol.yaogan.model.Shapefile;
 import com.rockontrol.yaogan.model.Shapefile.Category;
+import com.rockontrol.yaogan.model.User;
 import com.rockontrol.yaogan.service.ISecurityManager;
 import com.rockontrol.yaogan.service.IYaoganService;
 import com.rockontrol.yaogan.util.CompressUtil;
@@ -67,7 +71,10 @@ public class UploadController {
    }
 
    @RequestMapping("/form")
-   public String uploadForm() {
+   public String uploadForm(Model model) {
+      User user = _secMng.currentUser();
+      List<Place> places = yaoganService.getPlacesOfOrg(user, user.getOrgId());
+      model.addAttribute("places", places);
       return "/admin/upload";
    }
 

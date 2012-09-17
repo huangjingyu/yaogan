@@ -13,10 +13,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @SuppressWarnings("serial")
-@Entity(name = "users")
+@Entity
+@Table(name = "users")
 public class User implements Serializable {
    public enum Role {
       ROLE_ADMIN, ROLE_USER

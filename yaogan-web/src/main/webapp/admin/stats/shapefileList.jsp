@@ -1,7 +1,6 @@
 <%@page import="com.rockontrol.yaogan.vo.Page"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
-<%@ include file="/common/includes.jsp"%>
 <%@page import="org.springframework.web.util.WebUtils"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.Collection"%>
@@ -9,16 +8,46 @@
 <%@page import="java.util.HashMap"%>
 <%@page import="org.apache.commons.lang.StringUtils"%>
 <%@ taglib uri="http://jsptags.com/tags/navigation/pager" prefix="pg"%>
-<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
 <head>
-<link rel="stylesheet" type="text/css"
-	href="${ctx}/static/css/style.css" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<%@ include file="/common/head.jsp"%>
 <title>Shapefiles</title>
 <script type="text/javascript">
 	function query() {
 		document.getElementById("query_files").submit();
+	}
+	require([ "dijit/form/Select" ]);
+	function showAvaTimes(placeId) {
+		var placeSelectWidget = dijit.byId("placeId");
+		var timeSelectWidget = dijit.byId("shootTime");
+		timeSelectWidget.removeOption(timeSelectWidget.getOptions());
+		timeSelectWidget.addOption({
+			label : '全部时间',
+			value : ''
+		});
+		if (!placeId)
+			return;
+		require([ "dojo/_base/xhr" ], function(xhr) {
+			xhr.get({
+				url : "${ctx}/api/place/" + placeId + "/availableTimes.json",
+				handleAs : "json",
+				load : function(times) {
+					var options = [];
+					require([ "dojo/_base/array" ], function(arrayUtil) {
+						arrayUtil.forEach(times, function(time) {
+							var opt = {};
+							opt.label = time;
+							opt.value = time;
+							options.push(opt);
+						});
+					});
+					timeSelectWidget.addOption(options);
+				},
+				error : function() {
+				}
+			});
+		});
 	}
 </script>
 </head>
@@ -31,13 +60,28 @@
 					<table cellspacing="0" cellpadding="0" border="0">
 						<tbody>
 							<tr>
-								<td width="65">地区名称:</td>
-								<td width="155"><input type="text" size="20" name="place"></input></td>
+								<td width="65">请选择地区:</td>
+								<td width="155"><select id="placeId" name="placeId"
+									data-dojo-type="dijit.form.Select"
+									onchange="showAvaTimes(this.value)">
+										<option value="">全部地区</option>
+										<c:forEach var="place" items="${places}">
+											<option value="${place.id}"
+												<c:if test="${place.id eq curPlaceId}">selected="selected"</c:if>>${place.name}</option>
+										</c:forEach>
+								</select></td>
 								<td width="65">拍摄年份:</td>
-								<td width="90"><input type="text" size="20"
-									name="shootTime"></input></td>
+								<td width="90"><select id="shootTime" name="shootTime"
+									data-dojo-type="dijit.form.Select">
+										<option value="">全部时间</option>
+										<c:forEach var="shootTime" items="${shootTimes}">
+											<option value="${shootTime}"
+												<c:if test="${shootTime eq curShootTime}">selected="selected"</c:if>>${shootTime}</option>
+										</c:forEach>
+								</select></td>
 								<td width="79"><img width="50" height="24" alt="查询"
-									src="${ctx}/static/img/butt_search.gif" onclick="query()"></td>
+									src="${ctx}/static/img/butt_search.gif" onclick="query()">
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -78,29 +122,29 @@
 					</tbody>
 				</table>
 
-				<!-- 分页开始 -->
 				<c:if test="${page!=null}">
-					<pg:pager url="${actionUrl}" items="${page.totalItemNum}" index="center"
-						maxPageItems="${page.pageSize}" maxIndexPages="10" isOffset="true"
-						export="offset,currentPageNumber=pageNumber" scope="request">
-						<pg:param name="pageSize" value="11"/>
+					<pg:pager url="${actionUrl}" items="${page.totalItemNum}"
+						index="center" maxPageItems="${page.pageSize}" maxIndexPages="10"
+						isOffset="true" export="offset,currentPageNumber=pageNumber"
+						scope="request">
+						<pg:param name="pageSize" value="11" />
 						<pg:index>
 							<pg:prev export="pageUrl">&nbsp;<a href="<%=pageUrl%>">
 									[Prev]</a>
 							</pg:prev>
 							<pg:pages>
 								<%
-									   if (pageNumber.intValue() < 10) {
-									%>&nbsp;<%
-									   }
-									                  if (pageNumber == currentPageNumber) {
-									%><b><%=pageNumber%></b>
+								   if (pageNumber.intValue() < 10) {
+								%>&nbsp;<%
+								   }
+								               if (pageNumber == currentPageNumber) {
+								%><b><%=pageNumber%></b>
 								<%
-									   } else {
-									%><a href="<%=pageUrl%>"><%=pageNumber%></a>
+								   } else {
+								%><a href="<%=pageUrl%>"><%=pageNumber%></a>
 								<%
-									   }
-									%>
+								   }
+								%>
 							</pg:pages>
 							<pg:next export="pageUrl">&nbsp;<a href="<%=pageUrl%>">[Next]</a>
 							</pg:next>
@@ -109,11 +153,7 @@
 						</pg:index>
 					</pg:pager>
 				</c:if>
-				<!-- 分页结束 -->
-
 			</div>
-
-
 		</div>
 	</div>
 </body>

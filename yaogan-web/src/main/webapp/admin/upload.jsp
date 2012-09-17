@@ -1,13 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=utf-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<%@ include file="/common/includes.jsp"%>
-<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css"
-	href="${ctx}/static/css/style.css" />
+<%@ include file="/common/head.jsp"%>
 <title>upload shapefile</title>
 <script type="text/javascript" src="${ctx}/static/js/jquery-1.7.1.js"></script>
 <script type="text/javascript">
@@ -15,9 +11,11 @@
 		document.getElementById("uploadForm").submit();
 	}
 </script>
-
+<script type="text/javascript">
+	require([ "dijit/form/ComboBox" ]);
+</script>
 </head>
-<body>
+<body class="claro">
 	<div id="middle2">
 		<div class="rtlist">
 			<div class="map_top">文件上传</div>
@@ -28,9 +26,12 @@
 						id="table_two">
 						<tr>
 							<td width="17%"><label>地区名称：</label></td>
-							<td width="83%"><label> <input name="region"
-									type="text" id="textfield" size="30" />
-							</label></td>
+							<td width="83%"><select data-dojo-type="dijit.form.ComboBox"
+								id="region" name="region" value="">
+									<c:forEach var="place" items="${places}">
+										<option>${place.name}</option>
+									</c:forEach>
+							</select></td>
 						</tr>
 						<tr>
 							<td><label>地下水下降量：</label></td>

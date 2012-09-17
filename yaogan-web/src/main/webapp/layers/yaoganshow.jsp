@@ -25,30 +25,28 @@
            </table></div>
  
          <div class="rmapnr">      
-         <div style="margin-left:10px">
-         <ul id="mapSelect">
-            <li style="margin-right:30px">
-               <input type="radio" value="td" name="baseType" checked="checked"/>二维图
-               <input type="radio" value="yg" name="baseType"/>遥感图
-            </li>
-            <li>
-               <input type="checkbox" value="kq"/>矿区
-               <input type="checkbox" value="tdly"/>土地利用
-               <input type="checkbox" value="dbtx"/>地表塌陷
-               <input type="checkbox" value="dlf"/>地裂缝
-               <input type="checkbox" value="trqs"/>土壤侵蚀
-               <input type="checkbox" value="gqyg"/>高清遥感
-            </li>
-         </ul> 
-      </div><br/>
       <div style="float:left">
       <div id="map"></div><div style="clear:both"></div>
       </div>
-      <div id="legend">
-         <h3>图例说明</h3>
-         <ul>
-         
-         </ul>
+      <div id="layer">
+         <ul id="mapSelect">
+            <li>
+               <h4>专题图层</h4>
+               <ul>
+                  <li id="kq"><input type="checkbox" value="kq"/>矿区<div></div></li>
+                  <li id="tdly"><input type="checkbox" value="tdly"/>土地利用<div></div></li>
+                  <li id="dbtx"><input type="checkbox" value="dbtx"/>地表塌陷<div></div></li>
+                  <li id="dlf"><input type="checkbox" value="dlf"/>地裂缝<div></div></li>
+                  <li id="trqs"><input type="checkbox" value="trqs"/>土壤侵蚀<div></div></li>
+                  <li id="gqyg"><input type="checkbox" value="gqyg"/>高清遥感<div></div></li>
+               </ul>
+            </li>
+            <li>
+               <h4>基础图层</h4>
+               <input type="radio" value="td" name="baseType" checked="checked"/>二维图<br/>
+               <input type="radio" value="yg" name="baseType"/>遥感图
+            </li>            
+         </ul> 
       </div>
       </div>
       <div class="rmbutt"><a href="#"  id="thematicMapLink"><img src="<%=request.getContextPath()%>/static/img/butt_creatimg.jpg" width="132" height="39" /></a></div>

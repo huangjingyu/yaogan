@@ -2,6 +2,7 @@
     (function(){
     	var layerGroupWmsUrl = "/geoserver/wms";
     	var layerWmsUrl = "/geoserver/yaogan/wms";
+    	var legendUrl = layerWmsUrl + "?VERSION=1.1.1&FORMAT=image/png&SERVICE=WMS&REQUEST=GetLegendGraphic&TRANSPARENT=TRUE&WIDTH=40&LAYER=";
     	var kqLayerName = null;
     	var tdlyLayerName = null;
     	var dbtxLayerName = null;
@@ -110,7 +111,9 @@
                 	/*查询地图信息*/
                 	QUERYMAP : "./layers/queryMap",
                 	/*查询指数信息*/
-                	QUERYSTATS : "./layers/queryEnvStats"
+                	QUERYSTATS : "./layers/queryEnvStats",
+                	/*图例URL part*/
+                	LEGEND : legendUrl
                 },
                 getSeq : function() {
                 	return this.seq++;
@@ -378,19 +381,22 @@
         	/*专题图层名称*/
         	var spcLayerNames = this.spcLayerNames = [];
         	$("#mapSelect input[type='checkbox']:checked").each(function(){
-        		spcLayerNames[spcLayerNames.length] = $(this).val() + "Layer";
+        		spcLayerNames[spcLayerNames.length] = $(this).val();
         	});
         	/*叠加各专题图层*/
         	for(var i = 0; i < spcLayerNames.length; i++) {
-        		if(! R[spcLayerNames[i]].layerName) {
+        		var name = spcLayerNames[i] + "Layer";
+        		if(! R[name].layerName) {
         			continue;
         		}
-        		this.addWmsLayer(spcLayerNames[i], {transparent : true});
+        		this.addWmsLayer(name, {transparent : true});
                 /*如果是矿区图 则需要添加getFeature控件*/
-                if(R.KQ_LNAME == spcLayerNames[i]) {
+                if(R.KQ_LNAME == name) {
                    this.addGfControl();
                    this.gfControl.activate();
                 }
+                /*添加图例*/
+                $("#mapSelect li[id='" + spcLayerNames[i] + "'] div").html("<img src='" + R.reqUrl.LEGEND + R[name].layerName + "'/>");
         	}
         	
          /*添加选择图层*/
@@ -470,7 +476,7 @@
       /**底层图片的切换*/
       $("#mapSelect input[type='radio']").bind("click", function() {
      	 var layerName = $(this).val() + "Layer";
-     	 R.layerMap.map.setBaseLayer(layerName);
+     	 R.layerMap.map.setBaseLayer(R.layerMap[layerName]);
       });
       
       /**专题层的选择*/
@@ -484,17 +490,21 @@
     	 if(checked) {
         	 R[layerName].stamp = R.getSeq();
     		 R.layerMap.addWmsLayer(layerName, {transparent : true});
-    		 /*如果是矿区图 则需要添加getFeature控件*/
+          /*如果是矿区图 则需要添加getFeature控件*/
           if(R.KQ_LNAME == layerName) {
         	    R.layerMap.addGfControl();
         		R.layerMap.gfControl.activate();
           }
+          /*添加图例*/
+          $("#mapSelect li[id='" + $(this).val() + "'] div").html("<img src='" + R.reqUrl.LEGEND + R[layerName].layerName + "'/>");
     	 } else {
     		 /*如果是矿区图 则先把gf控件移除*/
     		 if(R.KQ_LNAME == layerName) {
     			 R.layerMap.removeGfControl();
            }
     		 R.layerMap.removeWmsLayer(layerName);
+    		 /*删除图例*/
+    		 $("#mapSelect li[id='" + $(this).val() + "'] div").empty();
     	 }
      });
 
