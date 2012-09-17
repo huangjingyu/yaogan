@@ -1,9 +1,12 @@
 package com.rockontrol.yaogan.service.util;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.Header;
@@ -13,6 +16,14 @@ import org.apache.http.util.EntityUtils;
 import com.rockontrol.yaogan.model.Shapefile;
 
 public class GeoServiceUtil {
+   
+   /**
+    * 用于标识文件属性
+    */
+   /*shapefile*/
+   public static final String SF_ATTR = "SF";
+   /*高清遥感*/
+   public static final String HD_ATTR = "HD";
    
    public static final Log log = LogFactory.getLog(GeoServiceUtil.class);
    /**存放每种地图的样式名称 名称在geoserver中添加*/
@@ -147,4 +158,60 @@ public class GeoServiceUtil {
       }
       return null;
    }
+   
+   /**
+    * 将shapeFile拷贝到工作目录下
+    * 
+    * @param shapeFile
+    */
+   public static void copyShapeFile(File shapeFile, String rename, String workDir) {
+      String name = shapeFile.getName();
+      int pos = name.indexOf(".");
+      String prefix = name.substring(0, pos);
+      String prePart = shapeFile.getParent() + "/" + prefix + ".";
+      copyOne(new File(prePart + "dbf"), rename, workDir);
+      copyOne(new File(prePart + "prj"), rename, workDir);
+      copyOne(new File(prePart + "qix"), rename, workDir);
+      copyOne(new File(prePart + "sbn"), rename, workDir);
+      copyOne(new File(prePart + "sbx"), rename, workDir);
+      copyOne(new File(prePart + "shp"), rename, workDir);
+      copyOne(new File(prePart + "shp.xml"), rename, workDir);
+      copyOne(new File(prePart + "shx"), rename, workDir);
+      copyOne(new File(prePart + "evf"), rename, workDir);
+
+   }
+   /**
+    * 将高清遥感图拷贝到工作目录下
+    * @param hdFile
+    * @param rename
+    */
+   public static void copyHdFile(File hdFile, String rename, String workDir) {
+      copyOne(hdFile, rename, workDir);
+   }
+
+   /**
+    * 拷贝一个文件
+    * 
+    * @param source
+    * @param rename
+    */
+   private static void copyOne(File source, String rename, String workDir) {
+      if (!source.exists()) {
+         return;
+      }
+      String name = source.getName();
+      int pos = name.indexOf(".");
+      String suffix = name.substring(pos + 1);
+      File file = new File(workDir);
+      if(! file.exists()) {
+         file.mkdirs();
+      }
+      File dest = new File(workDir + rename + "." + suffix);
+      try {
+         FileUtils.copyFile(source, dest);
+      } catch (IOException e) {
+         throw new RuntimeException(e);
+      }
+   }
+
 }
