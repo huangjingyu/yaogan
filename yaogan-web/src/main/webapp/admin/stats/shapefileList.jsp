@@ -62,7 +62,7 @@
 							<tr>
 								<td width="85">请选择地区:</td>
 								<td width="155"><select id="placeId" name="placeId"
-									data-dojo-type="dijit.form.Select"
+									style="margin-bottom: 8px;" data-dojo-type="dijit.form.Select"
 									onchange="showAvaTimes(this.value)">
 										<option value="">全部地区</option>
 										<c:forEach var="place" items="${places}">
@@ -72,16 +72,17 @@
 								</select></td>
 								<td width="65">拍摄年份:</td>
 								<td width="90"><select id="shootTime" name="shootTime"
-									data-dojo-type="dijit.form.Select">
+									style="margin-bottom: 8px;" data-dojo-type="dijit.form.Select">
 										<option value="">全部时间</option>
 										<c:forEach var="shootTime" items="${shootTimes}">
 											<option value="${shootTime}"
 												<c:if test="${shootTime eq curShootTime}">selected="selected"</c:if>>${shootTime}</option>
 										</c:forEach>
 								</select></td>
-								<td width="79"><img width="50" height="24" alt="查询"
-									src="${ctx}/static/img/butt_search.gif" onclick="query()">
-								</td>
+								<td width="79"><img
+									style="margin-top: 5px; margin-left: 25px;" width="50"
+									height="24" alt="查询" src="${ctx}/static/img/butt_search.gif"
+									onclick="query()"></td>
 							</tr>
 						</tbody>
 					</table>
@@ -95,10 +96,10 @@
 					id="table_one">
 					<tbody>
 						<tr>
-							<th width="32%">地区名称</th>
-							<th width="15%">年份</th>
+							<th width="20%">地区名称</th>
+							<th width="10%">年份</th>
 							<th width="15%">文件类型</th>
-							<th width="15%">文件名</th>
+							<th width="35%">文件名</th>
 							<th width="15%">上传时间</th>
 						</tr>
 						<c:forEach items="${page.items}" var="group">
@@ -128,11 +129,11 @@
 						isOffset="true" export="offset,currentPageNumber=pageNumber"
 						scope="request">
 						<pg:param name="pageSize" value="11" />
-						<pg:param name="placeId" value="${placeId}"/>
-						<pg:param name="shootTime" value="${shootTime}"/>
+						<pg:param name="placeId" value="${placeId}" />
+						<pg:param name="shootTime" value="${shootTime}" />
 						<pg:index>
 							<pg:prev export="pageUrl">&nbsp;<a href="<%=pageUrl%>">
-									[Prev]</a>
+									上一页</a>
 							</pg:prev>
 							<pg:pages>
 								<%
@@ -148,7 +149,7 @@
 								   }
 								%>
 							</pg:pages>
-							<pg:next export="pageUrl">&nbsp;<a href="<%=pageUrl%>">[Next]</a>
+							<pg:next export="pageUrl">&nbsp;<a href="<%=pageUrl%>">下一页</a>
 							</pg:next>
 							<br>
 							</font>

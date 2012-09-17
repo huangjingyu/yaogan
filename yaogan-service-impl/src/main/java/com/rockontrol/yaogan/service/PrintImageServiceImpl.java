@@ -89,6 +89,9 @@ public class PrintImageServiceImpl implements IPrintImageService {
       url.append("&srs=EPSG:4326");
       url.append("&format=image%2Fjpeg");
       File file = new File(tempPath);
+      if (!file.getParentFile().exists()) {
+         file.getParentFile().mkdirs();
+      }
       HttpClient client = new DefaultHttpClient();
       HttpGet get = new HttpGet(url.toString());
       HttpResponse response = client.execute(get);
