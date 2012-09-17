@@ -16,7 +16,7 @@
    </head>
    <body>
       <div id="middle2">
-         <%@include file="yaoganmap.jsp" %>
+         <%@include file="yaoganshow.jsp" %>
       </div>
    </body>
 </html>
