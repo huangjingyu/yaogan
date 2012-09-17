@@ -216,7 +216,7 @@
 						</table>
 					</form>
 					<div class="pane_pic" id="chartNode"
-						style="width: 800px; height: 600px;"></div>
+						style="width: 800px; height: 500px;"></div>
 				</div>
 			</div>
 		</div>
