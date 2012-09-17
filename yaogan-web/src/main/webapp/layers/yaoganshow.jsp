@@ -57,19 +57,19 @@
     <div id="placeData" class="message">
      <h2>整个地区</h2>
      <ul>
-      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_1.gif" />植被覆盖指数：<span id="plczbfg"></span></li>
-      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_2.gif" />生物丰度指数：<span id="plcswfd"></span></li>
-      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_3.gif" />地质环境指数：<span id="plcdzhj"></span></li>
-      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_4.gif" />土地退化指数：<span id="plctdth"></span></li>
+      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_1.gif" />植被覆盖指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助"/></a>：<span id="plczbfg"></span></li>
+      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_2.gif" />生物丰度指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助"/></a>：<span id="plcswfd"></span></li>
+      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_3.gif" />地质环境指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助"/></a>：<span id="plcdzhj"></span></li>
+      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_4.gif" />土地退化指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助"/></a>：<span id="plctdth"></span></li>
      </ul>    
     </div>
     <div id="areaData" class="message">
      <h2>所选地区</h2>
      <ul>
-      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_1.gif" />植被覆盖指数：<span id="areazbfg"></span></li>
-      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_2.gif" />生物丰度指数：<span id="areaswfd"></span></li>
-      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_3.gif" />地质环境指数：<span id="areadzhj"></span></li>
-      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_4.gif" />土地退化指数：<span id="areatdth"></span></li>
+      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_1.gif" />植被覆盖指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助"/></a>：<span id="areazbfg"></span></li>
+      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_2.gif" />生物丰度指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助"/></a>：<span id="areaswfd"></span></li>
+      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_3.gif" />地质环境指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助"/></a>：<span id="areadzhj"></span></li>
+      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_4.gif" />土地退化指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助"/></a>：<span id="areatdth"></span></li>
      </ul>    
     </div>
    </div>

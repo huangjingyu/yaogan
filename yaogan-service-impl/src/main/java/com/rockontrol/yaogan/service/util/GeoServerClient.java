@@ -13,6 +13,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 
+import com.rockontrol.yaogan.service.util.task.SelectFileTask;
+
 public class GeoServerClient {
    
    public static final Log log = LogFactory.getLog(GeoServerClient.class);
@@ -21,6 +23,7 @@ public class GeoServerClient {
    public static final String SHP_FILE_KEY = "SHP_FILE";
    public static final String LL_KEY = "LL";
    public static final String NATIVE_KEY = "NATIVE";
+   public static final String SELECT_ROOT_KEY = "SELECT_ROOT";
    
    /**
     * geoserver中手工创建的工作空间名称
@@ -35,6 +38,26 @@ public class GeoServerClient {
    
    private String serverBase;
    
+   private GeoClientTask selectFileTask = new SelectFileTask();
+   
+   
+   
+   public HttpClient getClient() {
+      return client;
+   }
+
+   public void setClient(HttpClient client) {
+      this.client = client;
+   }
+
+   public CallContext getContext() {
+      return context;
+   }
+
+   public void setContext(CallContext context) {
+      this.context = context;
+   }
+
    public GeoServerClient(HttpClient client, CallContext context, String serverBase) {
       this.client = client;
       this.context = context;
@@ -138,11 +161,14 @@ public class GeoServerClient {
       int end = html.indexOf("'", start);
       String action = html.substring(start, end);
       context.location = getWebLocation(action);
-      selectFile();
+      /**选择文件*/
+      HttpResponse response = selectFileTask.doTask(this, context.file);
+      html = GeoServiceUtil.getContent(response);
+      String path = GeoServiceUtil.search(html, null, "value=", 7, "\"");
       /** 存储目录 */
-      params.add(new BasicNameValuePair("parametersPanel:url:border:paramValue",
-            "file:yaogandata/" + context.newFileName));
-      params.add(new BasicNameValuePair("parametersPanel:url:dialog:content:roots", "0"));
+      params.add(new BasicNameValuePair("parametersPanel:url:border:paramValue", path));
+      String root = (String) context.get(SELECT_ROOT_KEY);
+      params.add(new BasicNameValuePair("parametersPanel:url:dialog:content:roots", root));
       if(GeoServiceUtil.SF_ATTR.equals(context.fileAttr)) {
          /** 字符集GBK */
          params.add(new BasicNameValuePair("parametersPanel:charset:border:paramValue", "6"));
@@ -155,7 +181,7 @@ public class GeoServerClient {
       params.add(new BasicNameValuePair("save", "1"));
       httpPost.addHeader("Wicket-Ajax", "true");
       httpPost.addHeader("Accept", "text/xml");
-      HttpResponse response = GisHttpUtil.execute(params, client, httpPost);
+      response = GisHttpUtil.execute(params, client, httpPost);
       return response;
    }
    
