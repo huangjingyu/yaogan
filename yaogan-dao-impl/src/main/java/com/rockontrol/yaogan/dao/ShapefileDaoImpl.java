@@ -3,6 +3,7 @@ package com.rockontrol.yaogan.dao;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hsqldb.lib.StringUtil;
 import org.springframework.stereotype.Repository;
 
 import com.rockontrol.yaogan.model.Place;
@@ -114,44 +115,45 @@ public class ShapefileDaoImpl extends BaseDaoImpl<Shapefile> implements IShapefi
       return query.list();
    }
 
-   private static final String FILTER_HQL_TEMPLATE = "select sf from com.rockontrol.yaogan.model.Shapefile"
-         + " where 1 = 1";
+   private static final String FILTER_HQL_TEMPLATE = "select f from com.rockontrol.yaogan.model.Shapefile as f ";
 
-   @Override
-   public List<Shapefile> filter(Long placeId, String time, int startIndex, int maxCount) {
-      String hql = _genFilterHql(placeId, time);
-      Object[] params = _genParams(placeId, time);
-      return findByPage(hql, startIndex, maxCount, params);
-   }
-
-   @Override
-   public long getCount(Long placeId, String time) {
-      String hql = _genFilterHql(placeId, time);
-      Object[] params = _genParams(placeId, time);
-      return getCount(hql, params);
-   }
-
-   private String _genFilterHql(Long placeId, String time) {
+   private String _genFilterHqlOfOrg(Long placeId, String time) {
       StringBuilder sb = new StringBuilder();
-      sb.append(FILTER_HQL_TEMPLATE);
+      sb.append(FILTER_HQL_TEMPLATE).append(",com.rockontrol.yaogan.model.Place as p ")
+            .append(" where p.orgId=? ").append(" and f.placeId=p.id ");
       if (placeId != null) {
-         sb.append(" and placeId = :placeId");
+         sb.append(" and f.placeId =? ");
       }
-      if (time != null) {
-         sb.append(" and time = :time");
+      if (!StringUtil.isEmpty(time)) {
+         sb.append(" and f.shootTime =? ");
       }
       return sb.toString();
    }
 
-   private Object[] _genParams(Long placeId, String time) {
-      if (placeId != null && time != null) {
-         return new Object[] { placeId, time };
+   private String _genFilterHqlOfUser(Long placeId, String time) {
+      StringBuilder sb = new StringBuilder();
+      sb.append(FILTER_HQL_TEMPLATE).append(",com.rockontrol.yaogan.model.Place as p ")
+            .append(" ,com.rockontrol.yaogan.model.UserPlace as up ")
+            .append(" where up.userId=? ").append(" and f.placeId=p.id ")
+            .append(" and f.placeId=up.placeId ");
+      if (placeId != null) {
+         sb.append(" and f.placeId = ? ");
+      }
+      if (!StringUtil.isEmpty(time)) {
+         sb.append(" and f.shootTime = ?");
+      }
+      return sb.toString();
+   }
+
+   private Object[] _genParams(Long id, Long placeId, String time) {
+      if (placeId != null && !StringUtil.isEmpty(time)) {
+         return new Object[] { id, placeId, time };
       }
       if (placeId != null) {
-         return new Object[] { placeId };
+         return new Object[] { id, placeId };
       }
-      if (time != null) {
-         return new Object[] { time };
+      if (!StringUtil.isEmpty(time)) {
+         return new Object[] { id, time };
       }
       return null;
    }
@@ -225,29 +227,32 @@ public class ShapefileDaoImpl extends BaseDaoImpl<Shapefile> implements IShapefi
 
    @Override
    public long filterCountOfOrg(Long orgId, Long placeId, String time) {
-      String hql = "select count(file) from com.rockontrol.yaogan.model.Shapefile file "
-            + ",com.rockontrol.yaogan.model.Place p where file.placeId=:placeId and file.placeId=p.id and p.orgId=:orgId "
-            + " and file.shootTime=:time order by file.placeId,file.shootTime desc";
-      Query query = getSession().createQuery(hql);
-      query.setLong("orgId", orgId);
-      query.setString("time", time);
-      query.setLong("placeId", placeId);
-      long count = (Long) query.uniqueResult();
-      return count;
+      String hql = _genFilterHqlOfOrg(placeId, time);
+      Object[] params = _genParams(orgId, placeId, time);
+      return findByHQL(hql, params).size();
    }
 
    @Override
    public long filterCountOfUser(Long userId, Long placeId, String time) {
-      String hql = "select count(file) from com.rockontrol.yaogan.model.Shapefile as file,"
-            + "com.rockontrol.yaogan.model.Place p,com.rockontrol.yaogan.model.UserPlace up "
-            + "  where file.placeId=:placeId and file.placeId=up.placeId and p.id=file.placeId and up.userId=:userId and file.shootTime=:time "
-            + "order by file.placeId,file.shootTime desc";
-      Query query = getSession().createQuery(hql);
-      query.setLong("userId", userId);
-      query.setString("time", time);
-      query.setLong("placeId", placeId);
-      long count = (Long) query.uniqueResult();
-      return count;
+      String hql = _genFilterHqlOfOrg(placeId, time);
+      Object[] params = _genParams(userId, placeId, time);
+      return findByHQL(hql, params).size();
+   }
+
+   @Override
+   public List<Shapefile> filterOfOrgByPage(Long orgId, Long placeId, String time,
+         int startIndex, int maxCount) {
+      String hql = _genFilterHqlOfOrg(placeId, time);
+      Object[] params = _genParams(orgId, placeId, time);
+      return findByPage(hql, startIndex, maxCount, params);
+   }
+
+   @Override
+   public List<Shapefile> filterOfUserByPage(Long UserId, Long placeId, String time,
+         int startIndex, int maxCount) {
+      String hql = _genFilterHqlOfOrg(placeId, time);
+      Object[] params = _genParams(UserId, placeId, time);
+      return findByPage(hql, startIndex, maxCount, params);
    }
 
 }

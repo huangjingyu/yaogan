@@ -479,11 +479,11 @@ public class YaoganServiceImpl implements IYaoganService {
       List<Shapefile> list = new ArrayList<Shapefile>();
       long count = 0;
       if (caller.getIsAdmin()) {
-         list = shapefileDao.filterShapefilesOfOrgByPage(caller.getOrgId(), placeId,
-               time, page.getStartItemIndex(), pageSize);
+         list = shapefileDao.filterOfOrgByPage(caller.getOrgId(), placeId, time,
+               page.getStartItemIndex(), pageSize);
          count = shapefileDao.filterCountOfOrg(caller.getOrgId(), placeId, time);
       } else {
-         list = shapefileDao.filterShapefilesOfUserByPage(caller.getId(), placeId, time,
+         list = shapefileDao.filterOfUserByPage(caller.getId(), placeId, time,
                page.getStartItemIndex(), pageSize);
          count = shapefileDao.filterCountOfUser(caller.getId(), placeId, time);
       }

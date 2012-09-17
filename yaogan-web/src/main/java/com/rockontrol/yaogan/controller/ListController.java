@@ -58,11 +58,15 @@ public class ListController {
       Page<ShapefileGroupVo> page = _service.filterShapefiles(caller, place.getId(),
             shootTime, pageNum, pageSize);
       model.addAttribute("page", page);
-      model.addAttribute("actionUrl", "./place");
+      model.addAttribute("actionUrl", "./fileList");
 
       model.addAttribute("curPlaceId", placeId);
       model.addAttribute("curShootTime", shootTime);
       model.addAttribute("shootTimes", _service.getAvailableTimeOptions(caller, placeId));
+      model.addAttribute("places",
+            _service.getPlacesVisibleToUser(caller, caller.getId()));
+      model.addAttribute("placeId", placeId);
+      model.addAttribute("shootTime", shootTime);
       return "/admin/stats/shapefileList";
 
    }

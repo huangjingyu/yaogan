@@ -63,7 +63,6 @@ public class PrintController {
    private String getWebRootPath() throws Exception {
       URI uri = PrintController.class.getResource("/").toURI();
       String webRootPath = uri.toURL().toString();
-      System.out.println(webRootPath);
       String flag = "WEB-INF";
       int begin = webRootPath.indexOf("/") + 1;
       int end = webRootPath.indexOf(flag);

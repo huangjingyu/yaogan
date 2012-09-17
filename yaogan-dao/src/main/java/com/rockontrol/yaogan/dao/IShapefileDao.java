@@ -27,10 +27,6 @@ public interface IShapefileDao extends IBaseDao<Shapefile> {
 
    public List<Shapefile> getAvailableFilesOfUser(Long userId);
 
-   public List<Shapefile> filter(Long placeId, String time, int startIndex, int maxCount);
-
-   public long getCount(Long placeId, String time);
-
    public long getShapefileCountOfOrg(Long orgId);
 
    public long getShapefileCountOfUser(User caller);
@@ -48,4 +44,10 @@ public interface IShapefileDao extends IBaseDao<Shapefile> {
    long filterCountOfOrg(Long orgId, Long placeId, String time);
 
    long filterCountOfUser(Long userId, Long placeId, String time);
+
+   List<Shapefile> filterOfOrgByPage(Long orgId, Long placeId, String time,
+         int startIndex, int maxCount);
+
+   List<Shapefile> filterOfUserByPage(Long UserId, Long placeId, String time,
+         int startIndex, int maxCount);
 }
