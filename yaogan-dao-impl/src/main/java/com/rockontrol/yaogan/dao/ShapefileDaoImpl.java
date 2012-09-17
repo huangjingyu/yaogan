@@ -2,8 +2,8 @@ package com.rockontrol.yaogan.dao;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
-import org.hsqldb.lib.StringUtil;
 import org.springframework.stereotype.Repository;
 
 import com.rockontrol.yaogan.model.Place;
@@ -124,7 +124,7 @@ public class ShapefileDaoImpl extends BaseDaoImpl<Shapefile> implements IShapefi
       if (placeId != null) {
          sb.append(" and f.placeId =? ");
       }
-      if (!StringUtil.isEmpty(time)) {
+      if (!StringUtils.isEmpty(time)) {
          sb.append(" and f.shootTime =? ");
       }
       return sb.toString();
@@ -139,20 +139,20 @@ public class ShapefileDaoImpl extends BaseDaoImpl<Shapefile> implements IShapefi
       if (placeId != null) {
          sb.append(" and f.placeId = ? ");
       }
-      if (!StringUtil.isEmpty(time)) {
+      if (!StringUtils.isEmpty(time)) {
          sb.append(" and f.shootTime = ?");
       }
       return sb.toString();
    }
 
    private Object[] _genParams(Long id, Long placeId, String time) {
-      if (placeId != null && !StringUtil.isEmpty(time)) {
+      if (placeId != null && !StringUtils.isEmpty(time)) {
          return new Object[] { id, placeId, time };
       }
       if (placeId != null) {
          return new Object[] { id, placeId };
       }
-      if (!StringUtil.isEmpty(time)) {
+      if (!StringUtils.isEmpty(time)) {
          return new Object[] { id, time };
       }
       return null;
