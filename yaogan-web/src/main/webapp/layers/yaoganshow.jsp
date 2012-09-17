@@ -31,7 +31,7 @@
       <div id="layer">
          <ul id="mapSelect">
             <li>
-               <h4>专题地图</h4>
+               <h4>专题图层</h4>
                <ul>
                   <li id="kq"><input type="checkbox" value="kq"/>矿区<div></div></li>
                   <li id="tdly"><input type="checkbox" value="tdly"/>土地利用<div></div></li>
@@ -42,7 +42,7 @@
                </ul>
             </li>
             <li>
-               <h4>基础地图</h4>
+               <h4>基础图层</h4>
                <input type="radio" value="td" name="baseType" checked="checked"/>二维图<br/>
                <input type="radio" value="yg" name="baseType"/>遥感图
             </li>            
