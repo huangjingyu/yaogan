@@ -108,7 +108,7 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 
    @Override
    public long getCount(String hql, Object[] params) {
-      return getCount(getSession().createQuery("select count(*) from (" + hql + ") t"),
+      return getCount(getSession().createQuery("select count(t) from (" + hql + ") t"),
             params);
    }
 

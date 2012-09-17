@@ -128,6 +128,8 @@
 						isOffset="true" export="offset,currentPageNumber=pageNumber"
 						scope="request">
 						<pg:param name="pageSize" value="11" />
+						<pg:param name="placeId" value="${placeId}"/>
+						<pg:param name="shootTime" value="${shootTime}"/>
 						<pg:index>
 							<pg:prev export="pageUrl">&nbsp;<a href="<%=pageUrl%>">
 									[Prev]</a>
