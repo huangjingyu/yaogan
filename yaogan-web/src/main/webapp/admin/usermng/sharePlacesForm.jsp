@@ -5,11 +5,11 @@
 <%@ include file="/common/head.jsp"%>
 <style type="text/css">
 #sharedPlacesDiv div {
-	margin-left: 5px;
+	margin-left: 10px;
 }
 
 #toSharePlacesDiv div {
-	margin-left: 5px;
+	margin-left: 10px;
 }
 </style>
 <script type="text/javascript">
@@ -71,13 +71,13 @@
 	<div id="middle2">
 		<div id="messageDiv"></div>
 		<div id="sharedPlacesDiv" data-dojo-type="dijit.TitlePane"
-			data-dojo-props="title: '已分配权限矿区'">
+			data-dojo-props="title: '<b>已分配权限矿区</b>'">
 			<c:forEach var="place" items="${sharedPlaces}" varStatus="status">
 				<input id="sharedPlace${status.index}" name="sharedPlaceId"
 					data-dojo-type="dijit.form.CheckBox" value="${place.id}" />
 				<label for="sharedPlace${status.index}">${place.name}</label>
 			</c:forEach>
-			<div style="height: 10px;"></div>
+			<div style="height: 20px;"></div>
 			<c:if test="${not empty sharedPlaces}">
 				<div>
 					<button data-dojo-type="dijit.form.Button" type="button">
@@ -91,17 +91,15 @@
 		还没有分配任何矿区给此用户
 		</c:if>
 		</div>
-		<br />
-		<br />
-		<br />
+		<br /> <br /> <br />
 		<div id="toSharePlacesDiv" data-dojo-type="dijit.TitlePane"
-			data-dojo-props="title: '待分配权限矿区'">
+			data-dojo-props="title: '<b>待分配权限矿区</b>'">
 			<c:forEach var="place" items="${toSharePlaces}" varStatus="status">
 				<input id="toSharePlace${status.index}" name="toSharePlaceId"
 					data-dojo-type="dijit.form.CheckBox" value="${place.id}" />
 				<label for="toSharePlace${status.index}">${place.name}</label>
 			</c:forEach>
-			<div style="height: 10px;"></div>
+			<div style="height: 20px;"></div>
 			<div>
 				<button data-dojo-type="dijit.form.Button" type="button">
 					分配权限
