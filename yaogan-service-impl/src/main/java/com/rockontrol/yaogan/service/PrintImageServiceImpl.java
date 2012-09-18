@@ -23,7 +23,6 @@ import org.geotools.feature.FeatureIterator;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.yaogan.gis.mgr.IDataStoreManager;
 import org.yaogan.gis.mgr.SimpleDataStoreManagerImpl;
 
@@ -33,7 +32,6 @@ import com.rockontrol.yaogan.model.Shapefile;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 
-@Service
 public class PrintImageServiceImpl implements IPrintImageService {
 
    @Autowired
