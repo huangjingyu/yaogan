@@ -3,6 +3,7 @@ package com.rockontrol.yaogan.service;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -63,9 +64,12 @@ public class PrintImageServiceImpl implements IPrintImageService {
       // 设置画笔颜色
       g.setColor(Color.BLACK);
       // 设置字体
-      g.setFont(new Font("宋体", Font.LAYOUT_LEFT_TO_RIGHT, 50));
+      g.setFont(new Font("楷体", Font.LAYOUT_LEFT_TO_RIGHT, 80));
+      // 字体平滑处理
+      g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON);
       // 写入签名 TODO
-      g.drawString(comment, 404, 85);
+      g.drawString(comment, 404, 110);
       g.dispose();
       FileOutputStream out = new FileOutputStream(template);
       ImageIO.write(image, "JPEG", out);

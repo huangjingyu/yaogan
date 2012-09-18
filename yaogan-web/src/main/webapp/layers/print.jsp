@@ -10,10 +10,10 @@
 <body>
 <center>
 <form action="./print/preview" method="post">
-请输入备注：<textarea rows="4" cols="20" name="comment"></textarea>
-<input type="text" name="mapPath" style="visibility: hidden;" value="${mapPath}">
+请输入标题：<input type="text" size="25" name="comment" />
+<input type="submit" value="打印预览"><br>
+<input type="text" name="mapPath" style="visibility: hidden;" value="${mapPath}"><br />
 <img alt="加载中。。。" src="${ctx}/static/temp/${mapName}" height="30%" width="30%"><br />
-<input type="submit" value="打印预览">
 </form>
 </center>
 </body>
