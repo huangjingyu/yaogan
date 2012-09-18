@@ -24,12 +24,6 @@ public class OpenPublishLayerPageTask  implements GeoClientTask{
       HttpResponse response = GisHttpUtil.execute(client, httpGet);
       String html = GeoServiceUtil.getContent(response);
       /** 得到刚加入的存储 */
-      int storeStart = html.indexOf(context.workspaceName + ":" + context.storeName);
-      while (storeStart-- > 0) {
-         if (html.charAt(storeStart) == '=') {
-            break;
-         }
-      }
       int idStart = GeoServiceUtil.reverseSearch(html, context.workspaceName + ":" + context.storeName, '=');
       String id = GeoServiceUtil.search(html, null, idStart, 2, "\"");
       /** 得到form表单地址 */

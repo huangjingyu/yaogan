@@ -68,17 +68,17 @@ public class GeoServiceImpl implements GeoService {
          String fileName = geoFile.getName();
          context.fileName = fileName;
          int endPos = fileName.lastIndexOf('.');
-         context.storeName = fileName.substring(0, endPos);
+         context.storeName = "R" + fileName.substring(0, endPos);
          log.info(fileName + ":" + context.fileName);
          /**根据文件后缀判断文件属性*/
          if(fileName.endsWith(".shp")) {
             context.fileAttr = GeoServiceUtil.SF_ATTR;
             //GeoServiceUtil.copyShapeFile(geoFile, context.storeName, workDir);
-            context.newFileName = context.storeName + ".shp";
+            //context.newFileName = context.storeName + ".shp";
          } else {
             context.fileAttr = GeoServiceUtil.HD_ATTR;
             //GeoServiceUtil.copyHdFile(geoFile, context.storeName, workDir);
-            context.newFileName = context.storeName + ".tif";
+           // context.newFileName = context.storeName + ".tif";
          }
         
          context.workspaceName = GeoServerClient.WORKSPACE_NAME;
