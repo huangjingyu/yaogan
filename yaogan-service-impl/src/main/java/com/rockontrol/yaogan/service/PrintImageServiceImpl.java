@@ -88,6 +88,9 @@ public class PrintImageServiceImpl implements IPrintImageService {
       // url.append("&srs=WGS84");
       url.append("&srs=EPSG:4326");
       url.append("&format=image%2Fjpeg");
+
+      // System.out.println("URL=" + url.toString());
+
       File file = new File(tempPath);
       if (!file.getParentFile().exists()) {
          file.getParentFile().mkdirs();

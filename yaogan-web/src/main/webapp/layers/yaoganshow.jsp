@@ -57,19 +57,19 @@
     <div id="placeData" class="message">
      <h2>整个地区</h2>
      <ul>
-      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_1.gif" />植被覆盖指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助"/></a>：<span id="plczbfg"></span></li>
-      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_2.gif" />生物丰度指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助"/></a>：<span id="plcswfd"></span></li>
-      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_3.gif" />地质环境指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助"/></a>：<span id="plcdzhj"></span></li>
-      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_4.gif" />土地退化指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助"/></a>：<span id="plctdth"></span></li>
+      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_1.gif" />植被覆盖指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助" title="指评价区域内林地、草地、 耕地、 建设用地和未利用地五种类型的面积占评价区域面积的比重，用于反映评价区域植被覆盖的程度"/></a>：<span id="plczbfg"></span></li>
+      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_2.gif" />生物丰度指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助" title="指通过单位面积上不同生态系统类型在生物物种数量上的差异，间接地反映评价区域内生物丰度的丰贫程度"/></a>：<span id="plcswfd"></span></li>
+      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_3.gif" />地质环境指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助" title="表征评价区域内地表塌陷、地裂缝、地下水水位下降等地质破坏状况，用于反映评价区域地质破坏程度"/></a>：<span id="plcdzhj"></span></li>
+      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_4.gif" />土地退化指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助" title="指评价区域内风蚀、水蚀、重力侵蚀、冻融侵蚀和工程侵蚀的面积占评价区域面积的比重，用于反映评价区域内土地退化程度"/></a>：<span id="plctdth"></span></li>
      </ul>    
     </div>
     <div id="areaData" class="message">
      <h2>所选地区</h2>
      <ul>
-      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_1.gif" />植被覆盖指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助"/></a>：<span id="areazbfg"></span></li>
-      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_2.gif" />生物丰度指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助"/></a>：<span id="areaswfd"></span></li>
-      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_3.gif" />地质环境指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助"/></a>：<span id="areadzhj"></span></li>
-      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_4.gif" />土地退化指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助"/></a>：<span id="areatdth"></span></li>
+      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_1.gif" />植被覆盖指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助" title="指评价区域内林地、草地、 耕地、 建设用地和未利用地五种类型的面积占评价区域面积的比重，用于反映评价区域植被覆盖的程度"/></a>：<span id="areazbfg"></span></li>
+      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_2.gif" />生物丰度指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助" title="指通过单位面积上不同生态系统类型在生物物种数量上的差异，间接地反映评价区域内生物丰度的丰贫程度"/></a>：<span id="areaswfd"></span></li>
+      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_3.gif" />地质环境指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助" title="表征评价区域内地表塌陷、地裂缝、地下水水位下降等地质破坏状况，用于反映评价区域地质破坏程度"/></a>：<span id="areadzhj"></span></li>
+      <li><img src="<%=request.getContextPath()%>/static/img/message_icon_4.gif" />土地退化指数<a href="#"><img src="<%=request.getContextPath()%>/static/img/icon_help.gif" alt="帮助" title="指评价区域内风蚀、水蚀、重力侵蚀、冻融侵蚀和工程侵蚀的面积占评价区域面积的比重，用于反映评价区域内土地退化程度"/></a>：<span id="areatdth"></span></li>
      </ul>    
     </div>
    </div>

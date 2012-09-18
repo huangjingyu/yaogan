@@ -31,7 +31,7 @@ public class SelectFileTask implements GeoClientTask{
       File file = (File) objects[0];
       HttpPost httpPost = new HttpPost(context.location);
       List<NameValuePair> params = new ArrayList<NameValuePair>();
-      /** 工作空间test */
+      /** 工作空间 */
       params.add(new BasicNameValuePair("workspacePanel:border:paramValue",
             (String) context.get(GeoServerClient.WS_KEY)));
       /** 存储名称 */
@@ -96,5 +96,5 @@ public class SelectFileTask implements GeoClientTask{
       String value = GeoServiceUtil.search(html, null, posStart, 2, "\"");
       return value;        
    }
-   
+
 }

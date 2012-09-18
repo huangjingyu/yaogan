@@ -30,6 +30,7 @@ public class PrintController {
       } catch (Exception e) {
          e.printStackTrace();
       }
+      System.out.println("mapPath" + map.getAbsolutePath());
       model.addAttribute("mapPath", map.getAbsolutePath());
       model.addAttribute("mapName", uuid.hashCode() + ".jpg");
       return "/layers/print";
@@ -46,6 +47,7 @@ public class PrintController {
                + fileName); // TODO
          service.addComment(template, comment);
          File image = new File(mapPath);
+
          service.addShapeLayer(template, image);
       } catch (Exception e) {
          e.printStackTrace();
@@ -62,11 +64,10 @@ public class PrintController {
     */
    private String getWebRootPath() throws Exception {
       URI uri = PrintController.class.getResource("/").toURI();
-      String webRootPath = uri.toURL().toString();
+      String filePath = uri.toURL().getFile();
       String flag = "WEB-INF";
-      int begin = webRootPath.indexOf("/") + 1;
-      int end = webRootPath.indexOf(flag);
-      webRootPath = webRootPath.substring(begin, end);
+      String webRootPath = filePath.substring(0, filePath.indexOf(flag));
       return webRootPath;
    }
+
 }
