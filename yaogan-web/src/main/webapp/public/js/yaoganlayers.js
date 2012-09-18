@@ -2,7 +2,7 @@
     (function(){
     	var layerGroupWmsUrl = "/geoserver/wms";
     	var layerWmsUrl = "/geoserver/yaogan/wms";
-    	var legendUrl = layerWmsUrl + "?VERSION=1.1.1&FORMAT=image/png&SERVICE=WMS&REQUEST=GetLegendGraphic&TRANSPARENT=TRUE&WIDTH=40&LAYER=";
+    	var legendUrl = layerWmsUrl + "?VERSION=1.1.1&FORMAT=image/png&SERVICE=WMS&REQUEST=GetLegendGraphic&TRANSPARENT=TRUE&WIDTH=40&LEGEND_OPTIONS=fontName:Simsun;fontSize:11&LAYER=";
     	var kqLayerName = null;
     	var tdlyLayerName = null;
     	var dbtxLayerName = null;
