@@ -32,7 +32,7 @@ public class ListController {
    @RequestMapping(value = "", method = { RequestMethod.GET, RequestMethod.POST })
    public String list(Model model,
          @RequestParam(value = "pager.offset", defaultValue = "0") int offset,
-         @RequestParam(value = "pageSize", defaultValue = "14") int pageSize) {
+         @RequestParam(value = "pageSize", defaultValue = "12") int pageSize) {
       User caller = _secMgr.currentUser();
       int pageNum = offset / pageSize + 1;
       Page<ShapefileGroupVo> page = _service.getShapefilesOfUserByPage(caller, pageNum,
@@ -48,7 +48,7 @@ public class ListController {
    public String list(Model model, @RequestParam("placeId") Long placeId,
          @RequestParam("shootTime") String shootTime,
          @RequestParam(value = "pager.offset", defaultValue = "0") int offset,
-         @RequestParam(value = "pageSize", defaultValue = "14") int pageSize) {
+         @RequestParam(value = "pageSize", defaultValue = "12") int pageSize) {
       if (placeId == null) {
          return "redirect:/admin/place";
       }

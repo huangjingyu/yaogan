@@ -49,9 +49,10 @@ public class PrintImageServiceImpl implements IPrintImageService {
    private int width = 656;
    private int heigth = 875;
 
+   private String serverBase = "http://localhost:8888/geoserver";
+
    @Override
    public File addShapeLayer(File template, File image) throws Exception {
-
       return this.mergeImg(template, image, 64, 190);// TODO
    }
 
@@ -77,8 +78,8 @@ public class PrintImageServiceImpl implements IPrintImageService {
    public File getMap(Long placeId, String time, String category, String tempPath)
          throws Exception {
       // TODO
-      StringBuilder url = new StringBuilder(
-            "http://localhost:8080/geoserver/yaogan/wms?service=WMS&version=1.1.0&request=GetMap");
+      StringBuilder url = new StringBuilder(64).append(serverBase).append(
+            "/yaogan/wms?service=WMS&version=1.1.0&request=GetMap");
       String wmsUrl = shapefileDao.getShapefile(placeId, time, category).getWmsUrl();
       url.append("&layers=").append(wmsUrl.substring(0, wmsUrl.indexOf('?')));
       url.append("&styles=");
@@ -199,6 +200,14 @@ public class PrintImageServiceImpl implements IPrintImageService {
          in.close();
       }
       return image;
+   }
+
+   public String getServerBase() {
+      return serverBase;
+   }
+
+   public void setServerBase(String serverBase) {
+      this.serverBase = serverBase;
    }
 
 }

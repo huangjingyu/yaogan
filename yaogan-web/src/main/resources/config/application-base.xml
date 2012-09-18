@@ -20,7 +20,7 @@
   <!--aop support -->
   <aop:aspectj-autoproxy />
 
-<!--hibernate db configruations -->
+  <!--hibernate db configruations -->
   <import resource="application-datasource.xml" />
   <bean id="sessionFactory"
     class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
@@ -47,6 +47,10 @@
     </property>
   </bean>
 
+  <bean class="com.rockontrol.yaogan.service.PrintImageServiceImpl">
+    <property name="serverBase" value="${geoserver.baseUrl}"></property>
+  </bean>
+
   <tx:annotation-driven transaction-manager="transactionManager" />
 
   <context:component-scan base-package="com.rockontrol.**">
@@ -54,6 +58,6 @@
       type="annotation" />
   </context:component-scan>
 
-  <import resource="applicationContext-httpclient.xml" />  
+  <import resource="applicationContext-httpclient.xml" />
   <import resource="application-security.xml" />
 </beans>
