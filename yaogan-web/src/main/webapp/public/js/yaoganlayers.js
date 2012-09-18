@@ -14,7 +14,7 @@
         /**全局命名空间R*/
         var R = window.R = {
         		/*顺序号 唯一标示的递增值*/
-        		seq : 0,
+        		seq : 1,
         	    /*选择要素的图层的名字*/
         	   SELECT_LNAME : "selectLayer",
                /*二维图层的名字*/
@@ -508,11 +508,19 @@
     	 }
      });
 
-
+   /**
+    * 生成专题图
+    * */
    $("#thematicMapLink").bind("click", function(){
-	   var placeId = $("#placeSelect").val();
- 	   var time = $("#timeSelect").val();
- 	   document.location.href = "./print?placeId=" + placeId + "&time=" + time + "&category=FILE_LAND_TYPE";
+	   var placeId = R.layerMap.placeId;
+ 	   var time = R.layerMap.time;
+ 	   var category = "FILE_LAND_TYPE";
+ 	   var landCheck = $("#mapSelect input[type='checkbox'][value='tdly']:checked").length>0;
+ 	   var soilCheck = $("#mapSelect input[type='checkbox'][value='trqs']:checked").length>0;
+ 	   if((!landCheck && soilCheck) || (landCheck && soilCheck && (R.trqsLayer.stamp > R.tdlyLayer.stamp))) {
+ 		   category = "FILE_LAND_SOIL";
+ 	   }
+ 	   document.location.href = "./print?placeId=" + placeId + "&time=" + time + "&category=" + category;
    });   
    /**页面装载完毕后对地图进行初始化*/
    R.layerMap.init();
