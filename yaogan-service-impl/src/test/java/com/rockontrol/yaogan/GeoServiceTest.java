@@ -23,6 +23,6 @@ public class GeoServiceTest {
       GeoService service = context.getBean(GeoService.class);
 
       service.publishGeoFile(Shapefile.Category.FILE_REGION_BOUNDARY, new File(
-            "E:/testfile/bianjie.shp"));
+            "D:/test/玉亮测试/边界/2028/a1bcd.shp"));
    }
 }
