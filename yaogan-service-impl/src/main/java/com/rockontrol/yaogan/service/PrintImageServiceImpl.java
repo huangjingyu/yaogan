@@ -63,12 +63,24 @@ public class PrintImageServiceImpl implements IPrintImageService {
       // 设置画笔颜色
       g.setColor(Color.BLACK);
       // 设置字体
-      g.setFont(new Font("楷体", Font.LAYOUT_LEFT_TO_RIGHT, 80));
+      int size = 40;
+      g.setFont(new Font("楷体", Font.LAYOUT_LEFT_TO_RIGHT, size));
       // 字体平滑处理
       g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
             RenderingHints.VALUE_ANTIALIAS_ON);
       // 写入签名 TODO
-      g.drawString(comment, 404, 110);
+      byte[] b = comment.getBytes();
+      int length = b.length;
+      int wPerLine = 18;
+      if(length>wPerLine*2){
+    	  int X = image.getWidth()/2-wPerLine/2*size;
+    	  g.drawString(new String(b, 0, wPerLine*2), X, 100);
+    	  X = image.getWidth()/2-(length-wPerLine*2)/4*size;
+    	  g.drawString(new String(b, wPerLine*2,length-wPerLine*2), X, 140);
+      }else {
+    	  int X = image.getWidth()/2-length/4*size;
+    	  g.drawString(comment, X, 100);
+	}
       g.dispose();
       FileOutputStream out = new FileOutputStream(template);
       ImageIO.write(image, "JPEG", out);
