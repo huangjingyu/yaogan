@@ -7,6 +7,10 @@
 #timesDiv div {
 	margin-left: 5px;
 }
+
+.statsTr {
+	height: 48px !important;
+}
 </style>
 <script type="text/javascript">
 	function timeCompare() {
@@ -193,7 +197,7 @@
 						<table width="700px" border="0" cellspacing="0" cellpadding="0"
 							id="table_two">
 							<tbody>
-								<tr>
+								<tr class="statsTr">
 									<td>选择区域：</td>
 									<td><select id="placeId" name="placeId"
 										data-dojo-type="dijit.form.Select" title="请选择区域:"
@@ -207,7 +211,7 @@
 										onclick="timeCompare()"><img
 											src="${ctx}/static/img/butt_fx.gif" width="50" height="24"></a></td>
 								</tr>
-								<tr>
+								<tr class="statsTr">
 									<td width="16%">请选择时间：</td>
 									<td><div id="timesDiv"
 											data-dojo-type="dijit.layout.ContentPane" title="请选择时间:"></div></td>
