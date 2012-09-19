@@ -44,8 +44,6 @@ public class CallContext extends HashMap<String, Object> {
     * 文件
     */
    public File file;
-   
-   public Shapefile.Category category;
 
    public CallContext() {
 

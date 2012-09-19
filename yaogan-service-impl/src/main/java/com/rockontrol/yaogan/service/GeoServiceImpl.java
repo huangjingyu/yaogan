@@ -59,7 +59,6 @@ public class GeoServiceImpl implements GeoService {
    public String publishGeoFile(Shapefile.Category type, File geoFile) {
       HttpClient client = null;
       CallContext context = new CallContext();
-      context.category = type;
       context.file = geoFile;
       if(! geoFile.exists()) {
          throw new RuntimeException("文件:" + geoFile.getAbsolutePath() + "不存在");
@@ -115,7 +114,8 @@ public class GeoServiceImpl implements GeoService {
          geoClient.addLayer();
          /**发布layer 主要是添加样式*/
          if(GeoServiceUtil.getStyle(type) != null) {
-            response = geoClient.publlishLayer();
+            String style = GeoServiceUtil.getStyle(type);
+            response = geoClient.publlishLayer(style);
          }
       } finally {
          if (client != null) {
