@@ -149,6 +149,7 @@
 			xhr.get({
 				url : "${ctx}/api/places.json?time=" + time,
 				handleAs : "json",
+				sync : true,
 				load : function(places) {
 					require([ "dojo/_base/array" ], function(arrayUtil) {
 						arrayUtil.forEach(places, function(place, i) {
@@ -159,7 +160,7 @@
 									id : chkId,
 									name : "placeId",
 									value : place['id'],
-									checked : false
+									checked : true
 								}, "checkBox");
 								var chkLabel = dojo.create("label", {
 									"for" : chkId,
@@ -177,12 +178,22 @@
 				}
 			});
 		});
+		placeCompare();
 	}
 </script>
 <script type="text/javascript">
 	require([ "dijit/form/Select", "dijit/form/Button",
 			"dojox/layout/TableContainer", "dijit/layout/ContentPane" ]);
 </script>
+<c:if test="${not empty curTime}">
+	<script type="text/javascript">
+		require([ "dojo/ready","dijit/registry","dojo/parser","dijit/form/Select" ], function(ready, registry) {
+			ready(function(){
+				registry.byId("time").set("value", "${curTime}");							
+			});			
+		});
+	</script>
+</c:if>
 </head>
 <body class="claro">
 	<div id="middle2">
