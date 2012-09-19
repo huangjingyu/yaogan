@@ -7,6 +7,10 @@
 #placesDiv div {
 	margin-left: 5px;
 }
+
+.statsTr {
+	height: 48px !important;
+}
 </style>
 <script type="text/javascript">
 	function placeCompare() {
@@ -193,7 +197,7 @@
 						<table width="700px" border="0" cellspacing="0" cellpadding="0"
 							id="table_two">
 							<tbody>
-								<tr>
+								<tr class="statsTr">
 									<td>请选择时间:</td>
 									<td><select id="time" name="time"
 										data-dojo-type="dijit.form.Select" title="请选择时间:"
@@ -207,7 +211,7 @@
 										onclick="placeCompare()"><img
 											src="${ctx}/static/img/butt_fx.gif" width="50" height="24"></a></td>
 								</tr>
-								<tr>
+								<tr class="statsTr">
 									<td width="16%">请选择矿区:</td>
 									<td><div id="placesDiv"
 											data-dojo-type="dijit.layout.ContentPane" title="请选择矿区:"></div></td>
