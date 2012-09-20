@@ -510,20 +510,70 @@
 
    /**
     * 生成专题图
-    * */
+    
    $("#thematicMapLink").bind("click", function(){
-	   var placeId = R.layerMap.placeId;
- 	   var time = R.layerMap.time;
- 	   var category = "FILE_LAND_TYPE";
- 	   var landCheck = $("#mapSelect input[type='checkbox'][value='tdly']:checked").length>0;
- 	   var soilCheck = $("#mapSelect input[type='checkbox'][value='trqs']:checked").length>0;
- 	   if((!landCheck && soilCheck) || (landCheck && soilCheck && (R.trqsLayer.stamp > R.tdlyLayer.stamp))) {
- 		   category = "FILE_LAND_SOIL";
- 	   }
- 	   document.location.href = "./print?placeId=" + placeId + "&time=" + time + "&category=" + category;
-   });   
+	  
+   });
+   * */   
    /**页面装载完毕后对地图进行初始化*/
    R.layerMap.init();
    /**根据地区查询时间 firefox默认会记录下拉选择*/
    timeSelect($("#placeSelect").val());
-    });
+  
+   /**专题图对话框*/
+	  $("#print-image-dialog").dialog({
+		modal : true,
+		autoOpen : false,
+		width : 400,
+		height : 560
+	});
+	  
+	  function createMapAjax(placeId,time,category) {
+			$.post(
+						"./print.json",
+						{placeId:placeId,time:time,category:category},
+						function(data) {
+							$("input[name=mapPath]").attr("value",data.mapPath);
+							$("#printImage").attr("src","../static/temp/"+data.mapName);
+						}
+					);
+		}
+	  
+	  function openDialog() {
+			$("#print-image-dialog").dialog({
+				title : "专题图打印",
+				buttons : {
+					"生成" : function() {
+						$("#printForm").attr("action","./save").submit();
+					},
+					"取消" : function() {
+						$(this).dialog('close');
+					}
+				}
+			});
+			$("#print-image-dialog").dialog("open");
+		}
+	  
+		$('#thematicMapLink').click(function() {
+			 var placeId = R.layerMap.placeId;
+		 	   var time = R.layerMap.time;
+		 	   var category = "FILE_LAND_TYPE";
+		 	   var landCheck = $("#mapSelect input[type='checkbox'][value='tdly']:checked").length>0;
+		 	   var soilCheck = $("#mapSelect input[type='checkbox'][value='trqs']:checked").length>0;
+		 	   if((!landCheck && soilCheck) || (landCheck && soilCheck && (R.trqsLayer.stamp > R.tdlyLayer.stamp))) {
+		 		   category = "FILE_LAND_SOIL";
+		 	   }
+		 	   
+		 	  if(typeof placeId == 'undefined' ||typeof time == 'undefined'){
+	    			alert("请选择地区和日期！");
+	    			return;
+	    		}
+		 	  
+		 	   createMapAjax(placeId,time,category);
+		 	   openDialog();
+		}); 
+		
+		
+   });
+   
+ 

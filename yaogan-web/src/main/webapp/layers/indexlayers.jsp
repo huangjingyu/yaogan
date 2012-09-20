@@ -13,6 +13,12 @@
 
         <!-- 遥感layers的控制脚本 -->
         <script src='<%=request.getContextPath()%>/static/js/yaoganlayers.js'></script>
+
+        <!-- JQuery-UI -->
+        <script src='<%=request.getContextPath()%>/static/js/jquery-ui-1.8.23.custom.min.js'></script>
+        <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/static/css/ui-lightness/jquery-ui-1.8.23.custom.css"/>
+        
+        
    </head>
    <body>
       <div id="middle2" style="min-width:910px">

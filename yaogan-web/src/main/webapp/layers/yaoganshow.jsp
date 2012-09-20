@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/common/includes.jsp"%>
+ <c:set var="ctx" value="<%=request.getContextPath()%>" />
       <div class="rmaplist">
          <div class="map_top">           
          <table>
@@ -74,3 +75,21 @@
     </div>
    </div>
    </div>
+   
+   <!-- 打印图片框 -->
+<div id="print-image-dialog" style="display: none" align="center">
+		<form name="printForm" id="printForm" action="" method="post">
+			<table>
+				<tr>
+					<td> 请输入标题：</td>
+					<td>
+					<input type="text" name="comment" id="comment" size="30" />
+					</td>
+				</tr>
+				<tr>
+				<td colspan="2" align="center"><img id="printImage" alt="加载中。。。" src="" height="423" width="328"></td>
+				</tr>
+			</table>
+					<input type="hidden" name="mapPath"  value="" />
+		</form>
+	</div>
