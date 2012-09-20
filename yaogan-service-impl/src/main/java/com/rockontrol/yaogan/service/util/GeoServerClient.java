@@ -143,8 +143,8 @@ public class GeoServerClient {
     * @param context
     * @return
     */
-   public HttpResponse publlishLayer() {
-      HttpResponse response = publishLayerTask.doTask(this);
+   public HttpResponse publlishLayer(String style) {
+      HttpResponse response = publishLayerTask.doTask(this, style);
       return response;
    }
 

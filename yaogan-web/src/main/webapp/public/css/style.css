@@ -1,4 +1,4 @@
-/* 鍏ㄥ眬瀹氫箟 */
+/* 全局定义 */
 *{padding:0; margin:0; list-style:none; font-family:Verdana}
 a:link,a:visited{color:#4e4e4e;text-decoration:none;}
 a:hover,a:active{color:#000;text-decoration:none;}
@@ -8,22 +8,28 @@ img{ border:0}
 a:focus { outline:0}
 
 /* ie6 hack */
-#header_ya{ _width:expression((document.documentElement.clientWidth||document.body.clientWidth)<1100?"1100px":"")}
+#header_ya{ _width:expression((document.documentElement.clientWidth||document.body.clientWidth)<980?"980px":"")}
 #left{ _height:expression((document.documentElement.clientHeight||document.body.clientHeight)<700?"700px":"") }
 #right{ _height:expression((document.documentElement.clientHeight||document.body.clientHeight)<700?"700px":"")}
 #middle{ _width:expression((document.documentElement.clientWidth||document.body.clientWidth)<550?"550px":"")}
 #warp{  _width:expression((document.documentElement.clientWidth||document.body.clientWidth)<980?"980px":"")}
 
-/* 澶撮儴 */
-#header_ya{ height:77px; background:url(../img/header_bg.gif) repeat-x top; padding-left:20px; min-width:1100px;}
+/* 头部 */
+#header_ya{ height:77px; background:url(../img/header_bg.gif) repeat-x top; padding-left:20px; min-width:980px;}
 #logo{ width:393px; height:71px; float:left; }
-#header_right{ height:71px; margin-left:240px}
+#header_right{ height:71px; margin-left:420px}
+#header_right ul{}
+#header_right li{ padding-top:3px; float:left; padding-right:10px;}
 
+/* 伸缩框架 */
+.content{ padding-top: 0px;}
+.tool{width:8px;float:left;cursor: pointer}
+.tool img{margin-top:240px;}
 
-/* 涓讳綋 */
+/* 主体 */
 #warp{ background-color:#c8dfc5; padding:10px; min-width:980px }
 
-/* 宸︿晶甯冨眬 */
+/* 左侧布局 */
 #left{ width:196px;float:left; background:#f7f7f7; border:1px solid #a6bfaa; min-height:700px; }
 .left_top { height:35px;background:url(../img/menu_top_bg.gif) repeat-x top; font-weight:bold; line-height:30px; padding-left:10px;}
 .left_user{ width:194px; height:92px; padding-top:20px; background:url(../img/left_user_bg.gif) no-repeat;}
@@ -40,11 +46,22 @@ a:focus { outline:0}
 .left_menu li a:hover{ color:#13927d}
 .left_menu li a:visited{ color:#13927d}
 
-/* 涓棿+鍙充晶涓讳綋 */
+/* 中间+右侧主体 */
 #main{ margin-left:210px; min-width:760px;}
 
+/* 右侧布局 */
+#rightd{ width:210px; padding-left:10px;float:left;}
+#right{ background:#fff; border-left: #a6bfaa 1px solid; border-right: #a6bfaa 1px solid; border-bottom: #a6bfaa 1px solid;min-height:700px;}
+.right_top { height:35px;background:url(../img/menu_top_bg.gif) repeat-x top; font-weight:bold; line-height:30px; padding-left:10px;border-top: #a6bfaa 1px solid}
+.message { padding-left:10px; float:left; margin-right:500px;}
+.message h2{ font-size:12px;}
+.message ul{width:790px;}
+.message li{border-bottom: #dadada 1px dashed; line-height:25px; float:left; padding-right:10px;}
+.message li img{ padding:6px 5px 0 5px;}
+.message li span{ color:#1f8eec; font-weight:bold}
 
-/* 涓棿甯冨眬 */
+
+/* 中间布局 */
 #middle{margin:0 214px 0 210px; min-width:550px;}
 #middle2{margin:0 0 0 210px; min-width:550px;}
 .map{height:638px;background:#fff; border-right: #a6bfaa 1px solid; border-bottom: #a6bfaa 1px solid;border-left: #a6bfaa 1px solid }
@@ -54,17 +71,17 @@ a:focus { outline:0}
 .map_bottom{ height:50px; padding:10px 0 0 10px; background:#fff; border:1px solid #a6bfaa; }
 .middle_content{ padding:10px}
 
-.rtlist{height:700px;background:#fff; border-right: #a6bfaa 1px solid; border-bottom: #a6bfaa 1px solid;border-left: #a6bfaa 1px solid }
+.rtlist{background:#fff; border-right: #a6bfaa 1px solid; border-bottom: #a6bfaa 1px solid;border-left: #a6bfaa 1px solid }
 .rtnr{ height:638px;padding:20px 10px 10px 10px;}
 .trnrmenu{ height:28px; background:url(../img/right_nr_bg.gif) repeat-x top; padding-top:8px; padding-left:10px; margin-top:10px;}
 .thnr_add {float:right; padding:0 0 0 20px; background:url(../img/add.gif) no-repeat left center; height:25px; line-height:25px }
 
-/* 鍙樻垚2鍒楀湴鍥句綅缃�*/
+/* 变成2列地图位置 */
 .rmaplist{height:700px;background:#fff; border-right: #a6bfaa 1px solid; border-bottom: #a6bfaa 1px solid;border-left: #a6bfaa 1px solid ; width:552px; float:left;}
-.rmapnr{ height:560px;}
-.rmbutt{ height:50px; padding:20px 0 0 10px;}
+.rmapnr{ padding-bottom:5px;}
+.rmbutt{height:35px; padding:10px 0 5px 10px; margin-right:600px;float:left;}
 
-/* 涓棿TAB */
+/* 中间TAB */
 .middle_tab{ margin-bottom:10px}
 .tabs {border-bottom:1px solid #666;height:30px;}
 .tabs li {float:left}
@@ -76,7 +93,7 @@ a:focus { outline:0}
 
 
 
-/* 琛ㄦ牸鏍峰紡 */
+/* 表格样式 */
 #table_one{ border-top: #929292 1px solid;border-left: #c8c8c8 1px solid;border-bottom: #c8c8c8 1px solid; background-color:#FFFFFF}
 #table_one td{ border-right: #c8c8c8 1px solid;border-top: #c8c8c8 1px solid; text-align:center; font-size:12px; padding:5px;}
 #table_one td img{ padding:0 3px}
@@ -91,8 +108,51 @@ a:focus { outline:0}
 #table_two th{ border-right: #c8c8c8 1px solid; background:url(../img/table_title_bg.gif) repeat-x top; text-align:left;font-size:12px;color:#0b5d9a;height:28px}
 #table_two tr{ height:20px}
 
+/* 浮动窗口样式 */
 
-/*缈婚〉*/
+#download_now,#d1,#d2,#d3,#d4{cursor:pointer; }
+
+/* mouseover state */
+#download_now:hover {background-position:0 -44px;}
+
+/* clicked state */  
+#download_now:focus {background-position:0 -88px;}   
+
+/* tooltip styling */  
+.tooltip {display:none; 
+background:url(../img/black_arrow_big.png);
+height:163px;
+padding:40px 30px 10px 30px;
+width:310px;
+font-size:11px;
+color:#fff;  }
+
+/* a .label element inside tooltip */
+.tooltip .label {color:yellow; width:35px;}
+.tooltip a {color:#ad4;font-size:11px;font-weight:bold;  }
+
+/* tooltip下方出现样式 */
+.tooltip.bottom {
+  background:url(../img/black_arrow_big_down.png);
+  padding-top:63px;
+  height:140px;
+}
+
+/* 苹果风格点击框 */
+.apple_overlay {display:none;font-size:12px;width:743px}
+
+/* 弹出窗口 */
+.tan_left{ width:670px; border:1px solid #d1d1d1; height:700px; float:left; background-color:#fff; padding:0 10px 0 10px;}
+.tan_left h2{ font-size:14px; color:#666666; text-align:center; padding-top:20px; padding-bottom:10px;}
+.tan_left img{ vertical-align:middle;}
+.tan_right{ width:230px; border:1px solid #a9ccde; background-color:#f2f9fe; margin-left:700px;height:680px; padding:20px 10px 0 10px;}
+.tan_right h2{ font-size:14px; color:#168096; font-weight:bold; padding-bottom:10px;}
+.tan_right img { padding-left:5px; }
+.tan_img { padding-top:40px;}
+
+
+
+/*翻页*/
 
 DIV.quotes {
 	TEXT-ALIGN: center;
@@ -132,3 +192,14 @@ DIV.quotes SPAN.current {
 DIV.quotes SPAN.disabled {
 	BORDER-RIGHT: #f3f3f3 1px solid; PADDING-RIGHT: 5px; BORDER-TOP: #f3f3f3 1px solid; PADDING-LEFT: 5px; PADDING-BOTTOM: 2px; BORDER-LEFT: #f3f3f3 1px solid; COLOR: #ccc; MARGIN-RIGHT: 2px; PADDING-TOP: 2px; BORDER-BOTTOM: #f3f3f3 1px solid
 }
+
+
+/* 扩展应用按钮样式 */
+.btn1 {position:relative;display:block;width:62px;height:62px;background:url(../img/menu_1.gif) top no-repeat;cursor: pointer;text-indent:-9999px;}	
+.btn1 span.hover {position: absolute;display: block;width:62px;height:62px;background:url(../img/menu_1.gif) bottom no-repeat;text-indent:-9999px;}
+.btn2 {position:relative;display:block;width:62px;height:62px;background:url(../img/menu_2.gif) top no-repeat;cursor: pointer;text-indent:-9999px;}	
+.btn2 span.hover {position: absolute;display: block;width:62px;height:62px;background:url(../img/menu_2.gif) bottom no-repeat;text-indent:-9999px;}
+.btn3 {position:relative;display:block;width:62px;height:62px;background:url(../img/menu_3.gif) top no-repeat;cursor: pointer;text-indent:-9999px;}	
+.btn3 span.hover {position: absolute;display: block;width:62px;height:62px;background:url(../img/menu_3.gif) bottom no-repeat;text-indent:-9999px;}
+.btn4 {position:relative;display:block;width:62px;height:62px;background:url(../img/menu_4.gif) top no-repeat;cursor: pointer;text-indent:-9999px;}	
+.btn4 span.hover {position: absolute;display: block;width:62px;height:62px;background:url(../img/menu_4.gif) bottom no-repeat;text-indent:-9999px;}

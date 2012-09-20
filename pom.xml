@@ -136,7 +136,7 @@
 
     <yaogan.gis.shapefile.home>d:/test</yaogan.gis.shapefile.home>
     <yaogan.upload.tempdir>/WEB-INF/temp</yaogan.upload.tempdir>
-    <homepage.admin>/admin/place</homepage.admin>
+    <homepage.admin>/admin/layers</homepage.admin>
     <homepage.user>/user/layers</homepage.user>
 
     <geoserver.baseUrl>http://localhost:8080/geoserver</geoserver.baseUrl>
@@ -167,7 +167,7 @@
 
         <yaogan.gis.shapefile.home>/home/ubuntu/yaogan/gisfile</yaogan.gis.shapefile.home>
         <yaogan.upload.tempdir>/home/ubuntu/yaogan/temp</yaogan.upload.tempdir>
-        <homepage.admin>/admin/place</homepage.admin>
+        <homepage.admin>/admin/layers</homepage.admin>
         <homepage.user>/user/layers</homepage.user>
 
         <geoserver.baseUrl>http://localhost:8080/geoserver</geoserver.baseUrl>

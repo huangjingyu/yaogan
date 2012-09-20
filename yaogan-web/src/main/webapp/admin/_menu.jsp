@@ -23,17 +23,13 @@
    }
 %>
 <ul>
-	<li <%=placeStyle%>><img src="${ctx}/static/img/menu_icon_3.png"
-		width="16" height="16"><a href="${ctx}/admin/place">地图管理</a>
-	</li>
 	<li <%=layersStyle%>><img src="${ctx}/static/img/menu_icon_1.png"
-		width="16" height="16"><a href="${ctx}/admin/layers">地图展示</a>
-	</li>
+		width="16" height="16"><a href="${ctx}/admin/layers">地图展示</a></li>
 	<li <%=statsStyle%>><img src="${ctx}/static/img/menu_icon_2.png"
 		width="16" height="16"><a
-		href="${ctx}/admin/envstats/timeCompare">统计分析</a>
-	</li>
+		href="${ctx}/admin/envstats/timeCompare">统计分析</a></li>
 	<li <%=userStyle%>><img src="${ctx}/static/img/menu_icon_4.png"
-		width="16" height="16"><a href="${ctx}/admin/user">权限管理</a>
-	</li>
+		width="16" height="16"><a href="${ctx}/admin/user">权限管理</a></li>
+	<li <%=placeStyle%>><img src="${ctx}/static/img/menu_icon_3.png"
+		width="16" height="16"><a href="${ctx}/admin/place">地图管理</a></li>
 </ul>

@@ -26,6 +26,11 @@ public class PublishLayerTask implements GeoClientTask{
    public <T> T doTask(GeoServerClient geoClient, Object... objects) {
       CallContext context = geoClient.getContext();
       HttpClient client = geoClient.getClient();
+      String style = (String) objects[0];
+      if(style == null) {
+         log.info("未配置样式");
+         return null;
+      }
       /**打开图层页面*/
       String location = "?wicket:bookmarkablePage=:org.geoserver.web.data.resource.ResourceConfigurationPage&name=" + context.storeName + "&wsName=" + GeoServerClient.WORKSPACE_NAME;
       HttpGet get = new HttpGet(geoClient.getWebLocation(location));
@@ -77,12 +82,6 @@ public class PublishLayerTask implements GeoClientTask{
       get = new HttpGet(location);
       response = GisHttpUtil.execute(client, get);
       html = GeoServiceUtil.getContent(response);
-      
-      String style = GeoServiceUtil.getStyle(context.category);
-      if(style == null) {
-         log.info("未配置样式");
-         return null;
-      }
 
       int startPos = GeoServiceUtil.reverseSearch(html, ">" + style + "</option>", '=');
       if(startPos == -1) {

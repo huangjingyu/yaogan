@@ -149,6 +149,7 @@
 			xhr.get({
 				url : "${ctx}/api/place/" + placeId + "/availableTimes.json",
 				handleAs : "json",
+				sync : true,
 				load : function(times) {
 					require([ "dojo/_base/array" ], function(arrayUtil) {
 						arrayUtil.forEach(times, function(time, i) {
@@ -159,7 +160,7 @@
 									id : chkId,
 									name : "time",
 									value : time,
-									checked : false
+									checked : true
 								}, "checkBox");
 								var chkLabel = dojo.create("label", {
 									"for" : chkId,
@@ -177,12 +178,22 @@
 				}
 			});
 		});
+		timeCompare();
 	}
 </script>
 <script type="text/javascript">
 	require([ "dijit/form/Select", "dijit/form/Button",
 			"dojox/layout/TableContainer", "dijit/layout/ContentPane" ]);
 </script>
+<c:if test="${not empty curPlaceId}">
+	<script type="text/javascript">
+		require([ "dojo/ready","dijit/registry","dojo/parser","dijit/form/Select" ], function(ready, registry) {
+			ready(function(){
+				registry.byId("placeId").set("value", "${curPlaceId}");							
+			});			
+		});
+	</script>
+</c:if>
 </head>
 <body class="claro">
 	<div id="middle2">
@@ -209,12 +220,14 @@
 									</select></td>
 									<td width="14%" rowspan="2"><a href="#"
 										onclick="timeCompare()"><img
-											src="${ctx}/static/img/butt_fx.gif" width="50" height="24"></a></td>
+											src="${ctx}/static/img/butt_fx.gif" width="50" height="24">
+									</a></td>
 								</tr>
 								<tr class="statsTr">
 									<td width="16%">请选择时间：</td>
 									<td><div id="timesDiv"
-											data-dojo-type="dijit.layout.ContentPane" title="请选择时间:"></div></td>
+											data-dojo-type="dijit.layout.ContentPane" title="请选择时间:"></div>
+									</td>
 								</tr>
 							</tbody>
 						</table>
