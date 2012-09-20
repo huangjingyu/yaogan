@@ -141,6 +141,16 @@ color:#fff;  }
 /* 苹果风格点击框 */
 .apple_overlay {display:none;font-size:12px;width:743px}
 
+/* 弹出窗口 */
+.tan_left{ width:670px; border:1px solid #d1d1d1; height:700px; float:left; background-color:#fff; padding:0 10px 0 10px;}
+.tan_left h2{ font-size:14px; color:#666666; text-align:center; padding-top:20px; padding-bottom:10px;}
+.tan_left img{ vertical-align:middle;}
+.tan_right{ width:230px; border:1px solid #a9ccde; background-color:#f2f9fe; margin-left:700px;height:680px; padding:20px 10px 0 10px;}
+.tan_right h2{ font-size:14px; color:#168096; font-weight:bold; padding-bottom:10px;}
+.tan_right img { padding-left:5px; }
+.tan_img { padding-top:40px;}
+
+
 
 /*翻页*/
 
